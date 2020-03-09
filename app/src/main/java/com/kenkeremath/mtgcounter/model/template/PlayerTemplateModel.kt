@@ -1,7 +1,7 @@
 package com.kenkeremath.mtgcounter.model.template
 
-data class PlayerTemplateModel(
-    val id: String,
-    val startingLife: Int,
+class PlayerTemplateModel(
+    val id: Int,
+    val name: String,
     val counters: List<CounterTemplateModel> = emptyList()
 )

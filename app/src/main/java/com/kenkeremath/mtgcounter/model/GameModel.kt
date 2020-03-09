@@ -1,8 +1,9 @@
 package com.kenkeremath.mtgcounter.model
 
 data class GameModel(
-    val numberOfPlayers: Int,
-    val listMode: Boolean,
+    val listMode: Boolean = false,
+    val keepScreenOn: Boolean = false,
+    var startingLife: Int = 0,
     val players: List<PlayerModel> = emptyList(),
-    val templateId: String?
+    val templateId: Int? = null
 )

@@ -3,18 +3,154 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.setup.SetupFragment">
 
     <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
+        android:id="@+id/player_number_label"
+        android:text="@string/player_number_label"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/player_number_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/player_number_label">
+
+        <Button
+            android:id="@+id/one_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="One" />
+
+        <Button
+            android:id="@+id/two_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Two" />
+
+        <Button
+            android:id="@+id/three_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Three" />
+
+
+        <Button
+            android:id="@+id/four_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Four" />
+
+        <!-- TODO unhide when design is figured out -->
+        <Button
+            android:id="@+id/five_plus_player_button"
+            android:visibility="gone"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Five+" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/starting_life_label"
+        android:text="@string/starting_life_label"
+        app:layout_constraintTop_toBottomOf="@+id/player_number_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/starting_life_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/starting_life_label">
+
+        <Button
+            android:id="@+id/twenty_life_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20" />
+
+        <Button
+            android:id="@+id/forty_life_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40" />
+
+        <Button
+            android:id="@+id/custom_life_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/keep_screen_awake_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/starting_life_container">
+
+        <CheckBox
+            android:id="@+id/keep_screen_awake_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keep Screen Awake" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tabletop_label"
+        android:text="@string/tabletop_label"
+        app:layout_constraintTop_toBottomOf="@+id/keep_screen_awake_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/tabletop_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tabletop_label">
+
+        <Button
+            android:id="@+id/tabletop_wide"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Landscape" />
+
+        <Button
+            android:id="@+id/tabletop_list"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

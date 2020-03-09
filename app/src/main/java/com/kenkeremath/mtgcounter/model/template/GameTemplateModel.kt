@@ -1,7 +1,9 @@
 package com.kenkeremath.mtgcounter.model.template
 
-data class GameTemplateModel(
-    val name: String, //This is the unique id
+class GameTemplateModel(
+    val id: Int,
+    val name: String,
+    var startingLifeTotal: Int,
     val players: List<PlayerTemplateModel>,
     val playerColors: List<Int>,
     val playerNames: List<String>

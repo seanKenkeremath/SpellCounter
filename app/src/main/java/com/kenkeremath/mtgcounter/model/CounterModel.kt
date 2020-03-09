@@ -1,10 +1,10 @@
 package com.kenkeremath.mtgcounter.model
 
 data class CounterModel(
-    val id: String,
-    val startingValue: Int,
-    var value: Int,
-    val name: String?,
-    val color: Int,
-    val templateId : String? = null
+    val id: Int,
+    val startingValue: Int = 0,
+    var value: Int = 0,
+    val name: String? = null,
+    val color: Int = 0,
+    val templateId : Int? = null
 )

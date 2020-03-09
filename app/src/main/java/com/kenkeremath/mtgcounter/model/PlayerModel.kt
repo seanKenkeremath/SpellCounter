@@ -1,10 +1,9 @@
 package com.kenkeremath.mtgcounter.model
 
 data class PlayerModel(
-    val id: String,
-    val startingLife: Int,
-    var life: Int,
-    val color: Int,
+    val id: Int,
+    val life: Int = 0,
+    val color: Int = 0,
     val counters: List<CounterModel> = emptyList(),
-    val templateId: String? = null
+    val templateId: Int? = null
 )

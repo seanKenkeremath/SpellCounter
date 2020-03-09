@@ -1,11 +1,22 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">?attr/sc_primary_color</item>
+        <item name="colorPrimaryDark">?attr/sc_primary_dark_color</item>
+        <item name="colorAccent">?attr/sc_accent_color</item>
     </style>
 
+    <style name="AppTheme.Light">
+        <item name="sc_primary_color">#ff0000</item>
+        <item name="sc_primary_dark_color">#990000</item>
+        <item name="sc_accent_color">#0000ff</item>
+        <item name="sc_option_button_color_normal">@color/optionButtonColor</item>
+        <item name="sc_option_button_color_selected">@color/optionButtonColorSelected</item>
+        <item name="sc_option_button_color_disabled">@color/optionButtonColorDisabled</item>
+    </style>
+
+    <style name="OptionButton">
+        <item name="android:background">@drawable/option_button_bg</item>
+        <item name="android:padding">16dp</item>
+    </style>
 </resources>
