@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.kenkeremath.mtgcounter.model.PlayerSetupModel
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.view.TabletopLayout
 
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
@@ -24,7 +25,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     lateinit var keepScreenAwakeCheckbox: CheckBox
 
+    lateinit var tabletopContainer : ViewGroup
     lateinit var tabletopModeButtons: List<Button>
+
+    lateinit var tabletopLayout : TabletopLayout
+    lateinit var tabletopLayoutAdapter: SetupTabletopLayoutAdapter
 
     companion object {
         fun newInstance() = SetupFragment()
@@ -45,8 +50,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             view.findViewById(R.id.one_player_button),
             view.findViewById(R.id.two_player_button),
             view.findViewById(R.id.three_player_button),
-            view.findViewById(R.id.four_player_button)
-        )
+            view.findViewById(R.id.four_player_button),
+            view.findViewById(R.id.five_player_button)
+            )
         fivePlusPlayersButton = view.findViewById(R.id.five_plus_player_button)
         //Save us some boilerplate by assuming buttons will be in order and start at 1 player
         playerNumberButtons.forEachIndexed { index, button ->
@@ -72,18 +78,18 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         keepScreenAwakeCheckbox = view.findViewById(R.id.keep_screen_awake_checkbox)
         keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
 
-        //TODO: tag with correct enums
-        //TODO: all layouts
+
+        tabletopContainer = view.findViewById(R.id.tabletop_container)
+        tabletopContainer.visibility = View.GONE
+
         tabletopModeButtons = listOf(
             view.findViewById(R.id.tabletop_list),
-            view.findViewById(R.id.tabletop_wide)
+            view.findViewById(R.id.tabletop_a),
+            view.findViewById(R.id.tabletop_b)
         )
-        tabletopModeButtons[0].tag = TabletopType.LIST
-        tabletopModeButtons[1].tag = TabletopType.ONE_HORIZONTAL
 
-        for (tabletopModeButton in tabletopModeButtons) {
-            tabletopModeButton.setOnClickListener { viewModel.setTabletopType(tabletopModeButton.tag as TabletopType) }
-        }
+        tabletopLayout = view.findViewById(R.id.tabletop_layout)
+        tabletopLayoutAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -96,6 +102,30 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
                 }
                 fivePlusPlayersButton.isSelected = it >= 5
+            }
+
+            viewModel.setTabletopType(TabletopType.NONE)
+
+            if (players != null) {
+                tabletopContainer.visibility = View.VISIBLE
+                val modes = TabletopType.getListForNumber(players.size)
+                tabletopModeButtons[0].tag = TabletopType.LIST
+                tabletopModeButtons[1].visibility = View.GONE
+                tabletopModeButtons[2].visibility = View.GONE
+                if (modes.isNotEmpty()) {
+                    tabletopModeButtons[1].tag = modes[0]
+                    tabletopModeButtons[1].visibility = View.VISIBLE
+                }
+                if (modes.size > 1) {
+                    tabletopModeButtons[2].tag = modes[1]
+                    tabletopModeButtons[2].visibility = View.VISIBLE
+                }
+
+                for (tabletopModeButton in tabletopModeButtons) {
+                    tabletopModeButton.setOnClickListener { viewModel.setTabletopType(tabletopModeButton.tag as TabletopType) }
+                }
+            } else {
+                tabletopContainer.visibility = View.GONE
             }
         })
 
@@ -129,6 +159,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 for (tableTopModeButton in tabletopModeButtons) {
                     tableTopModeButton.isSelected = tableTopModeButton.tag == it
                 }
+                tabletopLayoutAdapter.updateAll(it, viewModel.players.value ?: emptyList())
             }
         })
     }

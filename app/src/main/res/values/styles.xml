@@ -19,4 +19,8 @@
         <item name="android:background">@drawable/option_button_bg</item>
         <item name="android:padding">16dp</item>
     </style>
+
+    <style name="PlayerContainer">
+        <item name="android:background">@drawable/player_container_bg</item>
+    </style>
 </resources>

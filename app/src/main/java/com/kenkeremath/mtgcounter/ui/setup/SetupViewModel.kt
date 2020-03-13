@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,7 @@ class SetupViewModel : ViewModel() {
 
             //Add new empty players as necessary
             for (i in 0 until diff) {
-                newPlayerList.add(PlayerSetupModel())
+                newPlayerList.add(PlayerSetupModel(color = Color.RED))
             }
         } else if (number < currNumberPlayers) {
             val diff = currNumberPlayers - number
