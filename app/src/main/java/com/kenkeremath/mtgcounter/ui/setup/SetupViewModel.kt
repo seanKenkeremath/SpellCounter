@@ -4,10 +4,15 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kenkeremath.mtgcounter.model.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
+import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.persistence.*
+import kotlinx.coroutines.launch
 
-class SetupViewModel : ViewModel() {
+class SetupViewModel constructor(private val repository: GameRepository) : ViewModel() {
 
     private val _startingLife = MutableLiveData<Int>()
     val startingLife: LiveData<Int> get() = _startingLife
@@ -20,6 +25,31 @@ class SetupViewModel : ViewModel() {
 
     private val _tabletopType = MutableLiveData<TabletopType>()
     val tabletopType: LiveData<TabletopType> get() = _tabletopType
+
+    //TODO: delete
+    val allTemplates: LiveData<List<PlayerTemplateModel>>
+    val allCounters: LiveData<List<CounterTemplateModel>>
+
+    init {
+        allTemplates = repository.allPlayerTemplatesEntity
+        allCounters = repository.allCountersEntity
+    }
+
+    //TODO: delete
+    fun insert() = viewModelScope.launch {
+        val player = PlayerTemplateModel(
+            name = "Player1",
+            counters = listOf(
+                CounterTemplateModel(
+                    id = repository.getNewCounterTemplateId(),
+                    startingValue = 21,
+                    name = "CMD",
+                    color = 234
+                )
+            )
+        )
+        repository.insert(player)
+    }
 
     fun setNumberOfPlayers(number: Int) {
         val currNumberPlayers = _players.value?.size ?: 0
@@ -36,7 +66,7 @@ class SetupViewModel : ViewModel() {
 
             //remove last in order
             for (i in 0 until diff) {
-                newPlayerList.removeAt(newPlayerList.size -1)
+                newPlayerList.removeAt(newPlayerList.size - 1)
             }
         }
 

@@ -1,6 +1,8 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +11,20 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.kenkeremath.mtgcounter.model.PlayerSetupModel
+import androidx.lifecycle.ViewModelProvider
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
+import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.view.TabletopLayout
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
+
+    @Inject
+    lateinit var viewModelFactory: SetupViewModelFactory
 
     lateinit var playerNumberButtons: List<Button>
     lateinit var fivePlusPlayersButton: Button
@@ -36,6 +45,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     }
 
     private lateinit var viewModel: SetupViewModel
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,6 +88,10 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             lifeButton.setOnClickListener { viewModel.setStartingLife(lifeButton.tag as Int) }
         }
         customLifeButton = view.findViewById(R.id.custom_life_button)
+        customLifeButton.setOnClickListener {
+            viewModel.insert()
+        }
+
 
         keepScreenAwakeCheckbox = view.findViewById(R.id.keep_screen_awake_checkbox)
         keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
@@ -94,7 +112,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SetupViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(SetupViewModel::class.java)
 
         viewModel.players.observe(viewLifecycleOwner, Observer<List<PlayerSetupModel>> { players ->
             players?.size?.let {
@@ -160,6 +178,20 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     tableTopModeButton.isSelected = tableTopModeButton.tag == it
                 }
                 tabletopLayoutAdapter.updateAll(it, viewModel.players.value ?: emptyList())
+            }
+        })
+
+        //TODO: delete
+        viewModel.allTemplates.observe(viewLifecycleOwner, Observer<List<PlayerTemplateModel>> {
+            it?.let {
+                Log.d("TEMPLATES", it.toString())
+            }
+        })
+
+        //TODO: delete
+        viewModel.allCounters.observe(viewLifecycleOwner, Observer<List<CounterTemplateModel>> {
+            it?.let {
+                Log.d("COUNTERS", it.toString())
             }
         })
     }

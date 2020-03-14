@@ -50,7 +50,7 @@ enum class TableLayoutPosition {
     BOTTOM_PANEL_3
 }
 
-abstract class TabletopLayoutAdapter<VH, VM>(protected val parent: TabletopLayout) where VH : TabletopLayoutViewHolder<VM> {
+abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout) where VH : TabletopLayoutViewHolder<VM> {
 
     private val viewHolders: Map<TableLayoutPosition, VH>
 
