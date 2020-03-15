@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter.persistence
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
@@ -11,7 +12,28 @@ import javax.inject.Inject
 
 
 class GameRepositoryImpl @Inject constructor(private val database: AppDatabase, private val datastore: Datastore) : GameRepository {
-    override fun getNewCounterTemplateId(): Int {
+    override var startingLife: Int
+        get() = datastore.startingLife
+        set(value) {
+            datastore.startingLife = value
+        }
+    override var numberOfPlayers: Int
+        get() = datastore.numberOfPlayers
+        set(value) {
+            datastore.numberOfPlayers = value
+        }
+    override var keepScreenOn: Boolean
+        get() = datastore.keepScreenOn
+        set(value) {
+            datastore.keepScreenOn = value
+        }
+    override var tabletopType: TabletopType
+        get() = datastore.tabletopType
+        set(value) {
+            datastore.tabletopType = value
+        }
+
+    override fun createNewCounterTemplateId(): Int {
         return datastore.getNewCounterTemplateId()
     }
 

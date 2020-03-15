@@ -2,17 +2,15 @@ package com.kenkeremath.mtgcounter.ui.setup
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.kenkeremath.mtgcounter.model.PlayerSetupModel
+import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.persistence.GameRepository
-import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
-import org.mockito.Captor
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -22,10 +20,7 @@ class SetupViewModelTest {
     val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    lateinit var playersObserver: Observer<List<PlayerSetupModel>>
-
-    @Captor
-    lateinit var playersArgumentCaptor: ArgumentCaptor<List<PlayerSetupModel>>
+    lateinit var playersObserver: Observer<Int>
 
     @Mock
     lateinit var keepScreenOnObserver: Observer<Boolean>
@@ -34,40 +29,69 @@ class SetupViewModelTest {
     lateinit var startingLifeObserver: Observer<Int>
 
     @Mock
+    lateinit var tabletopTypeObserver: Observer<TabletopType>
+
+    @Mock
     lateinit var gameRepository: GameRepository
 
     lateinit var viewModel: SetupViewModel
 
     @Before
     fun setup() {
+        Mockito.`when`(gameRepository.keepScreenOn).thenReturn(true)
+        Mockito.`when`(gameRepository.startingLife).thenReturn(15)
+        Mockito.`when`(gameRepository.numberOfPlayers).thenReturn(7)
+        Mockito.`when`(gameRepository.tabletopType).thenReturn(TabletopType.FIVE_ACROSS)
+
         viewModel = SetupViewModel(gameRepository)
         viewModel.keepScreenOn.observeForever(keepScreenOnObserver)
         viewModel.startingLife.observeForever(startingLifeObserver)
-        viewModel.players.observeForever(playersObserver)
+        viewModel.numberOfPlayers.observeForever(playersObserver)
+        viewModel.tabletopType.observeForever(tabletopTypeObserver)
+    }
+
+    @Test
+    fun initializingPullsValuesFromRepository() {
+        verify(keepScreenOnObserver, times(1)).onChanged(true)
+        verify(startingLifeObserver, times(1)).onChanged(15)
+        verify(playersObserver, times(1)).onChanged(7)
+        verify(tabletopTypeObserver, times(1)).onChanged(TabletopType.FIVE_ACROSS)
+
     }
 
     @Test
     fun checkingKeepScreenOnCheckboxUpdatesLiveData() {
-        verify(keepScreenOnObserver, never()).onChanged(ArgumentMatchers.any())
+        //Called during initialization to set value
+        verify(keepScreenOnObserver, times(1)).onChanged(ArgumentMatchers.any())
         viewModel.setKeepScreenOn(true)
-        verify(keepScreenOnObserver, times(1)).onChanged(true)
+        verify(keepScreenOnObserver, times(2)).onChanged(ArgumentMatchers.any())
+        verify(keepScreenOnObserver, atLeastOnce()).onChanged(true)
     }
 
     @Test
     fun selectingStartingLifeUpdatesLiveData() {
-        verify(startingLifeObserver, never()).onChanged(ArgumentMatchers.any())
+        //Called during initialization to set value
+        verify(startingLifeObserver, times(1)).onChanged(ArgumentMatchers.any())
         viewModel.setStartingLife(40)
-        verify(startingLifeObserver, times(1)).onChanged(40)
+        verify(startingLifeObserver, times(2)).onChanged(ArgumentMatchers.any())
+        verify(startingLifeObserver, atLeastOnce()).onChanged(40)
     }
 
     @Test
     fun selectingNumberOfPlayersUpdatesLiveData() {
-        verify(playersObserver, never()).onChanged(ArgumentMatchers.any())
+        //Called during initialization to set value
+        verify(playersObserver, times(1)).onChanged(ArgumentMatchers.any())
         viewModel.setNumberOfPlayers(4)
-        verify(playersObserver, times(1)).onChanged(playersArgumentCaptor.capture())
+        verify(playersObserver, times(2)).onChanged(ArgumentMatchers.any())
+        verify(playersObserver, atLeastOnce()).onChanged(4)
+    }
 
-        val players = playersArgumentCaptor.value
-
-        assertEquals(4, players.size)
+    @Test
+    fun selectingTabletopTypeUpdatesLiveData() {
+        //Called during initialization to set value
+        verify(tabletopTypeObserver, times(1)).onChanged(ArgumentMatchers.any())
+        viewModel.setTabletopType(TabletopType.LIST)
+        verify(tabletopTypeObserver, times(2)).onChanged(ArgumentMatchers.any())
+        verify(tabletopTypeObserver, atLeastOnce()).onChanged(TabletopType.LIST)
     }
 }

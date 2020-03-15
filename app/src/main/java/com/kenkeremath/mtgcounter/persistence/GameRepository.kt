@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.persistence
 
 import androidx.lifecycle.LiveData
+import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
@@ -11,5 +12,9 @@ interface GameRepository {
     val allCountersEntity: LiveData<List<CounterTemplateModel>>
     suspend fun insert(playerTemplate: PlayerTemplateModel)
     suspend fun insert(counterTemplate: CounterTemplateModel)
-    fun getNewCounterTemplateId() : Int
+    fun createNewCounterTemplateId() : Int
+    var startingLife : Int
+    var numberOfPlayers: Int
+    var keepScreenOn : Boolean
+    var tabletopType: TabletopType
 }

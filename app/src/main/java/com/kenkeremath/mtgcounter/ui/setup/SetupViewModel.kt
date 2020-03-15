@@ -1,15 +1,13 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
-import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kenkeremath.mtgcounter.model.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
-import com.kenkeremath.mtgcounter.persistence.*
+import com.kenkeremath.mtgcounter.persistence.GameRepository
 import kotlinx.coroutines.launch
 
 class SetupViewModel constructor(private val repository: GameRepository) : ViewModel() {
@@ -20,8 +18,8 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     private val _keepScreenOn = MutableLiveData<Boolean>()
     val keepScreenOn: LiveData<Boolean> get() = _keepScreenOn
 
-    private val _players = MutableLiveData<List<PlayerSetupModel>>()
-    val players: LiveData<List<PlayerSetupModel>> get() = _players
+    private val _numberOfPlayers = MutableLiveData<Int>()
+    val numberOfPlayers: LiveData<Int> get() = _numberOfPlayers
 
     private val _tabletopType = MutableLiveData<TabletopType>()
     val tabletopType: LiveData<TabletopType> get() = _tabletopType
@@ -33,6 +31,11 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     init {
         allTemplates = repository.allPlayerTemplatesEntity
         allCounters = repository.allCountersEntity
+
+        _startingLife.value = repository.startingLife
+        _numberOfPlayers.value = repository.numberOfPlayers
+        _tabletopType.value = repository.tabletopType
+        _keepScreenOn.value = repository.keepScreenOn
     }
 
     //TODO: delete
@@ -41,7 +44,7 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
             name = "Player1",
             counters = listOf(
                 CounterTemplateModel(
-                    id = repository.getNewCounterTemplateId(),
+                    id = repository.createNewCounterTemplateId(),
                     startingValue = 21,
                     name = "CMD",
                     color = 234
@@ -52,36 +55,22 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     }
 
     fun setNumberOfPlayers(number: Int) {
-        val currNumberPlayers = _players.value?.size ?: 0
-        val newPlayerList = _players.value?.toMutableList() ?: mutableListOf()
-        if (number > currNumberPlayers) {
-            val diff = number - currNumberPlayers
-
-            //Add new empty players as necessary
-            for (i in 0 until diff) {
-                newPlayerList.add(PlayerSetupModel(color = Color.RED))
-            }
-        } else if (number < currNumberPlayers) {
-            val diff = currNumberPlayers - number
-
-            //remove last in order
-            for (i in 0 until diff) {
-                newPlayerList.removeAt(newPlayerList.size - 1)
-            }
-        }
-
-        _players.value = newPlayerList
+        repository.numberOfPlayers = number
+        _numberOfPlayers.value = number
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {
+        repository.keepScreenOn = keepScreenOn
         _keepScreenOn.value = keepScreenOn
     }
 
     fun setStartingLife(startingLife: Int) {
+        repository.startingLife = startingLife
         _startingLife.value = startingLife
     }
 
     fun setTabletopType(tabletopType: TabletopType) {
+        repository.tabletopType = tabletopType
         _tabletopType.value = tabletopType
     }
 }

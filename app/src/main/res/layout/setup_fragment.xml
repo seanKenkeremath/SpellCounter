@@ -11,13 +11,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.setup.SetupFragment">
 
-    <com.kenkeremath.mtgcounter.view.TabletopLayout
-        android:id="@+id/tabletop_layout"
-        android:visibility="gone"
-        android:rotation="90"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <TextView
         android:id="@+id/player_number_label"
         android:text="@string/player_number_label"
@@ -173,6 +166,13 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/start_button"
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

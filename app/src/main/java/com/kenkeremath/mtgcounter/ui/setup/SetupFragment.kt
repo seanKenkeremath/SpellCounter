@@ -1,8 +1,8 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
-import com.kenkeremath.mtgcounter.view.TabletopLayout
+import com.kenkeremath.mtgcounter.ui.game.GameActivity
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -37,8 +34,8 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     lateinit var tabletopContainer : ViewGroup
     lateinit var tabletopModeButtons: List<Button>
 
-    lateinit var tabletopLayout : TabletopLayout
-    lateinit var tabletopLayoutAdapter: SetupTabletopLayoutAdapter
+    lateinit var startButton: Button
+
 
     companion object {
         fun newInstance() = SetupFragment()
@@ -106,16 +103,16 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             view.findViewById(R.id.tabletop_b)
         )
 
-        tabletopLayout = view.findViewById(R.id.tabletop_layout)
-        tabletopLayoutAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
+        startButton = view.findViewById(R.id.start_button)
+        startButton.setOnClickListener { startActivity(Intent(context, GameActivity::class.java))}
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(SetupViewModel::class.java)
 
-        viewModel.players.observe(viewLifecycleOwner, Observer<List<PlayerSetupModel>> { players ->
-            players?.size?.let {
+        viewModel.numberOfPlayers.observe(viewLifecycleOwner, Observer<Int> { numberOfPlayers ->
+            numberOfPlayers?.let {
                 for (playerNumberButton in playerNumberButtons) {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
                 }
@@ -124,9 +121,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
             viewModel.setTabletopType(TabletopType.NONE)
 
-            if (players != null) {
+            if (numberOfPlayers != null) {
                 tabletopContainer.visibility = View.VISIBLE
-                val modes = TabletopType.getListForNumber(players.size)
+                val modes = TabletopType.getListForNumber(numberOfPlayers)
                 tabletopModeButtons[0].tag = TabletopType.LIST
                 tabletopModeButtons[1].visibility = View.GONE
                 tabletopModeButtons[2].visibility = View.GONE
@@ -177,21 +174,6 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 for (tableTopModeButton in tabletopModeButtons) {
                     tableTopModeButton.isSelected = tableTopModeButton.tag == it
                 }
-                tabletopLayoutAdapter.updateAll(it, viewModel.players.value ?: emptyList())
-            }
-        })
-
-        //TODO: delete
-        viewModel.allTemplates.observe(viewLifecycleOwner, Observer<List<PlayerTemplateModel>> {
-            it?.let {
-                Log.d("TEMPLATES", it.toString())
-            }
-        })
-
-        //TODO: delete
-        viewModel.allCounters.observe(viewLifecycleOwner, Observer<List<CounterTemplateModel>> {
-            it?.let {
-                Log.d("COUNTERS", it.toString())
             }
         })
     }
