@@ -20,13 +20,16 @@ enum class TabletopType(val numberOfPlayers: Int, val positions: List<TableLayou
 
     companion object {
 
-        //returns the tabletop types that are specific to a given number of players
+        //returns the tabletop types that are compatible with a given number of players
         fun getListForNumber(numberOfPlayers: Int) : List<TabletopType> {
             val list = mutableListOf<TabletopType>()
             for (value in values()) {
                 if (value.numberOfPlayers == numberOfPlayers) {
                     list.add(value)
                 }
+            }
+            if (numberOfPlayers > 1) {
+                list.add(LIST)
             }
             return list
         }

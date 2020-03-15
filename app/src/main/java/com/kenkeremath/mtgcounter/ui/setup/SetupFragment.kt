@@ -31,17 +31,17 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     lateinit var keepScreenAwakeCheckbox: CheckBox
 
-    lateinit var tabletopContainer : ViewGroup
+    lateinit var tabletopContainer: ViewGroup
     lateinit var tabletopModeButtons: List<Button>
 
     lateinit var startButton: Button
+
+    private lateinit var viewModel: SetupViewModel
 
 
     companion object {
         fun newInstance() = SetupFragment()
     }
-
-    private lateinit var viewModel: SetupViewModel
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -63,7 +63,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             view.findViewById(R.id.three_player_button),
             view.findViewById(R.id.four_player_button),
             view.findViewById(R.id.five_player_button)
-            )
+        )
         fivePlusPlayersButton = view.findViewById(R.id.five_plus_player_button)
         //Save us some boilerplate by assuming buttons will be in order and start at 1 player
         playerNumberButtons.forEachIndexed { index, button ->
@@ -86,7 +86,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         }
         customLifeButton = view.findViewById(R.id.custom_life_button)
         customLifeButton.setOnClickListener {
-            viewModel.insert()
+//            viewModel.insert()
         }
 
 
@@ -95,7 +95,6 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
 
         tabletopContainer = view.findViewById(R.id.tabletop_container)
-        tabletopContainer.visibility = View.GONE
 
         tabletopModeButtons = listOf(
             view.findViewById(R.id.tabletop_list),
@@ -104,7 +103,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         )
 
         startButton = view.findViewById(R.id.start_button)
-        startButton.setOnClickListener { startActivity(Intent(context, GameActivity::class.java))}
+        startButton.setOnClickListener { startActivity(Intent(context, GameActivity::class.java)) }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -117,30 +116,6 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
                 }
                 fivePlusPlayersButton.isSelected = it >= 5
-            }
-
-            viewModel.setTabletopType(TabletopType.NONE)
-
-            if (numberOfPlayers != null) {
-                tabletopContainer.visibility = View.VISIBLE
-                val modes = TabletopType.getListForNumber(numberOfPlayers)
-                tabletopModeButtons[0].tag = TabletopType.LIST
-                tabletopModeButtons[1].visibility = View.GONE
-                tabletopModeButtons[2].visibility = View.GONE
-                if (modes.isNotEmpty()) {
-                    tabletopModeButtons[1].tag = modes[0]
-                    tabletopModeButtons[1].visibility = View.VISIBLE
-                }
-                if (modes.size > 1) {
-                    tabletopModeButtons[2].tag = modes[1]
-                    tabletopModeButtons[2].visibility = View.VISIBLE
-                }
-
-                for (tabletopModeButton in tabletopModeButtons) {
-                    tabletopModeButton.setOnClickListener { viewModel.setTabletopType(tabletopModeButton.tag as TabletopType) }
-                }
-            } else {
-                tabletopContainer.visibility = View.GONE
             }
         })
 
@@ -166,6 +141,23 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     keepScreenAwakeCheckbox.isChecked = it
                 }
                 keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
+            }
+        })
+
+        viewModel.availableTabletopTypes.observe(viewLifecycleOwner, Observer<List<TabletopType>> {
+            it?.let {
+                for (tabletopModeButton in tabletopModeButtons) {
+                    tabletopModeButton.visibility = View.GONE
+                }
+                for (i in 0 until kotlin.math.min(3, it.size)) {
+                    tabletopModeButtons[i].tag = it[i]
+                    tabletopModeButtons[i].visibility = View.VISIBLE
+                    tabletopModeButtons[i].setOnClickListener {
+                        viewModel.setTabletopType(
+                            tabletopModeButtons[i].tag as TabletopType
+                        )
+                    }
+                }
             }
         })
 

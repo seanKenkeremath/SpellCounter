@@ -148,21 +148,21 @@
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List" />
+            android:text="A" />
 
         <Button
             android:id="@+id/tabletop_a"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A" />
+            android:text="B" />
 
         <Button
             android:id="@+id/tabletop_b"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="B" />
+            android:text="C" />
 
 
     </LinearLayout>

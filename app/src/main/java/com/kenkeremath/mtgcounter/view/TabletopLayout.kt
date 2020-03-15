@@ -81,6 +81,14 @@ abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout)
 
     abstract fun createViewHolder(container: RotateLayout): VH
 
+    fun setPositions(tabletopType: TabletopType) {
+        for (tableLayoutPosition in TableLayoutPosition.values()) {
+            if (!tabletopType.positions.contains(tableLayoutPosition)) {
+                updateAtPosition(tableLayoutPosition, null)
+            }
+        }
+    }
+
     fun updateAtPosition(tableLayoutPosition: TableLayoutPosition, viewModel: VM?) {
         if (viewModel == null) {
             viewHolders[tableLayoutPosition]?.container?.visibility = View.GONE
@@ -88,6 +96,10 @@ abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout)
             viewHolders[tableLayoutPosition]?.container?.visibility = View.VISIBLE
             viewHolders[tableLayoutPosition]?.bind(viewModel)
         }
+    }
+
+    fun updateAtPosition(tabletopType: TabletopType, playerPosition: Int, viewModel: VM?) {
+        updateAtPosition(tabletopType.positions[playerPosition], viewModel)
     }
 
     fun updateAll(data: Map<TableLayoutPosition, VM>) {
