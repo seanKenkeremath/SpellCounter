@@ -58,7 +58,7 @@
         tools:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@+id/guideline_half_horizontal"
         app:layout_constraintEnd_toStartOf="@+id/top_panel_2"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/left_panel"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
@@ -71,7 +71,7 @@
         tools:background="@color/optionButtonColorDisabled"
         app:layout_constraintBottom_toTopOf="@+id/guideline_half_horizontal"
         app:layout_constraintEnd_toStartOf="@+id/top_panel_3"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/top_panel_1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
@@ -84,7 +84,7 @@
         tools:background="@color/optionButtonColorSelected"
         app:layout_constraintBottom_toTopOf="@+id/guideline_half_horizontal"
         app:layout_constraintEnd_toStartOf="@+id/right_panel"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/top_panel_2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
@@ -98,7 +98,7 @@
         tools:background="@color/optionButtonColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_panel_2"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/left_panel"
         app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal"
         app:layout_constraintVertical_weight="1" />
@@ -111,7 +111,7 @@
         tools:background="#ff0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bottom_panel_3"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/bottom_panel_1"
         app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal"
         app:layout_constraintVertical_weight="1" />
@@ -124,7 +124,7 @@
         tools:background="@color/optionButtonColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_panel"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@+id/bottom_panel_2"
         app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal"
         app:layout_constraintVertical_weight="1" />
