@@ -3,6 +3,7 @@ package com.kenkeremath.mtgcounter.ui.setup
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.kenkeremath.mtgcounter.model.PlayerSetupModel
+import com.kenkeremath.mtgcounter.persistence.GameRepository
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -32,11 +33,14 @@ class SetupViewModelTest {
     @Mock
     lateinit var startingLifeObserver: Observer<Int>
 
+    @Mock
+    lateinit var gameRepository: GameRepository
+
     lateinit var viewModel: SetupViewModel
 
     @Before
     fun setup() {
-        viewModel = SetupViewModel()
+        viewModel = SetupViewModel(gameRepository)
         viewModel.keepScreenOn.observeForever(keepScreenOnObserver)
         viewModel.startingLife.observeForever(startingLifeObserver)
         viewModel.players.observeForever(playersObserver)
