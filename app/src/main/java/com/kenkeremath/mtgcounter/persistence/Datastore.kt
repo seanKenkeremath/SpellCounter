@@ -7,5 +7,6 @@ interface Datastore {
     var startingLife : Int
     var numberOfPlayers: Int
     var keepScreenOn : Boolean
+    var hideNavigation : Boolean
     var tabletopType: TabletopType
 }

@@ -129,10 +129,29 @@
             android:text="Keep Screen Awake" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/hide_navigation_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
+
+        <CheckBox
+            android:id="@+id/hide_navigation_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hide Navigation" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tabletop_label"
         android:text="@string/tabletop_label"
-        app:layout_constraintTop_toBottomOf="@+id/keep_screen_awake_container"
+        app:layout_constraintTop_toBottomOf="@+id/hide_navigation_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

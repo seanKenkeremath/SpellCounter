@@ -19,12 +19,16 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
 
     private val _keepScreenOn = MutableLiveData<Boolean>()
     val keepScreenOn: LiveData<Boolean> get() = _keepScreenOn
+    private val _hideNavigation = MutableLiveData<Boolean>()
+    val hideNavigation: LiveData<Boolean> get() = _hideNavigation
+
 
     val allTemplates: LiveData<List<PlayerTemplateModel>> = repository.allPlayerTemplatesEntity
     val allCounters: LiveData<List<CounterTemplateModel>> = repository.allCountersEntity
 
     init {
         _keepScreenOn.value = repository.keepScreenOn
+        _hideNavigation.value = repository.hideNavigation
         players = createPlayers(numberOfPlayers).map { MutableLiveData(it) }
     }
 

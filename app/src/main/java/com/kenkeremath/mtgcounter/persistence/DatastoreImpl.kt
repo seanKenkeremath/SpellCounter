@@ -32,6 +32,7 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         private val KEY_STARTING_LIFE = "key_starting_life"
         private val KEY_NUMBER_PLAYERS = "key_number_Players"
         private val KEY_KEEP_SCREEN_ON = "key_keep_screen_on"
+        private val KEY_HIDE_NAVIGATION = "key_hide_navigation"
         private val KEY_TABLETOP_TYPE = "key_tabletop_type"
 
 
@@ -93,6 +94,9 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
     override var keepScreenOn: Boolean
         get() = prefs.getBoolean(KEY_KEEP_SCREEN_ON, true)
         set(value)  = getEditor().putBoolean(KEY_KEEP_SCREEN_ON, value).apply()
+    override var hideNavigation: Boolean
+        get() = prefs.getBoolean(KEY_HIDE_NAVIGATION, false)
+        set(value)  = getEditor().putBoolean(KEY_HIDE_NAVIGATION, value).apply()
     override var tabletopType: TabletopType
         get() = TabletopType.values()[prefs.getInt(KEY_TABLETOP_TYPE, TabletopType.LIST.ordinal)]
         set(value)  = getEditor().putInt(KEY_TABLETOP_TYPE, value.ordinal).apply()

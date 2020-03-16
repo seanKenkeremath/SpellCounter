@@ -30,6 +30,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     lateinit var customLifeButton: Button
 
     lateinit var keepScreenAwakeCheckbox: CheckBox
+    lateinit var hideNavigationCheckbox: CheckBox
 
     lateinit var tabletopContainer: ViewGroup
     lateinit var tabletopModeButtons: List<Button>
@@ -88,12 +89,13 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         customLifeButton.setOnClickListener {
 //            viewModel.insert()
         }
-
-
+        
         keepScreenAwakeCheckbox = view.findViewById(R.id.keep_screen_awake_checkbox)
         keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
-
-
+        
+        hideNavigationCheckbox = view.findViewById(R.id.hide_navigation_checkbox)
+        hideNavigationCheckbox.setOnCheckedChangeListener(this)
+        
         tabletopContainer = view.findViewById(R.id.tabletop_container)
 
         tabletopModeButtons = listOf(
@@ -144,6 +146,18 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
+        viewModel.hideNavigation.observe(viewLifecycleOwner, Observer<Boolean> {
+            it?.let {
+
+                //Remove listener to avoid infinite loop
+                hideNavigationCheckbox.setOnCheckedChangeListener(null)
+                if (hideNavigationCheckbox.isChecked != it) {
+                    hideNavigationCheckbox.isChecked = it
+                }
+                hideNavigationCheckbox.setOnCheckedChangeListener(this)
+            }
+        })
+
         viewModel.availableTabletopTypes.observe(viewLifecycleOwner, Observer<List<TabletopType>> {
             it?.let {
                 for (tabletopModeButton in tabletopModeButtons) {
@@ -173,6 +187,8 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         if (buttonView == keepScreenAwakeCheckbox) {
             viewModel.setKeepScreenOn(isChecked)
+        } else if (buttonView == hideNavigationCheckbox) {
+            viewModel.setHideNavigation(isChecked)
         }
     }
 }

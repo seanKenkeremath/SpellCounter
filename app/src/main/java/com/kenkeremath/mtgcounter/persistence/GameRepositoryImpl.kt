@@ -32,6 +32,11 @@ class GameRepositoryImpl @Inject constructor(private val database: AppDatabase, 
         set(value) {
             datastore.tabletopType = value
         }
+    override var hideNavigation: Boolean
+        get() = datastore.keepScreenOn
+        set(value) {
+            datastore.keepScreenOn = value
+        }
 
     override fun createNewCounterTemplateId(): Int {
         return datastore.getNewCounterTemplateId()

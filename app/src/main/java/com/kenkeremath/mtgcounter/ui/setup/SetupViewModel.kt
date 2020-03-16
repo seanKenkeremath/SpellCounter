@@ -14,6 +14,9 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     private val _keepScreenOn = MutableLiveData<Boolean>()
     val keepScreenOn: LiveData<Boolean> get() = _keepScreenOn
 
+    private val _hideNavigation = MutableLiveData<Boolean>()
+    val hideNavigation: LiveData<Boolean> get() = _hideNavigation
+
     private val _numberOfPlayers = MutableLiveData<Int>()
     val numberOfPlayers: LiveData<Int> get() = _numberOfPlayers
 
@@ -28,6 +31,7 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
         _numberOfPlayers.value = repository.numberOfPlayers
         _tabletopType.value = repository.tabletopType
         _keepScreenOn.value = repository.keepScreenOn
+        _hideNavigation.value = repository.hideNavigation
         _availableTabletopTypes.value = TabletopType.getListForNumber(repository.numberOfPlayers)
     }
 
@@ -60,6 +64,11 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     fun setKeepScreenOn(keepScreenOn: Boolean) {
         repository.keepScreenOn = keepScreenOn
         _keepScreenOn.value = keepScreenOn
+    }
+
+    fun setHideNavigation(hideNavigation: Boolean) {
+        repository.hideNavigation = hideNavigation
+        _hideNavigation.value = hideNavigation
     }
 
     fun setStartingLife(startingLife: Int) {
