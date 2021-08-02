@@ -50,20 +50,19 @@ enum class TableLayoutPosition {
     BOTTOM_PANEL_3
 }
 
-abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout) where VH : TabletopLayoutViewHolder<VM> {
+abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) where VH : TabletopLayoutViewHolder<T> {
 
-    private val viewHolders: Map<TableLayoutPosition, VH>
+    private val viewHolders: MutableMap<TableLayoutPosition, VH> = mutableMapOf()
 
     private val defaultRotations: Map<TableLayoutPosition, Int>
 
     init {
-        viewHolders = mutableMapOf()
-        for (tableLayoutPosition in parent.panels.keys) {
-            val panel = parent.panels[tableLayoutPosition] ?: continue
-            val viewHolder = this.createViewHolder(panel)
-            viewHolders[tableLayoutPosition] = viewHolder
-            panel.addView(viewHolder.view)
-        }
+        //        for (tableLayoutPosition in parent.panels.keys) {
+//            val panel = parent.panels[tableLayoutPosition] ?: continue
+//            val viewHolder = this.createViewHolder(panel)
+//            viewHolders[tableLayoutPosition] = viewHolder
+//            panel.addView(viewHolder.view)
+//        }
         defaultRotations = mapOf(
             Pair(TableLayoutPosition.SOLO_PANEL, 0),
             Pair(TableLayoutPosition.LEFT_PANEL, 270),
@@ -89,27 +88,33 @@ abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout)
         }
     }
 
-    fun updateAtPosition(tableLayoutPosition: TableLayoutPosition, viewModel: VM?) {
-        if (viewModel == null) {
+    fun updateAtPosition(tableLayoutPosition: TableLayoutPosition, data: T?) {
+        if (viewHolders[tableLayoutPosition] == null) {
+            val panel = parent.panels[tableLayoutPosition] ?: return
+            val viewHolder = this.createViewHolder(panel)
+            viewHolders[tableLayoutPosition] = viewHolder
+            panel.addView(viewHolder.view)
+        }
+        if (data == null) {
             viewHolders[tableLayoutPosition]?.container?.visibility = View.GONE
         } else {
             viewHolders[tableLayoutPosition]?.container?.visibility = View.VISIBLE
-            viewHolders[tableLayoutPosition]?.bind(viewModel)
+            viewHolders[tableLayoutPosition]?.bind(data)
         }
     }
 
-    fun updateAtPosition(tabletopType: TabletopType, playerPosition: Int, viewModel: VM?) {
-        updateAtPosition(tabletopType.positions[playerPosition], viewModel)
+    fun updateAtPosition(tabletopType: TabletopType, playerPosition: Int, data: T?) {
+        updateAtPosition(tabletopType.positions[playerPosition], data)
     }
 
-    fun updateAll(data: Map<TableLayoutPosition, VM>) {
+    fun updateAll(data: Map<TableLayoutPosition, T>) {
         for (layoutPosition in TableLayoutPosition.values()) {
             updateAtPosition(layoutPosition, data[layoutPosition])
         }
     }
 
-    fun updateAll(type: TabletopType, list: List<VM>) {
-        val positionMap : MutableMap<TableLayoutPosition, VM> = mutableMapOf()
+    fun updateAll(type: TabletopType, list: List<T>) {
+        val positionMap : MutableMap<TableLayoutPosition, T> = mutableMapOf()
         //If empty or mismatched size, all positions will be null/hidden by default
         if (type.numberOfPlayers == list.size) {
             for (i in 0 until list.size) {
@@ -146,7 +151,7 @@ abstract class TabletopLayoutAdapter<VH, VM>(private val parent: TabletopLayout)
 }
 
 
-abstract class TabletopLayoutViewHolder<VM>(val container: RotateLayout) {
+abstract class TabletopLayoutViewHolder<T>(val container: RotateLayout) {
     abstract val view : View
-    abstract fun bind(viewModel: VM)
+    abstract fun bind(data: T)
 }

@@ -5,15 +5,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.ui.setup.SetupTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity(), OnPlayerClickedListener {
 
     private lateinit var tabletopLayout: TabletopLayout
-    private lateinit var tabletopLayoutAdapter: SetupTabletopLayoutAdapter
+    private lateinit var tabletopLayoutAdapter: GameTabletopLayoutAdapter
 
     @Inject
     lateinit var gameViewModelFactory: GameViewModelFactory
@@ -28,8 +27,12 @@ class GameActivity : AppCompatActivity() {
 
         tabletopLayout = findViewById(R.id.tabletop_layout)
 
-        tabletopLayoutAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
+        tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this)
         tabletopLayoutAdapter.setPositions(viewModel.tabletopType)
+
+        viewModel.players.observe(this) {
+            tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -51,5 +54,9 @@ class GameActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
+    }
+
+    override fun onLifeIncremented(playerIndex: Int, amount: Int) {
+        viewModel.incrementPlayerLife(playerIndex, amount)
     }
 }

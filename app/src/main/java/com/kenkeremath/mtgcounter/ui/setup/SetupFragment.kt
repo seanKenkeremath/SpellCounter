@@ -53,7 +53,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.setup_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_setup, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
