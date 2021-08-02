@@ -56,7 +56,8 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
         _numberOfPlayers.value = number
         val availableTabletopTypes = TabletopType.getListForNumber(number)
         _availableTabletopTypes.value = availableTabletopTypes
-        if (availableTabletopTypes.isNotEmpty()) {
+        val currentTabletopType = _tabletopType.value
+        if (!availableTabletopTypes.contains(currentTabletopType)) {
             setTabletopType(TabletopType.getListForNumber(number)[0])
         }
     }
