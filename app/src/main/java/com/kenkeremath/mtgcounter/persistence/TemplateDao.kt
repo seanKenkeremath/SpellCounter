@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.persistence
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
@@ -12,13 +11,13 @@ abstract class TemplateDao {
 
     @Transaction
     @Query("Select * from ${PlayerTemplateEntity.TABLE_PLAYER_TEMPLATES}")
-    abstract fun getPlayerTemplates() : LiveData<List<PlayerTemplateWithCountersEntity>>
+    abstract fun getPlayerTemplates() : List<PlayerTemplateWithCountersEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insert(playerTemplateEntity: PlayerTemplateEntity)
 
     @Query("Select * from ${CounterTemplateEntity.TABLE_COUNTER_TEMPLATES}")
-    abstract fun getCounterTemplates() : LiveData<List<CounterTemplateEntity>>
+    abstract fun getCounterTemplates() : List<CounterTemplateEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(counterTemplateEntity: CounterTemplateEntity)

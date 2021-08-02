@@ -19,12 +19,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]
 }
 
 ext {
     roomVersion = '2.3.0'
     archLifecycleVersion = '2.3.1'
     daggerVersion = '2.35'
+    coroutinesVersion = '1.4.1'
 }
 
 dependencies {
@@ -47,8 +64,10 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
     implementation 'rongi.rotate-layout:rotate-layout:3.0.0'
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+
     //Dagger
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
@@ -56,7 +75,9 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "org.mockito:mockito-core:2.26.0"
+    testImplementation 'org.robolectric:robolectric:4.6'
+    testImplementation "io.mockk:mockk:1.10.3-jdk8"
+    testImplementation "androidx.test:core:1.4.0"
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

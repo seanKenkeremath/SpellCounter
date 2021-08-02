@@ -1,34 +1,60 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
+import com.kenkeremath.mtgcounter.CoroutineTestRule
+import com.kenkeremath.mtgcounter.TestApplication
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.persistence.GameRepository
+import com.kenkeremath.mtgcounter.persistence.*
+import com.squareup.moshi.Moshi
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O], application = TestApplication::class)
 class SetupViewModelTest {
     @get:Rule
     val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    lateinit var gameRepository: GameRepository
+    @get:Rule
+    var coroutinesTestRule = CoroutineTestRule()
+
+    private lateinit var gameRepository: GameRepository
 
     private lateinit var viewModel: SetupViewModel
 
+    private lateinit var datastore: Datastore
+
+    @MockK
+    private lateinit var database: AppDatabase
+
+    @MockK
+    private lateinit var templateDao: TemplateDao
+
     @Before
     fun setup() {
-        Mockito.`when`(gameRepository.keepScreenOn).thenReturn(false)
-        Mockito.`when`(gameRepository.startingLife).thenReturn(15)
-        Mockito.`when`(gameRepository.numberOfPlayers).thenReturn(3)
-        Mockito.`when`(gameRepository.tabletopType).thenReturn(TabletopType.THREE_CIRCLE)
-
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        datastore = DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+        every {
+            database.templateDao()
+        } returns templateDao
+        every {
+            templateDao.getCounterTemplates()
+        } returns emptyList()
+        gameRepository = GameRepositoryImpl(database, datastore)
+        datastore.keepScreenOn = false
+        datastore.startingLife = 15
+        datastore.numberOfPlayers = 3
+        datastore.tabletopType = TabletopType.THREE_CIRCLE
         viewModel = SetupViewModel(gameRepository)
     }
 

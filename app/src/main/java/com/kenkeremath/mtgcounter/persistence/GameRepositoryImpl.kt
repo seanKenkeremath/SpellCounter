@@ -1,17 +1,24 @@
 package com.kenkeremath.mtgcounter.persistence
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import com.kenkeremath.mtgcounter.coroutines.DefaultDispatcherProvider
+import com.kenkeremath.mtgcounter.coroutines.DispatcherProvider
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 
-class GameRepositoryImpl @Inject constructor(private val database: AppDatabase, private val datastore: Datastore) : GameRepository {
+class GameRepositoryImpl @Inject constructor(
+    private val database: AppDatabase,
+    private val datastore: Datastore,
+    private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
+) : GameRepository {
     override var startingLife: Int
         get() = datastore.startingLife
         set(value) {
@@ -38,22 +45,43 @@ class GameRepositoryImpl @Inject constructor(private val database: AppDatabase, 
             datastore.keepScreenOn = value
         }
 
-    override fun createNewCounterTemplateId(): Int {
-        return datastore.getNewCounterTemplateId()
+    override fun getAllPlayerTemplates(): Flow<List<PlayerTemplateModel>> {
+        return flow {
+            val entities = database.templateDao().getPlayerTemplates()
+            emit(entities.map {
+                PlayerTemplateModel(it)
+            })
+        }.flowOn(dispatcherProvider.default())
     }
 
-    override val allCountersEntity: LiveData<List<CounterTemplateModel>> =
-        Transformations.map(database.templateDao().getCounterTemplates()) {
-            it.map(::CounterTemplateModel)
-        }
+    override fun getAllCounters(): Flow<List<CounterTemplateModel>> {
+        return flow {
+            val entities = database.templateDao().getCounterTemplates()
+            emit(entities.map {
+                CounterTemplateModel(it)
+            })
+        }.flowOn(dispatcherProvider.default())
+    }
 
-    override val allPlayerTemplatesEntity: LiveData<List<PlayerTemplateModel>> =
-        Transformations.map(
-            database.templateDao().getPlayerTemplates()) {
-            it.map(::PlayerTemplateModel)
+    override fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean> {
+        return flow {
+            val playerEntity = PlayerTemplateEntity(name = playerTemplate.name)
+            database.templateDao().replacePlayerTemplate(playerEntity)
+            for (counterTemplate in playerTemplate.counters) {
+                addCounterTemplateInternal(counterTemplate)
+                database.templateDao().insert(
+                    PlayerCounterTemplateCrossRefEntity(
+                        playerTemplateId = playerEntity.name,
+                        counterTemplateId = counterTemplate.id
+                    )
+                )
+            }
+            emit(true)
         }
+            .flowOn(dispatcherProvider.default())
+    }
 
-    override suspend fun insert(counterTemplate: CounterTemplateModel) {
+    private suspend fun addCounterTemplateInternal(counterTemplate: CounterTemplateModel) {
         database.templateDao().insert(
             CounterTemplateEntity(
                 id = counterTemplate.id,
@@ -65,18 +93,15 @@ class GameRepositoryImpl @Inject constructor(private val database: AppDatabase, 
         )
     }
 
-    override suspend fun insert(playerTemplate: PlayerTemplateModel) {
-        val playerEntity = PlayerTemplateEntity(name = playerTemplate.name)
-        database.templateDao().replacePlayerTemplate(playerEntity)
-        for (counterTemplate in playerTemplate.counters) {
-            insert(counterTemplate)
-            database.templateDao().insert(
-                PlayerCounterTemplateCrossRefEntity(
-                    playerTemplateId = playerEntity.name,
-                    counterTemplateId = counterTemplate.id
-                )
-            )
-        }
+    override fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Boolean> {
+        return flow {
+            addCounterTemplateInternal(counterTemplate)
+            emit(true)
+        }.flowOn(dispatcherProvider.default())
+    }
+
+    override fun createNewCounterTemplateId(): Int {
+        return datastore.getNewCounterTemplateId()
     }
 }
 
