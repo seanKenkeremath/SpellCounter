@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <!-- TODO -->
-    <TextView
+    <com.kenkeremath.mtgcounter.view.LifeCounterView
         android:id="@+id/life"
         android:gravity="center"
         android:layout_width="match_parent"
