@@ -21,13 +21,12 @@ class GameTabletopLayoutViewHolder(
 
 
     init {
-        life.setOnValueUpdatedListener(object: CounterView.OnValueUpdatedListener {
-            override fun onValueSet(value: Int) {
-                //TODO
+        life.setOnAmountUpdatedListener(object: CounterView.OnAmountUpdatedListener {
+            override fun onAmountSet(amount: Int) {
+                life.setAmount(amount)
             }
-
-            override fun onValueIncremented(valueDifference: Int) {
-                onPlayerClickedListener.onLifeIncremented(playerIndex, valueDifference)
+            override fun onAmountIncremented(amountDifference: Int) {
+                onPlayerClickedListener.onLifeIncremented(playerIndex, amountDifference)
             }
         })
     }
@@ -35,6 +34,6 @@ class GameTabletopLayoutViewHolder(
 
     override fun bind(data: PlayerModel) {
         playerIndex = data.id
-        life.setValue(data.life)
+        life.setAmount(data.life)
     }
 }
