@@ -9,7 +9,7 @@ import com.kenkeremath.mtgcounter.view.TabletopLayout
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class GameActivity : AppCompatActivity(), OnPlayerClickedListener {
+class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
 
     private lateinit var tabletopLayout: TabletopLayout
     private lateinit var tabletopLayoutAdapter: GameTabletopLayoutAdapter
@@ -56,7 +56,23 @@ class GameActivity : AppCompatActivity(), OnPlayerClickedListener {
         }
     }
 
-    override fun onLifeIncremented(playerIndex: Int, amount: Int) {
-        viewModel.incrementPlayerLife(playerIndex, amount)
+    override fun onLifeIncremented(playerId: Int, amountDifference: Int) {
+        viewModel.incrementPlayerLife(playerId, amountDifference)
+    }
+
+    override fun onLifeAmountSet(playerId: Int, amount: Int) {
+        //TODO
+    }
+
+    override fun onCounterIncremented(playerId: Int, counterId: Int, amountDifference: Int) {
+        viewModel.incrementCounter(playerId, counterId, amountDifference)
+    }
+
+    override fun onCounterAmountSet(playerId: Int, counterId: Int, amount: Int) {
+        //TODO
+    }
+
+    override fun onCounterAdded(playerId: Int) {
+        viewModel.addCounter(playerId)
     }
 }

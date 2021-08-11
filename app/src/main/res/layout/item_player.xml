@@ -4,11 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <!-- TODO -->
     <com.kenkeremath.mtgcounter.view.LifeCounterView
         android:id="@+id/life"
         android:gravity="center"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/counters_recycler"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <Button
+        android:id="@+id/add_counter"
+        android:text="+"
+        android:layout_width="60dp"
         android:layout_height="match_parent"/>
 
 </LinearLayout>

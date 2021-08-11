@@ -54,14 +54,14 @@ class GameViewModelTest {
         gameRepository = GameRepositoryImpl(database, datastore, coroutinesTestRule.testDispatcherProvider)
         val counter1 = CounterTemplateEntity(
             id = 1,
-            startingValue = 3,
+            startingAmount = 3,
             name = "counter1",
             color = 1234,
             linkToPlayer = false
         )
         val counter2 = CounterTemplateEntity(
             id = 2,
-            startingValue = 4,
+            startingAmount = 4,
             name = "counter2",
             color = 7,
             linkToPlayer = true
@@ -99,6 +99,18 @@ class GameViewModelTest {
     }
 
     @Test
+    fun add_counter_updates_player() {
+        val id = viewModel.players.value!![0].id
+        assertEquals(0, viewModel.players.value!![0].counters.size)
+        assertEquals(0, viewModel.players.value!![1].counters.size)
+        assertEquals(0, viewModel.players.value!![2].counters.size)
+        viewModel.addCounter(id)
+        assertEquals(1, viewModel.players.value!![0].counters.size)
+        assertEquals(0, viewModel.players.value!![1].counters.size)
+        assertEquals(0, viewModel.players.value!![2].counters.size)
+    }
+
+    @Test
     fun increment_life_updates_players() {
         viewModel.incrementPlayerLife(0, 1)
         viewModel.incrementPlayerLife(1, 5)
@@ -119,7 +131,7 @@ class GameViewModelTest {
     }
 
     @Test
-    fun increment_life_does_nothing_when_outside_player_bounds() {
+    fun increment_life_does_nothing_when_player_id_not_found() {
         viewModel.incrementPlayerLife(-1, 1)
         viewModel.incrementPlayerLife(4, 1)
 
@@ -129,4 +141,55 @@ class GameViewModelTest {
         assertEquals(15, viewModel.players.value!![2].life)
     }
 
+    @Test
+    fun increment_counter_updates_player() {
+        val playerId = viewModel.players.value!![0].id
+        viewModel.addCounter(playerId)
+        assertEquals(1, viewModel.players.value!![0].counters.size)
+        val counterId = viewModel.players.value!![0].counters[0].id
+        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+
+        viewModel.incrementCounter(playerId, counterId)
+
+        assertEquals(1, viewModel.players.value!![0].counters[0].amount)
+
+        viewModel.incrementCounter(playerId, counterId, 10)
+
+        assertEquals(11, viewModel.players.value!![0].counters[0].amount)
+    }
+
+    @Test
+    fun increment_counter_allows_negative() {
+        val playerId = viewModel.players.value!![0].id
+        viewModel.addCounter(playerId)
+        val counterId = viewModel.players.value!![0].counters[0].id
+        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+
+        viewModel.incrementCounter(playerId, counterId, -1)
+
+        assertEquals(-1, viewModel.players.value!![0].counters[0].amount)
+    }
+
+    @Test
+    fun increment_counter_does_nothing_when_counter_id_not_found() {
+        val playerId = viewModel.players.value!![0].id
+        viewModel.addCounter(playerId)
+        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+
+        viewModel.incrementCounter(playerId, -9999, 1)
+
+        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+    }
+
+    @Test
+    fun increment_counter_does_nothing_when_player_id_not_found() {
+        val playerId = viewModel.players.value!![0].id
+        viewModel.addCounter(playerId)
+        val counterId = viewModel.players.value!![0].counters[0].id
+
+        viewModel.incrementCounter(-9999, counterId, 1)
+
+        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+
+    }
 }

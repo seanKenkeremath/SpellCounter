@@ -5,10 +5,10 @@ import com.kenkeremath.mtgcounter.model.PlayerModel
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.TabletopLayoutAdapter
 
-class GameTabletopLayoutAdapter(parent: TabletopLayout, private val onPlayerClickedListener: OnPlayerClickedListener) :
+class GameTabletopLayoutAdapter(parent: TabletopLayout, private val onPlayerUpdatedListener: OnPlayerUpdatedListener) :
     TabletopLayoutAdapter<GameTabletopLayoutViewHolder, PlayerModel>(parent) {
 
     override fun createViewHolder(container: RotateLayout): GameTabletopLayoutViewHolder {
-        return GameTabletopLayoutViewHolder(container, onPlayerClickedListener)
+        return GameTabletopLayoutViewHolder(container, onPlayerUpdatedListener)
     }
 }

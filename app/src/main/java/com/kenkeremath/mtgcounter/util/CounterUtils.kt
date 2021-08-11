@@ -1,5 +1,7 @@
 package com.kenkeremath.mtgcounter.util
 
+import java.util.*
+
 object CounterUtils {
     private const val LARGE_INCREMENT = 5
     private const val SMALL_INCREMENT = 1
@@ -11,5 +13,8 @@ object CounterUtils {
         } else {
             LARGE_INCREMENT
         }
+    }
+    fun getUniqueId() : Int {
+        return UUID.randomUUID().hashCode()
     }
 }

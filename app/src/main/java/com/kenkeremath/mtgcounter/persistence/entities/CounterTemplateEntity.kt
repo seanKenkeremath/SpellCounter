@@ -10,8 +10,8 @@ data class CounterTemplateEntity(
     @ColumnInfo(name = COLUMN_COUNTER_TEMPLATE_ID)
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    @ColumnInfo(name = "starting_value")
-    val startingValue: Int = 0,
+    @ColumnInfo(name = "starting_amount")
+    val startingAmount: Int = 0,
     @ColumnInfo(name = "name")
     val name: String? = null,
     @ColumnInfo(name = "color")
@@ -26,6 +26,6 @@ data class CounterTemplateEntity(
     }
 
     override fun toString(): String {
-        return "CounterTemplateEntity(id=$id, startingValue=$startingValue, name=$name, color=$color, linkToPlayer=$linkToPlayer)"
+        return "CounterTemplateEntity(id=$id, startingAmount=$startingAmount, name=$name, color=$color, linkToPlayer=$linkToPlayer)"
     }
 }

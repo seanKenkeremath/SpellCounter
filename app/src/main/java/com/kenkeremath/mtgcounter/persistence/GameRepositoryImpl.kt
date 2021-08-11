@@ -85,7 +85,7 @@ class GameRepositoryImpl @Inject constructor(
         database.templateDao().insert(
             CounterTemplateEntity(
                 id = counterTemplate.id,
-                startingValue = counterTemplate.startingValue,
+                startingAmount = counterTemplate.startingAmount,
                 name = counterTemplate.name,
                 color = counterTemplate.color,
                 linkToPlayer = false
