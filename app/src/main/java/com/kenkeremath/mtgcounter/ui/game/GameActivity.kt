@@ -2,17 +2,27 @@ package com.kenkeremath.mtgcounter.ui.game
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
+import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
 
+    private lateinit var tabletopContainer: ViewGroup
     private lateinit var tabletopLayout: TabletopLayout
     private lateinit var tabletopLayoutAdapter: GameTabletopLayoutAdapter
+
+    private lateinit var playersRecyclerView: RecyclerView
+    private lateinit var playersRecyclerAdapter: GamePlayerRecyclerAdapter
 
     @Inject
     lateinit var gameViewModelFactory: GameViewModelFactory
@@ -25,13 +35,27 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
         setContentView(R.layout.activity_game)
         viewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
+        tabletopContainer = findViewById(R.id.tabletop_container)
         tabletopLayout = findViewById(R.id.tabletop_layout)
-
         tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this)
         tabletopLayoutAdapter.setPositions(viewModel.tabletopType)
 
+        playersRecyclerView = findViewById(R.id.players_recycler_view)
+        playersRecyclerView.layoutManager = LinearLayoutManager(this)
+        playersRecyclerAdapter = GamePlayerRecyclerAdapter(this)
+        playersRecyclerView.adapter = playersRecyclerAdapter
+
+        if (viewModel.tabletopType == TabletopType.LIST) {
+            playersRecyclerView.visibility = View.VISIBLE
+            tabletopContainer.visibility = View.GONE
+        } else {
+            playersRecyclerView.visibility = View.GONE
+            tabletopContainer.visibility = View.VISIBLE
+        }
+
         viewModel.players.observe(this) {
             tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
+            playersRecyclerAdapter.setData(it)
         }
     }
 

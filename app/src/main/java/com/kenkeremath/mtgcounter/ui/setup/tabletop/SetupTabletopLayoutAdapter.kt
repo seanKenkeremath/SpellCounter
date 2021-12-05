@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.ui.setup
+package com.kenkeremath.mtgcounter.ui.setup.tabletop
 
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.model.PlayerSetupModel

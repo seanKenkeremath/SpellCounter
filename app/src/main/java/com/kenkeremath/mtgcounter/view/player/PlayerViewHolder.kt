@@ -1,35 +1,31 @@
-package com.kenkeremath.mtgcounter.ui.game
+package com.kenkeremath.mtgcounter.view.player
 
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.PlayerModel
+import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.view.CounterView
 import com.kenkeremath.mtgcounter.view.CountersRecyclerAdapter
-import com.kenkeremath.mtgcounter.view.TabletopLayoutViewHolder
 
-class GameTabletopLayoutViewHolder(
-    container: RotateLayout,
-    private val onPlayerUpdatedListener: OnPlayerUpdatedListener
-) : TabletopLayoutViewHolder<PlayerModel>(container) {
+/**
+ * Generic VH pattern for a player that can be used in a RV or TableTopLayout
+ */
+class PlayerViewHolder(val itemView: View, onPlayerUpdatedListener: OnPlayerUpdatedListener) {
 
-    override val view: View =
-        LayoutInflater.from(container.context).inflate(R.layout.item_player, container, false)
-
-    private val life: CounterView = view.findViewById(R.id.life)
+    private val life: CounterView = itemView.findViewById(R.id.life)
     //TODO: delete temporary button
-    private val addCounter: Button = view.findViewById(R.id.add_counter)
-    private val countersRecycler: RecyclerView = view.findViewById(R.id.counters_recycler)
+    private val addCounter: Button = itemView.findViewById(R.id.add_counter)
+    private val countersRecycler: RecyclerView = itemView.findViewById(R.id.counters_recycler)
     private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
     private var playerId: Int = -1
 
     init {
 
-        countersRecycler.layoutManager = LinearLayoutManager(view.context, RecyclerView.HORIZONTAL, false)
+        countersRecycler.layoutManager =
+            LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
         countersRecycler.adapter = countersAdapter
 
         life.setOnAmountUpdatedListener(object: CounterView.OnAmountUpdatedListener {
@@ -47,7 +43,7 @@ class GameTabletopLayoutViewHolder(
         }
     }
 
-    override fun bind(data: PlayerModel) {
+    fun bind(data: PlayerModel) {
         playerId = data.id
         life.setAmount(data.life)
         countersAdapter.setData(data)

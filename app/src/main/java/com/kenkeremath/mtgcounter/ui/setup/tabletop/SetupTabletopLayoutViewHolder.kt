@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.ui.setup
+package com.kenkeremath.mtgcounter.ui.setup.tabletop
 
 import android.view.LayoutInflater
 import android.view.View
