@@ -62,11 +62,10 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
         }
     }
 
-    //TODO
-    fun addCounter(playerId: Int) {
+    fun addCounter(playerId: Int, counterModel: CounterModel) {
         playerMap[playerId]?.let {
             val counters = it.counters.toMutableList()
-            counters.add(CounterModel(CounterUtils.getUniqueId()))
+            counters.add(counterModel)
             playerMap[playerId] = it.copy(counters = counters)
             _players.value = playerMap.values.toList()
         }

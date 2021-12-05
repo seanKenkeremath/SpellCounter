@@ -8,14 +8,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.CounterModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.ui.dialog.EditCounterDialogFragment
+import com.kenkeremath.mtgcounter.ui.dialog.OnGameDialogListener
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
+class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener, OnGameDialogListener {
 
     private lateinit var tabletopContainer: ViewGroup
     private lateinit var tabletopLayout: TabletopLayout
@@ -37,12 +40,12 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
 
         tabletopContainer = findViewById(R.id.tabletop_container)
         tabletopLayout = findViewById(R.id.tabletop_layout)
-        tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this)
+        tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this, this)
         tabletopLayoutAdapter.setPositions(viewModel.tabletopType)
 
         playersRecyclerView = findViewById(R.id.players_recycler_view)
         playersRecyclerView.layoutManager = LinearLayoutManager(this)
-        playersRecyclerAdapter = GamePlayerRecyclerAdapter(this)
+        playersRecyclerAdapter = GamePlayerRecyclerAdapter(this, this)
         playersRecyclerView.adapter = playersRecyclerAdapter
 
         if (viewModel.tabletopType == TabletopType.LIST) {
@@ -96,7 +99,16 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener {
         //TODO
     }
 
-    override fun onCounterAdded(playerId: Int) {
-        viewModel.addCounter(playerId)
+    override fun onCounterAdded(playerId: Int, counterModel: CounterModel) {
+        viewModel.addCounter(playerId, counterModel)
+    }
+
+    override fun onCounterEdited(playerId: Int, counterPosition: Int, counterModel: CounterModel) {
+        //TODO
+    }
+
+    override fun onOpenAddCounterDialog(playerId: Int) {
+        val dialog = EditCounterDialogFragment.newCreateInstance(playerId)
+        dialog.show(supportFragmentManager, "add_counter")
     }
 }

@@ -6,9 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.PlayerModel
+import com.kenkeremath.mtgcounter.ui.dialog.OnGameDialogListener
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 
-class GamePlayerRecyclerAdapter(private val onPlayerUpdatedListener: OnPlayerUpdatedListener) :
+class GamePlayerRecyclerAdapter(
+    private val onPlayerUpdatedListener: OnPlayerUpdatedListener,
+    private val onGameDialogListener: OnGameDialogListener,
+) :
     RecyclerView.Adapter<GamePlayerRecyclerViewHolder>() {
 
     init {
@@ -34,7 +38,8 @@ class GamePlayerRecyclerAdapter(private val onPlayerUpdatedListener: OnPlayerUpd
     ): GamePlayerRecyclerViewHolder {
         return GamePlayerRecyclerViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_player_list, parent, false),
-            onPlayerUpdatedListener
+            onPlayerUpdatedListener,
+            onGameDialogListener,
         )
     }
 

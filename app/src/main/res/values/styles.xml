@@ -23,4 +23,26 @@
     <style name="PlayerContainer">
         <item name="android:background">@drawable/player_container_bg</item>
     </style>
+
+    <style name="DialogStyle" parent="Theme.AppCompat.Dialog">
+        <!-- TODO -->
+    </style>
+
+    <style name="ValueEditText">
+        <item name="android:ems">3</item>
+        <item name="android:hint">0</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="NameEditText">
+        <item name="android:imeOptions">flagNoExtractUi</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:inputType">text</item>
+    </style>
 </resources>

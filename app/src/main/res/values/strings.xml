@@ -6,4 +6,22 @@
     <string name="starting_life_label">Starting Life:</string>
     <string name="keep_screen_awake_label">Keep Screen Awake</string>
     <string name="tabletop_label">Tabletop:</string>
+
+
+    <!-- Legacy Strings -->
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="replace">Replace</string>
+    <string name="reset">Reset</string>
+
+    <string name="edit_player_title">Edit Player</string>
+    <string name="create_player_title">Create Player</string>
+    <string name="player_starting_value">Starting Life:</string>
+    <string name="player_name">Player Name:</string>
+
+    <string name="counter_name">Label:</string>
+    <string name="counter_starting_value">Starting Value:</string>
+    <string name="edit_counter_title">Edit Counter</string>
+    <string name="create_counter_title">Create Counter</string>
 </resources>

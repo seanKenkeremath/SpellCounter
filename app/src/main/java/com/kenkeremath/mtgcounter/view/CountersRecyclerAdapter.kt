@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.view
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,5 +78,6 @@ class CounterViewHolder(
         this.playerId = playerId
         this.counterId = counterModel.id
         this.counterView.setAmount(counterModel.amount)
+        this.counterView.background = ColorDrawable(counterModel.color)
     }
 }
