@@ -4,9 +4,11 @@ import com.kenkeremath.mtgcounter.model.TabletopType
 
 interface Datastore {
     fun getNewCounterTemplateId() : Int
+    fun setFirstLaunchComplete()
     var startingLife : Int
     var numberOfPlayers: Int
     var keepScreenOn : Boolean
     var hideNavigation : Boolean
     var tabletopType: TabletopType
+    val isFirstLaunch: Boolean
 }

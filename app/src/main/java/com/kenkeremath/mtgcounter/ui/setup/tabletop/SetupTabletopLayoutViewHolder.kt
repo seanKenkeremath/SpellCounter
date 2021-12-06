@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.PlayerSetupModel
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.view.TabletopLayoutViewHolder
 
 class SetupTabletopLayoutViewHolder(container: RotateLayout) :

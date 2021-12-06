@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.view
+package com.kenkeremath.mtgcounter.view.counter
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.util.CounterUtils
+import com.kenkeremath.mtgcounter.view.CounterIncrementerButton
 
 abstract class CounterView(
     layoutResId: Int,
@@ -43,7 +44,8 @@ abstract class CounterView(
         decrementer = findViewById(R.id.decrement_button)
         setAmount(0)
 
-        incrementer.setOnCounterIncrementedListener(object: CounterIncrementerButton.OnCounterIncrementedListener {
+        incrementer.setOnCounterIncrementedListener(object:
+            CounterIncrementerButton.OnCounterIncrementedListener {
             override fun onSingleIncrement() {
                 listener?.onAmountIncremented(1)
             }
@@ -52,7 +54,8 @@ abstract class CounterView(
             }
         })
 
-        decrementer.setOnCounterIncrementedListener(object: CounterIncrementerButton.OnCounterIncrementedListener {
+        decrementer.setOnCounterIncrementedListener(object:
+            CounterIncrementerButton.OnCounterIncrementedListener {
             override fun onSingleIncrement() {
                 listener?.onAmountIncremented(-1)
             }

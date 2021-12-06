@@ -1,8 +1,8 @@
 package com.kenkeremath.mtgcounter.persistence
 
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {

@@ -13,9 +13,11 @@ import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateWithCounter
 import com.squareup.moshi.Moshi
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,22 +52,26 @@ class GameViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         testScope = TestCoroutineScope(coroutinesTestRule.testDispatcher)
-        datastore = DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
-        gameRepository = GameRepositoryImpl(database, datastore, coroutinesTestRule.testDispatcherProvider)
+        datastore =
+            DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+        gameRepository =
+            GameRepositoryImpl(database, datastore, coroutinesTestRule.testDispatcherProvider)
         val counter1 = CounterTemplateEntity(
             id = 1,
-            startingAmount = 3,
             name = "counter1",
             color = 1234,
             linkToPlayer = false
         )
         val counter2 = CounterTemplateEntity(
             id = 2,
-            startingAmount = 4,
             name = "counter2",
             color = 7,
             linkToPlayer = true
         )
+        every {
+            database.templateDao()
+        } returns templateDao
+
         coEvery {
             templateDao.getCounterTemplates()
         } returns listOf(
@@ -91,105 +97,100 @@ class GameViewModelTest {
     }
 
     @Test
-    fun players_created_correctly() {
+    fun players_created_correctly() = coroutinesTestRule.testDispatcher.runBlockingTest {
         assertEquals(3, viewModel.players.value?.size)
-        assertEquals(15, viewModel.players.value!![0].life)
-        assertEquals(15, viewModel.players.value!![1].life)
-        assertEquals(15, viewModel.players.value!![2].life)
+        assertEquals(15, viewModel.players.value!![0].model.life)
+        assertEquals(15, viewModel.players.value!![1].model.life)
+        assertEquals(15, viewModel.players.value!![2].model.life)
     }
 
     @Test
-    fun add_counter_updates_player() {
-        val id = viewModel.players.value!![0].id
-        assertEquals(0, viewModel.players.value!![0].counters.size)
-        assertEquals(0, viewModel.players.value!![1].counters.size)
-        assertEquals(0, viewModel.players.value!![2].counters.size)
-        viewModel.addCounter(id)
-        assertEquals(1, viewModel.players.value!![0].counters.size)
-        assertEquals(0, viewModel.players.value!![1].counters.size)
-        assertEquals(0, viewModel.players.value!![2].counters.size)
-    }
-
-    @Test
-    fun increment_life_updates_players() {
+    fun increment_life_updates_players() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.incrementPlayerLife(0, 1)
         viewModel.incrementPlayerLife(1, 5)
         viewModel.incrementPlayerLife(2, 0)
 
         assertEquals(3, viewModel.players.value?.size)
-        assertEquals(16, viewModel.players.value!![0].life)
-        assertEquals(20, viewModel.players.value!![1].life)
-        assertEquals(15, viewModel.players.value!![2].life)
+        assertEquals(16, viewModel.players.value!![0].model.life)
+        assertEquals(20, viewModel.players.value!![1].model.life)
+        assertEquals(15, viewModel.players.value!![2].model.life)
     }
 
     @Test
-    fun increment_life_allows_negative() {
+    fun increment_life_allows_negative() = coroutinesTestRule.testDispatcher.runBlockingTest {
         viewModel.incrementPlayerLife(0, -1)
 
         assertEquals(3, viewModel.players.value?.size)
-        assertEquals(14, viewModel.players.value!![0].life)
+        assertEquals(14, viewModel.players.value!![0].model.life)
     }
 
     @Test
-    fun increment_life_does_nothing_when_player_id_not_found() {
-        viewModel.incrementPlayerLife(-1, 1)
-        viewModel.incrementPlayerLife(4, 1)
+    fun increment_life_does_nothing_when_player_id_not_found() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            viewModel.incrementPlayerLife(-1, 1)
+            viewModel.incrementPlayerLife(4, 1)
 
-        assertEquals(3, viewModel.players.value?.size)
-        assertEquals(15, viewModel.players.value!![0].life)
-        assertEquals(15, viewModel.players.value!![1].life)
-        assertEquals(15, viewModel.players.value!![2].life)
-    }
+            assertEquals(3, viewModel.players.value?.size)
+            assertEquals(15, viewModel.players.value!![0].model.life)
+            assertEquals(15, viewModel.players.value!![1].model.life)
+            assertEquals(15, viewModel.players.value!![2].model.life)
+        }
 
     @Test
-    fun increment_counter_updates_player() {
-        val playerId = viewModel.players.value!![0].id
-        viewModel.addCounter(playerId)
-        assertEquals(1, viewModel.players.value!![0].counters.size)
-        val counterId = viewModel.players.value!![0].counters[0].id
-        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+    fun increment_counter_updates_player() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val playerId = viewModel.players.value!![0].model.id
+        viewModel.selectCounter(playerId, 1)
+        viewModel.confirmCounterChanges(playerId)
+        assertEquals(1, viewModel.players.value!![0].model.counters.size)
+        val counterId = viewModel.players.value!![0].model.counters[0].templateId
+        assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
         viewModel.incrementCounter(playerId, counterId)
 
-        assertEquals(1, viewModel.players.value!![0].counters[0].amount)
+        assertEquals(1, viewModel.players.value!![0].model.counters[0].amount)
 
         viewModel.incrementCounter(playerId, counterId, 10)
 
-        assertEquals(11, viewModel.players.value!![0].counters[0].amount)
+        assertEquals(11, viewModel.players.value!![0].model.counters[0].amount)
     }
 
     @Test
-    fun increment_counter_allows_negative() {
-        val playerId = viewModel.players.value!![0].id
-        viewModel.addCounter(playerId)
-        val counterId = viewModel.players.value!![0].counters[0].id
-        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+    fun increment_counter_allows_negative() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        val playerId = viewModel.players.value!![0].model.id
+        viewModel.selectCounter(playerId, 1)
+        viewModel.confirmCounterChanges(playerId)
+        val counterId = viewModel.players.value!![0].model.counters[0].templateId
+        assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
         viewModel.incrementCounter(playerId, counterId, -1)
 
-        assertEquals(-1, viewModel.players.value!![0].counters[0].amount)
+        assertEquals(-1, viewModel.players.value!![0].model.counters[0].amount)
     }
 
     @Test
-    fun increment_counter_does_nothing_when_counter_id_not_found() {
-        val playerId = viewModel.players.value!![0].id
-        viewModel.addCounter(playerId)
-        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+    fun increment_counter_does_nothing_when_counter_id_not_found() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            val playerId = viewModel.players.value!![0].model.id
+            viewModel.selectCounter(playerId, 1)
+            viewModel.confirmCounterChanges(playerId)
+            assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
-        viewModel.incrementCounter(playerId, -9999, 1)
+            viewModel.incrementCounter(playerId, -9999, 1)
 
-        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
-    }
+            assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
+        }
 
     @Test
-    fun increment_counter_does_nothing_when_player_id_not_found() {
-        val playerId = viewModel.players.value!![0].id
-        viewModel.addCounter(playerId)
-        val counterId = viewModel.players.value!![0].counters[0].id
+    fun increment_counter_does_nothing_when_player_id_not_found() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            val playerId = viewModel.players.value!![0].model.id
+            viewModel.selectCounter(playerId, 1)
+            viewModel.confirmCounterChanges(playerId)
+            val counterId = viewModel.players.value!![0].model.counters[0].templateId
 
-        viewModel.incrementCounter(-9999, counterId, 1)
+            viewModel.incrementCounter(-9999, counterId, 1)
 
-        assertEquals(0, viewModel.players.value!![0].counters[0].amount)
+            assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
-    }
+        }
 }

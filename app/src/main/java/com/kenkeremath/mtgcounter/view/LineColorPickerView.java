@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import com.kenkeremath.mtgcounter.R;
 
 /**
- * Legacy code
+ * Legacy code, forked from a library
  */
 
 public class LineColorPickerView extends View {

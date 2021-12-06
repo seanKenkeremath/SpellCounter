@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.view
+package com.kenkeremath.mtgcounter.view.counter
 
 import android.content.Context
 import android.util.AttributeSet

@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.PlayerModel
-import com.kenkeremath.mtgcounter.ui.dialog.OnGameDialogListener
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
+import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
 
 class GamePlayerRecyclerAdapter(
     private val onPlayerUpdatedListener: OnPlayerUpdatedListener,
-    private val onGameDialogListener: OnGameDialogListener,
+    private val onCounterSelectionListener: OnCounterSelectionListener,
 ) :
     RecyclerView.Adapter<GamePlayerRecyclerViewHolder>() {
 
@@ -19,27 +19,31 @@ class GamePlayerRecyclerAdapter(
         setHasStableIds(true)
     }
 
-    private val players: MutableList<PlayerModel> = mutableListOf()
+    private val players: MutableList<GamePlayerUiModel> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(players: List<PlayerModel>) {
+    fun setData(players: List<GamePlayerUiModel>) {
         this.players.clear()
         this.players.addAll(players)
         notifyDataSetChanged()
     }
 
     override fun getItemId(position: Int): Long {
-        return players[position].id.toLong()
+        return players[position].model.id.toLong()
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): GamePlayerRecyclerViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_player_tabletop, parent, false)
+        val lp = v.layoutParams
+        lp.height = parent.context.resources.getDimensionPixelSize(R.dimen.player_list_item_height)
+        v.layoutParams = lp
         return GamePlayerRecyclerViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_player_list, parent, false),
+            v,
             onPlayerUpdatedListener,
-            onGameDialogListener,
+            onCounterSelectionListener
         )
     }
 

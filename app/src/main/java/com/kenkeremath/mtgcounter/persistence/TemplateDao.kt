@@ -23,6 +23,9 @@ abstract class TemplateDao {
     abstract suspend fun insert(counterTemplateEntity: CounterTemplateEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertCounters(counterTemplateEntities: List<CounterTemplateEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(pairing: PlayerCounterTemplateCrossRefEntity)
 
     @Query("DELETE FROM ${PlayerCounterTemplateCrossRefEntity.TABLE_PLAYER_COUNTER_CROSS_REFS} WHERE ${PlayerCounterTemplateCrossRefEntity.COLUMN_PLAYER_TEMPLATE_ID} = :playerTemplateName")

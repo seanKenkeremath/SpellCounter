@@ -24,4 +24,6 @@
     <string name="counter_starting_value">Starting Value:</string>
     <string name="edit_counter_title">Edit Counter</string>
     <string name="create_counter_title">Create Counter</string>
+    <string name="add_counter_title">Add Counter</string>
+    <string name="edit_counters_title">Edit Counters</string>
 </resources>

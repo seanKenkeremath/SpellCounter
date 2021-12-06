@@ -1,5 +1,6 @@
-package com.kenkeremath.mtgcounter.model.template
+package com.kenkeremath.mtgcounter.model.player
 
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateWithCountersEntity
 
 class PlayerTemplateModel(

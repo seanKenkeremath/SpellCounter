@@ -1,15 +1,18 @@
 package com.kenkeremath.mtgcounter.view.player
 
 import android.view.View
-import android.widget.Button
+import android.view.ViewTreeObserver
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.PlayerModel
-import com.kenkeremath.mtgcounter.ui.dialog.OnGameDialogListener
+import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.view.CounterView
-import com.kenkeremath.mtgcounter.view.CountersRecyclerAdapter
+import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.view.counter.CounterView
+import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
+import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
+import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
 
 /**
  * Generic VH pattern for a player that can be used in a RV or TableTopLayout
@@ -17,26 +20,29 @@ import com.kenkeremath.mtgcounter.view.CountersRecyclerAdapter
 class PlayerViewHolder(
     val itemView: View,
     onPlayerUpdatedListener: OnPlayerUpdatedListener,
-    onGameDialogListener: OnGameDialogListener?
+    onCounterSelectionListener: OnCounterSelectionListener,
 ) {
 
-    private val life: CounterView = itemView.findViewById(R.id.life)
+    private val binding = ItemPlayerTabletopBinding.bind(itemView)
 
-    //TODO: delete temporary button
-    private val addCounter: Button = itemView.findViewById(R.id.add_counter)
-    private val countersRecycler: RecyclerView = itemView.findViewById(R.id.counters_recycler)
     private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
     private var playerId: Int = -1
 
+    private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(onCounterSelectionListener)
+
+    private var counterRowsResized: Boolean = false
+
     init {
 
-        countersRecycler.layoutManager =
+        binding.countersRecycler.layoutManager =
             LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
-        countersRecycler.adapter = countersAdapter
+        binding.countersRecycler.adapter = countersAdapter
 
-        life.setOnAmountUpdatedListener(object : CounterView.OnAmountUpdatedListener {
+        binding.editCountersRecycler.adapter = addCountersRecyclerAdapter
+
+        binding.life.setOnAmountUpdatedListener(object : CounterView.OnAmountUpdatedListener {
             override fun onAmountSet(amount: Int) {
-                life.setAmount(amount)
+                binding.life.setAmount(amount)
             }
 
             override fun onAmountIncremented(amountDifference: Int) {
@@ -44,14 +50,45 @@ class PlayerViewHolder(
             }
         })
 
-        addCounter.setOnClickListener {
-            onGameDialogListener?.onOpenAddCounterDialog(playerId)
+        binding.addCounter.setOnClickListener {
+            binding.gameContainer.visibility = View.GONE
+            binding.editCountersContainer.visibility = View.VISIBLE
+        }
+
+        binding.cancel.setOnClickListener {
+            onCounterSelectionListener.onCancelCounterChanges(playerId)
+            binding.gameContainer.visibility = View.VISIBLE
+            binding.editCountersContainer.visibility = View.GONE
+        }
+
+        binding.confirm.setOnClickListener {
+            onCounterSelectionListener.onConfirmCounterChanges(playerId)
+            binding.gameContainer.visibility = View.VISIBLE
+            binding.editCountersContainer.visibility = View.GONE
         }
     }
 
-    fun bind(data: PlayerModel) {
-        playerId = data.id
-        life.setAmount(data.life)
-        countersAdapter.setData(data)
+    fun bind(data: GamePlayerUiModel) {
+        playerId = data.model.id
+        binding.life.setAmount(data.model.life)
+        countersAdapter.setData(data.model)
+        addCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
+
+        if (!counterRowsResized) {
+            counterRowsResized = true
+            itemView.viewTreeObserver.addOnPreDrawListener(object :
+                ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    itemView.viewTreeObserver.removeOnPreDrawListener(this)
+                    val height = itemView.height
+                    val minRowHeight =
+                        itemView.resources.getDimensionPixelSize(R.dimen.edit_counters_row_min_height)
+                    val rows = height / minRowHeight
+                    binding.editCountersRecycler.layoutManager =
+                        GridLayoutManager(itemView.context, rows, RecyclerView.HORIZONTAL, false)
+                    return false
+                }
+            })
+        }
     }
 }

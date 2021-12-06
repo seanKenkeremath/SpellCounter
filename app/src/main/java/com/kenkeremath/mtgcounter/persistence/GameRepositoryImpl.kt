@@ -3,8 +3,8 @@ package com.kenkeremath.mtgcounter.persistence
 import com.kenkeremath.mtgcounter.coroutines.DefaultDispatcherProvider
 import com.kenkeremath.mtgcounter.coroutines.DispatcherProvider
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.model.template.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.template.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
@@ -85,9 +85,10 @@ class GameRepositoryImpl @Inject constructor(
         database.templateDao().insert(
             CounterTemplateEntity(
                 id = counterTemplate.id,
-                startingAmount = counterTemplate.startingAmount,
                 name = counterTemplate.name,
                 color = counterTemplate.color,
+                symbolOrdinal = counterTemplate.symbol.ordinal,
+                deletable = true,
                 linkToPlayer = false
             )
         )

@@ -54,27 +54,21 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
 
     private val viewHolders: MutableMap<TableLayoutPosition, VH> = mutableMapOf()
 
-    private val defaultRotations: Map<TableLayoutPosition, Int>
+    private val defaultRotations: Map<TableLayoutPosition, Int> = mapOf(
+        Pair(TableLayoutPosition.SOLO_PANEL, 0),
+        Pair(TableLayoutPosition.LEFT_PANEL, 270),
+        Pair(TableLayoutPosition.RIGHT_PANEL, 90),
+        Pair(TableLayoutPosition.TOP_PANEL_1, 180),
+        Pair(TableLayoutPosition.TOP_PANEL_2, 180),
+        Pair(TableLayoutPosition.TOP_PANEL_3, 180),
+        Pair(TableLayoutPosition.BOTTOM_PANEL_1, 0),
+        Pair(TableLayoutPosition.BOTTOM_PANEL_2, 0),
+        Pair(TableLayoutPosition.BOTTOM_PANEL_3, 0)
+    )
+
+    private var currentRotations: Map<TableLayoutPosition, Int> = defaultRotations
 
     init {
-        //        for (tableLayoutPosition in parent.panels.keys) {
-//            val panel = parent.panels[tableLayoutPosition] ?: continue
-//            val viewHolder = this.createViewHolder(panel)
-//            viewHolders[tableLayoutPosition] = viewHolder
-//            panel.addView(viewHolder.view)
-//        }
-        defaultRotations = mapOf(
-            Pair(TableLayoutPosition.SOLO_PANEL, 0),
-            Pair(TableLayoutPosition.LEFT_PANEL, 270),
-            Pair(TableLayoutPosition.RIGHT_PANEL, 90),
-            Pair(TableLayoutPosition.TOP_PANEL_1, 180),
-            Pair(TableLayoutPosition.TOP_PANEL_2, 180),
-            Pair(TableLayoutPosition.TOP_PANEL_3, 180),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_1, 0),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_2, 0),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_3, 0)
-        )
-
         setDefaultRotations()
     }
 
@@ -135,9 +129,9 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
 
     //Rotate individual values differently using a map
     fun setRotations(rotations: Map<TableLayoutPosition, Int>) {
+        currentRotations = rotations
         for (layoutPosition in TableLayoutPosition.values()) {
             //Use default rotation value if none specified
-
             val rotation = rotations[layoutPosition] ?: (defaultRotations[layoutPosition] ?: 0)
             parent.panels[layoutPosition]?.angle = rotation
         }
@@ -145,8 +139,12 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
 
     //Reset all rotations to default (specified in default rotations map)
     fun setDefaultRotations() {
-        //Passing empty map because setRotations uses default values as fallback
-        setRotations(emptyMap())
+        currentRotations = defaultRotations
+        setRotations(defaultRotations)
+    }
+
+    fun getRotationForPosition(position: TableLayoutPosition): Int {
+        return currentRotations[position] ?: defaultRotations[position] ?: 0
     }
 }
 

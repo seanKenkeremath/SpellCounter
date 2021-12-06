@@ -2,25 +2,24 @@ package com.kenkeremath.mtgcounter.ui.game
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.CounterModel
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.ui.dialog.EditCounterDialogFragment
-import com.kenkeremath.mtgcounter.ui.dialog.OnGameDialogListener
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
+import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener, OnGameDialogListener {
+class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
+    OnCounterSelectionListener {
 
-    private lateinit var tabletopContainer: ViewGroup
+    private lateinit var tabletopContainer: RotateLayout
     private lateinit var tabletopLayout: TabletopLayout
     private lateinit var tabletopLayoutAdapter: GameTabletopLayoutAdapter
 
@@ -99,16 +98,19 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener, OnGameDialogL
         //TODO
     }
 
-    override fun onCounterAdded(playerId: Int, counterModel: CounterModel) {
-        viewModel.addCounter(playerId, counterModel)
+    override fun onCounterSelected(playerId: Int, templateId: Int) {
+        viewModel.selectCounter(playerId, templateId)
     }
 
-    override fun onCounterEdited(playerId: Int, counterPosition: Int, counterModel: CounterModel) {
-        //TODO
+    override fun onCounterDeselected(playerId: Int, templateId: Int) {
+        viewModel.deselectCounter(playerId, templateId)
     }
 
-    override fun onOpenAddCounterDialog(playerId: Int) {
-        val dialog = EditCounterDialogFragment.newCreateInstance(playerId)
-        dialog.show(supportFragmentManager, "add_counter")
+    override fun onCancelCounterChanges(playerId: Int) {
+        viewModel.cancelCounterChanges(playerId)
+    }
+
+    override fun onConfirmCounterChanges(playerId: Int) {
+        viewModel.confirmCounterChanges(playerId)
     }
 }

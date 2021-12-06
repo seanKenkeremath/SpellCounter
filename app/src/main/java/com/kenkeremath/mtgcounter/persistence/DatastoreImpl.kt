@@ -22,8 +22,6 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
 
         private val KEY_GAME_STATE = "key_game_state"
         private val KEY_FIRST_LAUNCH = "key_first_launch"
-        //If someone has legacy version before game templates, give them the stock game templates
-        private val KEY_STOCK_GAME_TEMPLATES_SET = "key_stock_game_templates"
         private val KEY_PLAYER_TEMPLATES = "key_templates"
         private val KEY_GAME_TEMPLATES = "key_game_templates"
         private val KEY_THEME = "key_theme"
@@ -54,7 +52,7 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         )
     }
 
-    val isFirstLaunch: Boolean
+    override val isFirstLaunch: Boolean
         get() = prefs.getBoolean(KEY_FIRST_LAUNCH, true)
 
 
@@ -101,11 +99,7 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         get() = TabletopType.values()[prefs.getInt(KEY_TABLETOP_TYPE, TabletopType.LIST.ordinal)]
         set(value)  = getEditor().putInt(KEY_TABLETOP_TYPE, value.ordinal).apply()
 
-    //    public boolean wereStockGameTemplatesSet() {
-    //        return getPrefs().getBoolean(KEY_STOCK_GAME_TEMPLATES_SET, false);
-    //    }
-
-    fun setFirstLaunchComplete() {
+    override fun setFirstLaunchComplete() {
         //Subsequent checks for first launch will return false
         getEditor().putBoolean(KEY_FIRST_LAUNCH, false).apply()
     }

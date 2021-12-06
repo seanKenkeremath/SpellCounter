@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.view
+package com.kenkeremath.mtgcounter.view.counter
 
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.CounterModel
-import com.kenkeremath.mtgcounter.model.PlayerModel
+import com.kenkeremath.mtgcounter.model.counter.CounterModel
+import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 
 class CountersRecyclerAdapter(
@@ -26,7 +26,7 @@ class CountersRecyclerAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return "${player!!.counters[position].id}##!##${player?.id}".hashCode().toLong()
+        return "${player!!.counters[position].templateId}##!##${player?.id}".hashCode().toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
@@ -76,8 +76,10 @@ class CounterViewHolder(
 
     fun bind(playerId: Int, counterModel: CounterModel) {
         this.playerId = playerId
-        this.counterId = counterModel.id
+        this.counterId = counterModel.templateId
         this.counterView.setAmount(counterModel.amount)
-        this.counterView.background = ColorDrawable(counterModel.color)
+        this.counterView.background = counterModel.color?.let {
+            ColorDrawable(counterModel.color)
+        }
     }
 }

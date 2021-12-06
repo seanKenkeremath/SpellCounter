@@ -32,6 +32,10 @@ android {
             includeAndroidResources = true
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
@@ -55,6 +59,7 @@ dependencies {
 
     //Architecture Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifecycleVersion"
     implementation 'androidx.arch.core:core-testing:2.1.0'
     //Room
     implementation "androidx.room:room-runtime:$roomVersion"
