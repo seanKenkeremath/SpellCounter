@@ -37,6 +37,7 @@
     <dimen name="load_template_header_size">48sp</dimen>
 
     <!-- Divider -->
-    <dimen name="divider_height">1px</dimen>
+    <dimen name="counter_divider_width">1dp</dimen>
+    <dimen name="player_divider_width">1dp</dimen>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.view.counter
 
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +36,10 @@ class CountersRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
-        holder.bind(player!!.id, player!!.counters[position])
+        holder.bind(
+            player!!.id,
+            player!!.counters[position]
+        )
     }
 
     override fun getItemCount(): Int {
@@ -77,9 +79,6 @@ class CounterViewHolder(
     fun bind(playerId: Int, counterModel: CounterModel) {
         this.playerId = playerId
         this.counterId = counterModel.templateId
-        this.counterView.setAmount(counterModel.amount)
-        this.counterView.background = counterModel.color?.let {
-            ColorDrawable(counterModel.color)
-        }
+        this.counterView.setContent(counterModel)
     }
 }

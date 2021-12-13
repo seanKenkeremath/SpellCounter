@@ -2,6 +2,8 @@ package com.kenkeremath.mtgcounter.view.player
 
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,9 +35,21 @@ class PlayerViewHolder(
     private var counterRowsResized: Boolean = false
 
     init {
-
         binding.countersRecycler.layoutManager =
             LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
+        val decoration = DividerItemDecoration(
+            itemView.context,
+            RecyclerView.HORIZONTAL
+        )
+        decoration.setDrawable(
+            ContextCompat.getDrawable(
+                itemView.context,
+                R.drawable.divider
+            )!!
+        )
+        binding.countersRecycler.addItemDecoration(
+            decoration
+        )
         binding.countersRecycler.adapter = countersAdapter
 
         binding.editCountersRecycler.adapter = addCountersRecyclerAdapter

@@ -12,9 +12,15 @@
 
         <com.kenkeremath.mtgcounter.view.counter.LifeCounterView
             android:id="@+id/life"
-            android:layout_width="100dp"
+            android:layout_width="160dp"
             android:layout_height="match_parent"
             android:gravity="center" />
+
+        <View
+            android:id="@+id/life_divider"
+            android:background="@color/divider_color"
+            android:layout_width="@dimen/counter_divider_width"
+            android:layout_height="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/counters_recycler"

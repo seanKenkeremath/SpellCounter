@@ -4,6 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="black">#000</color>
+    <color name="white">#fff</color>
+
+    <color name="divider_color">#ababab</color>
+
     <color name="optionButtonColor">#4e4ede</color>
     <color name="optionButtonColorSelected">#349efe</color>
     <color name="optionButtonColorDisabled">#8e8e8e</color>
@@ -33,5 +38,7 @@
         <item>@color/indigo</item>
         <item>@color/cool_purple</item>
     </integer-array>
+
+    <color name="default_icon_tint">@color/black</color>
 
 </resources>

@@ -28,15 +28,13 @@ class SplashActivity: AppCompatActivity() {
             val stockColors = resources.getIntArray(R.array.counter_palette)
             val stockTemplates = mutableListOf<CounterTemplateEntity>()
             for (counterSymbol in CounterSymbol.values().filter { it.resId != null }) {
-                stockTemplates.add(CounterTemplateEntity(symbolOrdinal = counterSymbol.ordinal))
+                stockTemplates.add(CounterTemplateEntity(symbolId = counterSymbol.symbolId))
             }
+            stockTemplates.add(CounterTemplateEntity(name = "XP"))
+            stockTemplates.add(CounterTemplateEntity(name = "CMD"))
             for (stockColor in stockColors) {
                 stockTemplates.add(CounterTemplateEntity(color = stockColor))
             }
-            //TODO: remove
-            stockTemplates.add(CounterTemplateEntity(name = "TST"))
-            stockTemplates.add(CounterTemplateEntity(name = "TST2"))
-            stockTemplates.add(CounterTemplateEntity(name = "TST3"))
             lifecycleScope.launch {
                 database.templateDao().insertCounters(
                     stockTemplates

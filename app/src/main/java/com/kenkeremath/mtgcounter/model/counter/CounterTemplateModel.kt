@@ -7,7 +7,7 @@ import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 data class CounterTemplateModel(
     val id: Int = 0,
     var name: String? = null,
-    @ColorInt var color: Int = Color.TRANSPARENT,
+    @ColorInt var color: Int? = null,
     var symbol: CounterSymbol = CounterSymbol.NONE,
     var uri: String? = null,
     var deletable: Boolean = false,
@@ -16,7 +16,7 @@ data class CounterTemplateModel(
         id = entity.id,
         name = entity.name,
         color = entity.color,
-        symbol = CounterSymbol.values()[entity.symbolOrdinal],
+        symbol = CounterSymbol.values().find { it.symbolId == entity.symbolId } ?: CounterSymbol.NONE,
         uri = entity.uri,
         deletable = entity.deletable
     )

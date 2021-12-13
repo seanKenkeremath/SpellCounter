@@ -87,7 +87,7 @@ class GameRepositoryImpl @Inject constructor(
                 id = counterTemplate.id,
                 name = counterTemplate.name,
                 color = counterTemplate.color,
-                symbolOrdinal = counterTemplate.symbol.ordinal,
+                symbolId = counterTemplate.symbol.symbolId,
                 deletable = true,
                 linkToPlayer = false
             )

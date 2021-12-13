@@ -3,7 +3,9 @@ package com.kenkeremath.mtgcounter.ui.game
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rongi.rotate_layout.layout.RotateLayout
@@ -46,6 +48,19 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         playersRecyclerView.layoutManager = LinearLayoutManager(this)
         playersRecyclerAdapter = GamePlayerRecyclerAdapter(this, this)
         playersRecyclerView.adapter = playersRecyclerAdapter
+        val decoration = DividerItemDecoration(
+            this,
+            RecyclerView.VERTICAL
+        )
+        decoration.setDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.divider
+            )!!
+        )
+        playersRecyclerView.addItemDecoration(
+            decoration
+        )
 
         if (viewModel.tabletopType == TabletopType.LIST) {
             playersRecyclerView.visibility = View.VISIBLE

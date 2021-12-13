@@ -1,7 +1,7 @@
 package com.kenkeremath.mtgcounter.model.counter
 
 import android.os.Parcelable
-import com.kenkeremath.mtgcounter.util.CounterUtils
+import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -10,7 +10,7 @@ data class CounterModel(
     val name: String? = null,
     val color: Int? = null,
     val uri: String? = null,
-    val symbol: Int? = null,
+    @DrawableRes val symbolResId: Int? = null,
     val templateId: Int = 0
 ) : Parcelable {
 
@@ -18,7 +18,7 @@ data class CounterModel(
         name = template.name,
         color = template.color,
         uri = template.uri,
-        symbol = template.symbol.resId,
+        symbolResId = template.symbol.resId,
         templateId = template.id,
     )
 }

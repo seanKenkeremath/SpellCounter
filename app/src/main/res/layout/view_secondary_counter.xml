@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/ic_skull" />
+
     <TextView
         android:id="@+id/amount"
+        style="@style/CounterText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:padding="8dp"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        tools:text="1234" />
 
 
     <LinearLayout
@@ -17,17 +33,17 @@
 
         <com.kenkeremath.mtgcounter.view.CounterIncrementerButton
             android:id="@+id/increment_button"
-            android:background="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground" />
 
         <com.kenkeremath.mtgcounter.view.CounterIncrementerButton
             android:id="@+id/decrement_button"
-            android:background="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground" />
 
     </LinearLayout>
 

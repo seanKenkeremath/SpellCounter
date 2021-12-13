@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.view.counter.edit
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 
@@ -79,13 +81,18 @@ class CounterSelectionViewHolder(
 
         text.visibility = if (model.template.name.isNullOrBlank()) View.GONE else View.VISIBLE
         text.text = model.template.name
-        image.background = ColorDrawable(model.template.color)
         //TODO URI
 
         if (model.template.symbol.resId == null) {
-            image.setImageDrawable(null)
+            if (model.template.color != null) {
+                image.setImageResource(R.drawable.ic_circle)
+                image.imageTintList = ColorStateList.valueOf(model.template.color!!)
+            } else {
+                image.setImageDrawable(null)
+            }
         } else {
             image.setImageResource(model.template.symbol.resId!!)
+            image.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.default_icon_tint))
         }
         itemView.isSelected = selected
         if (selected) {
