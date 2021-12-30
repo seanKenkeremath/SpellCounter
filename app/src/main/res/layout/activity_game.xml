@@ -7,8 +7,7 @@
     <com.github.rongi.rotate_layout.layout.RotateLayout
         android:id="@+id/tabletop_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:angle="90">
+        android:layout_height="match_parent">
 
         <com.kenkeremath.mtgcounter.view.TabletopLayout
             android:id="@+id/tabletop_layout"

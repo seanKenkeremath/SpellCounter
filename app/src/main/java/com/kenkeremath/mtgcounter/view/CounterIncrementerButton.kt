@@ -17,8 +17,6 @@ class CounterIncrementerButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val LOG_TAG = "SpellCounterTouchEvents"
-
         /**
          * When in immersive mode we want to be able to show the system controls
          * without registering a click
@@ -44,7 +42,7 @@ class CounterIncrementerButton @JvmOverloads constructor(
     private val holdGestureRunnable = object : Runnable {
         override fun run() {
             holdIncrements++
-            LogUtils.d("Sending hold callback: Iteration $holdIncrements", LOG_TAG)
+            LogUtils.d("Sending hold callback: Iteration $holdIncrements", LogUtils.TAG_INCREMENTER)
             listener?.onHoldContinued(holdIncrements)
             var interval = MAX_HOLD_INTERVAL
             for (i in 0 until holdIntervals.size()) {
@@ -103,7 +101,7 @@ class CounterIncrementerButton @JvmOverloads constructor(
             background?.setHotspot(x, y)
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    LogUtils.d("Hold gesture started", LOG_TAG)
+                    LogUtils.d("Hold gesture started", LogUtils.TAG_INCREMENTER)
                     touchStartX = it.rawX
                     touchStartY = it.rawY
                     isPressed = true
@@ -113,10 +111,13 @@ class CounterIncrementerButton @JvmOverloads constructor(
                     return true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    LogUtils.d("Hold touch moved", LOG_TAG)
+                    LogUtils.d("Hold touch moved", LogUtils.TAG_INCREMENTER)
                     val distance = MathUtils.distance(it.rawX, it.rawY, touchStartX, touchStartY)
                     if (distance > maxTouchDistance) {
-                        LogUtils.d("Hold touch exceeded max distance. Canceling gesture.", LOG_TAG)
+                        LogUtils.d(
+                            "Hold touch exceeded max distance. Canceling gesture.",
+                            LogUtils.TAG_INCREMENTER
+                        )
                         isPressed = false
                         holdGestureHandler.removeCallbacks(holdGestureRunnable)
                         return false
@@ -124,23 +125,23 @@ class CounterIncrementerButton @JvmOverloads constructor(
                     return true
                 }
                 MotionEvent.ACTION_CANCEL -> {
-                    LogUtils.d("Canceling hold gesture", LOG_TAG)
+                    LogUtils.d("Canceling hold gesture", LogUtils.TAG_INCREMENTER)
                     isPressed = false
                     holdGestureHandler.removeCallbacks(holdGestureRunnable)
                 }
                 MotionEvent.ACTION_UP -> {
-                    LogUtils.d("Hold gesture complete", LOG_TAG)
+                    LogUtils.d("Hold gesture complete", LogUtils.TAG_INCREMENTER)
                     isPressed = false
                     holdGestureHandler.removeCallbacks(holdGestureRunnable)
                     val distance = MathUtils.distance(it.rawX, it.rawY, touchStartX, touchStartY)
                     return if (distance < maxTouchDistance && System.currentTimeMillis() - holdStartTime < MAX_HOLD_INTERVAL) {
-                        LogUtils.d("Hold gesture registered as click", LOG_TAG)
+                        LogUtils.d("Hold gesture registered as click", LogUtils.TAG_INCREMENTER)
                         performClick()
                         true
                     } else {
                         LogUtils.d(
                             "Hold gesture moved too much or took too long to be registered as a click",
-                            LOG_TAG
+                            LogUtils.TAG_INCREMENTER
                         )
                         false
                     }

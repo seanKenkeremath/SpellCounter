@@ -1,18 +1,25 @@
 package com.kenkeremath.mtgcounter.view
 
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.util.LogUtils
 
 class TabletopLayout : ConstraintLayout {
 
-    internal val panels : Map<TableLayoutPosition, RotateLayout>
+    internal val panels: Map<TableLayoutPosition, RotateLayout>
 
+    private val hitRect = Rect()
+
+    private val touchMap = mutableMapOf<Int, View>()
+    private val touchTimeMap = mutableMapOf<Int, Long>()
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -26,28 +33,200 @@ class TabletopLayout : ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.view_tabletop, this, true)
         panels = mutableMapOf(
             Pair(TableLayoutPosition.SOLO_PANEL, findViewById(R.id.solo_panel)),
-            Pair(TableLayoutPosition.LEFT_PANEL, findViewById(R.id.left_panel)),
-            Pair(TableLayoutPosition.RIGHT_PANEL, findViewById(R.id.right_panel)),
-            Pair(TableLayoutPosition.TOP_PANEL_1, findViewById(R.id.top_panel_1)),
-            Pair(TableLayoutPosition.TOP_PANEL_2, findViewById(R.id.top_panel_2)),
-            Pair(TableLayoutPosition.TOP_PANEL_3, findViewById(R.id.top_panel_3)),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_1, findViewById(R.id.bottom_panel_1)),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_2, findViewById(R.id.bottom_panel_2)),
-            Pair(TableLayoutPosition.BOTTOM_PANEL_3, findViewById(R.id.bottom_panel_3))
+            Pair(TableLayoutPosition.TOP_PANEL, findViewById(R.id.top_panel)),
+            Pair(TableLayoutPosition.BOTTOM_PANEL, findViewById(R.id.bottom_panel)),
+            Pair(TableLayoutPosition.RIGHT_PANEL_1, findViewById(R.id.right_panel_1)),
+            Pair(TableLayoutPosition.RIGHT_PANEL_2, findViewById(R.id.right_panel_2)),
+            Pair(TableLayoutPosition.RIGHT_PANEL_3, findViewById(R.id.right_panel_3)),
+            Pair(TableLayoutPosition.LEFT_PANEL_1, findViewById(R.id.left_panel_1)),
+            Pair(TableLayoutPosition.LEFT_PANEL_2, findViewById(R.id.left_panel_2)),
+            Pair(TableLayoutPosition.LEFT_PANEL_3, findViewById(R.id.left_panel_3))
         )
+        for (key in panels.keys) {
+            panels[key]?.tag = key
+        }
+    }
+
+    override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        event?.let {
+
+            if (it.actionMasked != MotionEvent.ACTION_MOVE) {
+                val pointerIndex = when (it.actionMasked) {
+                    MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_POINTER_UP -> it.actionIndex
+                    else -> 0
+                }
+                val pointerId = it.getPointerId(pointerIndex)
+                val parentX = it.getX(pointerIndex)
+                val parentY = it.getY(pointerIndex)
+                val childView = getChildForCoordinate(parentX, parentY)
+
+                var passedEvent: MotionEvent? = null
+
+                if (childView == null) {
+                    return false
+                } else {
+                    val childX = parentX - childView.left
+                    val childY = parentY - childView.top
+
+                    var removePointer = false
+
+                    when (it.actionMasked) {
+                        MotionEvent.ACTION_DOWN -> {
+                            passedEvent = MotionEvent.obtain(
+                                it.downTime,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_DOWN,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            touchMap[pointerId] = childView
+                            touchTimeMap[pointerId] = System.currentTimeMillis()
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started (ACTION_DOWN)"
+                            )
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            passedEvent = MotionEvent.obtain(
+                                it.downTime,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_UP,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete (ACTION_UP)"
+                            )
+                            removePointer = true
+
+                        }
+                        MotionEvent.ACTION_POINTER_DOWN -> {
+                            touchMap[pointerId] = childView
+                            val downTime = System.currentTimeMillis()
+                            touchTimeMap[pointerId] = downTime
+                            passedEvent = MotionEvent.obtain(
+                                downTime,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_DOWN,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started x: $childX, y: $childY"
+                            )
+                        }
+                        MotionEvent.ACTION_POINTER_UP -> {
+                            passedEvent = MotionEvent.obtain(
+                                touchTimeMap[pointerId]!!,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_UP,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete"
+                            )
+                            removePointer = true
+                        }
+                        MotionEvent.ACTION_CANCEL -> {
+                            passedEvent = MotionEvent.obtain(
+                                touchTimeMap[pointerId]!!,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_CANCEL,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            removePointer = true
+                        }
+                        else -> {}
+                    }
+                    passedEvent?.let { childEvent ->
+                        touchMap[pointerId]?.dispatchTouchEvent(childEvent)
+                        childEvent.recycle()
+                        if (removePointer) {
+                            touchMap.remove(pointerId)
+                            touchTimeMap.remove(pointerId)
+                        }
+                    }
+                }
+            } else {
+                for (pointerId in touchMap.keys) {
+                    val index = it.findPointerIndex(pointerId)
+                    touchMap[pointerId]?.let { child ->
+                        val parentX = it.getX(index)
+                        val parentY = it.getY(index)
+                        val childX = parentX - child.left
+                        val childY = parentY - child.top
+                        val inBounds = getChildForCoordinate(parentX, parentY) == child
+                        if (!inBounds && false) { //TODO: out of bounds
+                            val passedEvent = MotionEvent.obtain(it)
+                            passedEvent.action = MotionEvent.ACTION_CANCEL
+                            child.dispatchTouchEvent(passedEvent)
+                            passedEvent.recycle()
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${child.tag} Out of bounds. Touch Complete"
+                            )
+                            touchMap.remove(pointerId)
+                            touchTimeMap.remove(pointerId)
+                        } else {
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "Pointers: ${touchMap.keys} pointerId: $pointerId View tag: ${child.tag} Move: x: $childX, y: $childY"
+                            )
+                            val passedEvent = MotionEvent.obtain(
+                                touchTimeMap[pointerId]!!,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_MOVE,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            child.dispatchTouchEvent(passedEvent)
+                            passedEvent.recycle()
+                        }
+                    }
+                }
+            }
+            return true
+        }
+        return false
+    }
+
+    private fun getChildForCoordinate(x: Float, y: Float): View? {
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.getHitRect(hitRect)
+            if (hitRect.contains(x.toInt(), y.toInt())) {
+                return child
+            }
+        }
+        return null
     }
 }
 
 enum class TableLayoutPosition {
     SOLO_PANEL,
-    LEFT_PANEL,
-    RIGHT_PANEL,
-    TOP_PANEL_1,
-    TOP_PANEL_2,
-    TOP_PANEL_3,
-    BOTTOM_PANEL_1,
-    BOTTOM_PANEL_2,
-    BOTTOM_PANEL_3
+    TOP_PANEL,
+    BOTTOM_PANEL,
+    LEFT_PANEL_1,
+    LEFT_PANEL_2,
+    LEFT_PANEL_3,
+    RIGHT_PANEL_1,
+    RIGHT_PANEL_2,
+    RIGHT_PANEL_3,
 }
 
 abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) where VH : TabletopLayoutViewHolder<T> {
@@ -55,15 +234,15 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
     private val viewHolders: MutableMap<TableLayoutPosition, VH> = mutableMapOf()
 
     private val defaultRotations: Map<TableLayoutPosition, Int> = mapOf(
-        Pair(TableLayoutPosition.SOLO_PANEL, 0),
-        Pair(TableLayoutPosition.LEFT_PANEL, 270),
-        Pair(TableLayoutPosition.RIGHT_PANEL, 90),
-        Pair(TableLayoutPosition.TOP_PANEL_1, 180),
-        Pair(TableLayoutPosition.TOP_PANEL_2, 180),
-        Pair(TableLayoutPosition.TOP_PANEL_3, 180),
-        Pair(TableLayoutPosition.BOTTOM_PANEL_1, 0),
-        Pair(TableLayoutPosition.BOTTOM_PANEL_2, 0),
-        Pair(TableLayoutPosition.BOTTOM_PANEL_3, 0)
+        Pair(TableLayoutPosition.SOLO_PANEL, 270),
+        Pair(TableLayoutPosition.TOP_PANEL, 180),
+        Pair(TableLayoutPosition.BOTTOM_PANEL, 0),
+        Pair(TableLayoutPosition.LEFT_PANEL_1, 270),
+        Pair(TableLayoutPosition.LEFT_PANEL_2, 270),
+        Pair(TableLayoutPosition.LEFT_PANEL_3, 270),
+        Pair(TableLayoutPosition.RIGHT_PANEL_1, 90),
+        Pair(TableLayoutPosition.RIGHT_PANEL_2, 90),
+        Pair(TableLayoutPosition.RIGHT_PANEL_3, 90)
     )
 
     private var currentRotations: Map<TableLayoutPosition, Int> = defaultRotations
@@ -108,7 +287,7 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
     }
 
     fun updateAll(type: TabletopType, list: List<T>) {
-        val positionMap : MutableMap<TableLayoutPosition, T> = mutableMapOf()
+        val positionMap: MutableMap<TableLayoutPosition, T> = mutableMapOf()
         //If empty or mismatched size, all positions will be null/hidden by default
         if (type.numberOfPlayers == list.size) {
             for (i in 0 until list.size) {
@@ -120,7 +299,7 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
 
     //Rotate all to the same absolute rotation value
     fun setRotations(rotation: Int) {
-        val rotations : MutableMap<TableLayoutPosition, Int> = mutableMapOf()
+        val rotations: MutableMap<TableLayoutPosition, Int> = mutableMapOf()
         for (tableLayoutPosition in TableLayoutPosition.values()) {
             rotations[tableLayoutPosition] = rotation
         }
@@ -150,6 +329,6 @@ abstract class TabletopLayoutAdapter<VH, T>(private val parent: TabletopLayout) 
 
 
 abstract class TabletopLayoutViewHolder<T>(val container: RotateLayout) {
-    abstract val view : View
+    abstract val view: View
     abstract fun bind(data: T)
 }
