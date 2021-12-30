@@ -11,7 +11,14 @@ import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 
 class CountersRecyclerAdapter(
     private val onPlayerUpdatedListener: OnPlayerUpdatedListener
-) : RecyclerView.Adapter<CounterViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val TYPE_LIFE = 1
+        private const val TYPE_COUNTER = 2
+
+        private const val ID_LIFE = "__LIFE__"
+    }
 
     private var player: PlayerModel? = null
 
@@ -25,25 +32,80 @@ class CountersRecyclerAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return "${player!!.counters[position].templateId}##!##${player?.id}".hashCode().toLong()
+        val counterId = if (position == 0) ID_LIFE else "${player!!.counters[position - 1].templateId}"
+        return "$counterId##!##${player?.id}".hashCode().toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CounterViewHolder {
-        return CounterViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_counter, parent, false),
-            onPlayerUpdatedListener
-        )
+    override fun getItemViewType(position: Int): Int {
+        if (position == 0) {
+            return TYPE_LIFE
+        } else {
+            return TYPE_COUNTER
+        }
     }
 
-    override fun onBindViewHolder(holder: CounterViewHolder, position: Int) {
-        holder.bind(
-            player!!.id,
-            player!!.counters[position]
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == TYPE_LIFE) {
+            return LifeViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.item_life_counter, parent, false),
+                onPlayerUpdatedListener
+            )
+        } else {
+            return CounterViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.item_counter, parent, false),
+                onPlayerUpdatedListener
+            )
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (position == 0) {
+            (holder as LifeViewHolder).bind(
+                player!!
+            )
+        } else {
+            (holder as CounterViewHolder).bind(
+                player!!.id,
+                player!!.counters[position - 1]
+            )
+        }
     }
 
     override fun getItemCount(): Int {
-        return player?.counters?.size ?: 0
+        //Life counter is part of this list
+        return 1 + (player?.counters?.size ?: 0)
+    }
+}
+
+class LifeViewHolder(
+    itemView: View,
+    onPlayerUpdatedListener: OnPlayerUpdatedListener
+) : RecyclerView.ViewHolder(itemView) {
+    private var lifeView = itemView.findViewById<LifeCounterView>(R.id.counter)
+
+    private var playerId: Int = -1
+
+    init {
+        lifeView.setOnAmountUpdatedListener(object : CounterView.OnAmountUpdatedListener {
+            override fun onAmountSet(amount: Int) {
+                onPlayerUpdatedListener.onLifeAmountSet(
+                    playerId = playerId,
+                    amount = amount
+                )
+            }
+
+            override fun onAmountIncremented(amountDifference: Int) {
+                onPlayerUpdatedListener.onLifeIncremented(
+                    playerId = playerId,
+                    amountDifference = amountDifference
+                )
+            }
+        })
+    }
+
+    fun bind(playerModel: PlayerModel) {
+        this.playerId = playerModel.id
+        lifeView.setAmount(playerModel.life)
     }
 }
 

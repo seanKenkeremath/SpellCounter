@@ -54,16 +54,6 @@ class PlayerViewHolder(
 
         binding.editCountersRecycler.adapter = addCountersRecyclerAdapter
 
-        binding.life.setOnAmountUpdatedListener(object : CounterView.OnAmountUpdatedListener {
-            override fun onAmountSet(amount: Int) {
-                binding.life.setAmount(amount)
-            }
-
-            override fun onAmountIncremented(amountDifference: Int) {
-                onPlayerUpdatedListener.onLifeIncremented(playerId, amountDifference)
-            }
-        })
-
         binding.addCounter.setOnClickListener {
             binding.gameContainer.visibility = View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
@@ -84,7 +74,6 @@ class PlayerViewHolder(
 
     fun bind(data: GamePlayerUiModel) {
         playerId = data.model.id
-        binding.life.setAmount(data.model.life)
         countersAdapter.setData(data.model)
         addCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
 
