@@ -91,16 +91,18 @@ class CountersRecyclerAdapter(
     }
 
     private fun adjustCellWidth(isLifeCounter: Boolean, holder: RecyclerView.ViewHolder) {
-        var lifeWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.player_life_width)
-        var counterWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.counter_width)
-        val dividerWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.counter_divider_width)
+        val resources = holder.itemView.resources
+        var lifeWidth = resources.getDimensionPixelSize(R.dimen.player_life_width)
+        var counterWidth = resources.getDimensionPixelSize(R.dimen.counter_width)
+        val dividerWidth = resources.getDimensionPixelSize(R.dimen.counter_divider_width)
         val dividersTotalWidth = dividerWidth * (1 + player!!.counters.size)
         val totalWidth = lifeWidth + (player!!.counters.size * counterWidth) + dividersTotalWidth
         val recyclerViewWidth = recyclerView?.let {
             it.width - it.paddingStart - it.paddingEnd
         } ?: 0
 
-        if (totalWidth < recyclerViewWidth) {
+        val scrollThreshold = resources.getDimensionPixelSize(R.dimen.counter_scroll_threshold)
+        if (totalWidth < recyclerViewWidth || totalWidth - recyclerViewWidth < scrollThreshold) {
             /**
              * Give life view 50% more weight than all other views and stretch them to fit
              * accordingly

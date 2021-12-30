@@ -18,6 +18,10 @@
     <dimen name="counter_button_height">28dp</dimen>
     <dimen name="counter_width">80dp</dimen>
     <dimen name="counter_recycler_horz_padding">2dp</dimen>
+    <!-- If the counter list would not exceed this value in width,
+    then cells are sized to fit without scrolling. This may cause counter cells to be
+     a few pixels smaller than they normally would -->
+    <dimen name="counter_scroll_threshold">16dp</dimen>
 
     <!-- Edit Counter -->
     <dimen name="color_picker_width">200dp</dimen>
