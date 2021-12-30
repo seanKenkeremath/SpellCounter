@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter.ui.game
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -75,6 +76,14 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         viewModel.players.observe(this) {
             tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
             playersRecyclerAdapter.setData(it)
+        }
+
+        viewModel.keepScreenOn.observe(this) {
+            if (it) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
         }
     }
 

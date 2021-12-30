@@ -40,9 +40,9 @@ class GameRepositoryImpl @Inject constructor(
             datastore.tabletopType = value
         }
     override var hideNavigation: Boolean
-        get() = datastore.keepScreenOn
+        get() = datastore.hideNavigation
         set(value) {
-            datastore.keepScreenOn = value
+            datastore.hideNavigation = value
         }
 
     override fun getAllPlayerTemplates(): Flow<List<PlayerTemplateModel>> {
