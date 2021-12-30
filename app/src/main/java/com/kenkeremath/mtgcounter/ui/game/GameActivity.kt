@@ -39,6 +39,8 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         setContentView(R.layout.activity_game)
         viewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
+        hideSystemUI()
+
         tabletopContainer = findViewById(R.id.tabletop_container)
         tabletopLayout = findViewById(R.id.tabletop_layout)
         tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this, this)
@@ -74,11 +76,6 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
             tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
             playersRecyclerAdapter.setData(it)
         }
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) hideSystemUI()
     }
 
     private fun hideSystemUI() {

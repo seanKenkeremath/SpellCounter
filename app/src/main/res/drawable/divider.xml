@@ -3,8 +3,8 @@
     android:shape="rectangle">
 
     <size
-        android:width="1dp"
-        android:height="1dp" />
+        android:width="@dimen/counter_divider_width"
+        android:height="@dimen/counter_divider_width" />
 
     <solid android:color="@color/divider_color" />
 

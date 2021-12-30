@@ -21,7 +21,7 @@ class CounterIncrementerButton @JvmOverloads constructor(
          * When in immersive mode we want to be able to show the system controls
          * without registering a click
          */
-        private const val MAX_CLICK_DISTANCE_DP = 3
+        private const val MAX_CLICK_DISTANCE_DP = 16
 
         /**
          * As the button is held down the intervals between events will speed up between max and min

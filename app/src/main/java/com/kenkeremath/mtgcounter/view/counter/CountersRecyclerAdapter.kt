@@ -1,8 +1,10 @@
 package com.kenkeremath.mtgcounter.view.counter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
@@ -22,6 +24,8 @@ class CountersRecyclerAdapter(
 
     private var player: PlayerModel? = null
 
+    private var recyclerView: RecyclerView? = null
+
     init {
         setHasStableIds(true)
     }
@@ -32,7 +36,8 @@ class CountersRecyclerAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        val counterId = if (position == 0) ID_LIFE else "${player!!.counters[position - 1].templateId}"
+        val counterId =
+            if (position == 0) ID_LIFE else "${player!!.counters[position - 1].templateId}"
         return "$counterId##!##${player?.id}".hashCode().toLong()
     }
 
@@ -47,7 +52,8 @@ class CountersRecyclerAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == TYPE_LIFE) {
             return LifeViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_life_counter, parent, false),
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_life_counter, parent, false),
                 onPlayerUpdatedListener
             )
         } else {
@@ -58,7 +64,7 @@ class CountersRecyclerAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         if (position == 0) {
             (holder as LifeViewHolder).bind(
                 player!!
@@ -69,11 +75,69 @@ class CountersRecyclerAdapter(
                 player!!.counters[position - 1]
             )
         }
+
+        val isLifeCounter = position == 0
+        if (recyclerView?.width ?: 0 > 0) {
+            adjustCellWidth(isLifeCounter, holder)
+        } else {
+            recyclerView?.viewTreeObserver?.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    recyclerView?.viewTreeObserver?.removeOnPreDrawListener(this)
+                    adjustCellWidth(isLifeCounter, holder)
+                    return false
+                }
+            })
+        }
+    }
+
+    private fun adjustCellWidth(isLifeCounter: Boolean, holder: RecyclerView.ViewHolder) {
+        var lifeWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.player_life_width)
+        var counterWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.counter_width)
+        val dividerWidth = holder.itemView.resources.getDimensionPixelSize(R.dimen.counter_divider_width)
+        val dividersTotalWidth = dividerWidth * (1 + player!!.counters.size)
+        val totalWidth = lifeWidth + (player!!.counters.size * counterWidth) + dividersTotalWidth
+        val recyclerViewWidth = recyclerView?.let {
+            it.width - it.paddingStart - it.paddingEnd
+        } ?: 0
+
+        if (totalWidth < recyclerViewWidth) {
+            /**
+             * Give life view 50% more weight than all other views and stretch them to fit
+             * accordingly
+             */
+            val totalWeight = 1.5f + player!!.counters.size
+            lifeWidth = (1.5f / totalWeight * (recyclerViewWidth - dividersTotalWidth)).toInt()
+            counterWidth = (1f / totalWeight * (recyclerViewWidth - dividersTotalWidth)).toInt()
+        }
+
+        if (isLifeCounter) {
+            (holder as LifeViewHolder).let {
+                val lp = it.itemView.layoutParams
+                lp.width = lifeWidth
+                it.itemView.layoutParams = lp
+            }
+        } else {
+            (holder as CounterViewHolder).let {
+                val lp = it.itemView.layoutParams
+                lp.width = counterWidth
+                it.itemView.layoutParams = lp
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         //Life counter is part of this list
-        return 1 + (player?.counters?.size ?: 0)
+        return if (player == null) 0 else 1 + (player?.counters?.size ?: 0)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        this.recyclerView = null
     }
 }
 
