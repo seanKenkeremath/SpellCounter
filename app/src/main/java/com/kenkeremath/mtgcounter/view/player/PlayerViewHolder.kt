@@ -75,6 +75,12 @@ class PlayerViewHolder(
     fun bind(data: GamePlayerUiModel) {
         playerId = data.model.id
         countersAdapter.setData(data.model)
+
+        //Scroll to end if there's a new counter, and set ui model flag to false
+        if (data.newCounterAdded) {
+            binding.countersRecycler.scrollToPosition(countersAdapter.itemCount - 1)
+            data.newCounterAdded = false
+        }
         addCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
 
         if (!counterRowsResized) {

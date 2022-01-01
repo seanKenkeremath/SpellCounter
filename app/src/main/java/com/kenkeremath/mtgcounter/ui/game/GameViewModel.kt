@@ -133,17 +133,21 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
                     }
                 }
 
+                var newCounter = false
+
                 //add newly selected counters from templates
                 for (templateId in pendingCounterSelection) {
                     availableCounters.find { it.id == templateId }?.let { template ->
                         //avoid adding duplicates
                         if (newCountersList.find { it.templateId == template.id } == null) {
+                            newCounter = true
                             newCountersList.add(CounterModel(template))
                         }
                     }
                 }
 
                 uiModel.model = uiModel.model.copy(counters = newCountersList)
+                uiModel.newCounterAdded = newCounter
                 _players.value = playerMap.values.toList()
             }
         }
