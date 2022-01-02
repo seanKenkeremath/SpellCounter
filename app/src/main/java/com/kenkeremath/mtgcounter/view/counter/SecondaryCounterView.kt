@@ -2,11 +2,8 @@ package com.kenkeremath.mtgcounter.view.counter
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.view.View
 import android.widget.ImageView
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
@@ -21,16 +18,16 @@ class SecondaryCounterView @JvmOverloads constructor(
 
     fun setContent(counterModel: CounterModel) {
         if (counterModel.symbolResId == null) {
-            if (counterModel.color != null) {
+            if (counterModel.colorResId != null) {
                 image.setImageResource(R.drawable.ic_circle)
                 image.imageTintList = ColorStateList.valueOf(
-                    counterModel.color
+                    counterModel.colorResId
                 )
             }
         } else {
             image.setImageResource(counterModel.symbolResId)
             image.imageTintList = ColorStateList.valueOf(
-                counterModel.color ?: ContextCompat.getColor(context, R.color.default_icon_tint)
+                counterModel.colorResId ?: ContextCompat.getColor(context, R.color.default_icon_tint)
             )
         }
 

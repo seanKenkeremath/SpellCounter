@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.model.counter
 
 import android.os.Parcelable
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 
@@ -8,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class CounterModel(
     var amount: Int = 0,
     val name: String? = null,
-    val color: Int? = null,
+    @ColorRes val colorResId: Int? = null,
     val uri: String? = null,
     @DrawableRes val symbolResId: Int? = null,
     val templateId: Int = 0
@@ -16,7 +17,7 @@ data class CounterModel(
 
     constructor(template: CounterTemplateModel) : this(
         name = template.name,
-        color = template.color,
+        colorResId = template.color.resId,
         uri = template.uri,
         symbolResId = template.symbol.resId,
         templateId = template.id,

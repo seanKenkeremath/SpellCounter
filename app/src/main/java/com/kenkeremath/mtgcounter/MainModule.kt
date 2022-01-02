@@ -1,22 +1,19 @@
-package com.kenkeremath.mtgcounter.dagger
+package com.kenkeremath.mtgcounter
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.kenkeremath.mtgcounter.persistence.*
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(val application: Application) {
-
-    @Provides
-    @Singleton
-    fun providesContext(): Context {
-        return application.applicationContext
-    }
+@InstallIn(SingletonComponent::class)
+object MainModule {
 
     @Provides
     @Singleton
@@ -26,15 +23,15 @@ class ApplicationModule(val application: Application) {
 
     @Provides
     @Singleton
-    fun providesDatastore(context: Context, moshi: Moshi): Datastore {
-        return DatastoreImpl(context, moshi)
+    fun providesDatastore(@ApplicationContext appContext: Context, moshi: Moshi): Datastore {
+        return DatastoreImpl(appContext, moshi)
     }
 
     @Provides
     @Singleton
-    fun providesDatabase(context: Context): AppDatabase {
+    fun providesDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
-            context.applicationContext,
+            appContext.applicationContext,
             AppDatabase::class.java,
             "template_database"
         ).build()

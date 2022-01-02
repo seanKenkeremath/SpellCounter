@@ -2,7 +2,7 @@ package com.kenkeremath.mtgcounter.ui.game.tabletop
 
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.TabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener

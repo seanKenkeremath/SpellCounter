@@ -3,9 +3,9 @@ package com.kenkeremath.mtgcounter.ui.game
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +16,9 @@ import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     OnCounterSelectionListener {
 
@@ -29,16 +29,11 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     private lateinit var playersRecyclerView: RecyclerView
     private lateinit var playersRecyclerAdapter: GamePlayerRecyclerAdapter
 
-    @Inject
-    lateinit var gameViewModelFactory: GameViewModelFactory
-
-    private lateinit var viewModel: GameViewModel
+    private val viewModel: GameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        viewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
         hideSystemUI()
 

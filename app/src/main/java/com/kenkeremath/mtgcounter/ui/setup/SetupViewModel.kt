@@ -4,9 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SetupViewModel constructor(private val repository: GameRepository) : ViewModel() {
+@HiltViewModel
+class SetupViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
 
     private val _startingLife = MutableLiveData<Int>()
     val startingLife: LiveData<Int> get() = _startingLife
@@ -20,6 +25,9 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
     private val _numberOfPlayers = MutableLiveData<Int>()
     val numberOfPlayers: LiveData<Int> get() = _numberOfPlayers
 
+    private val _setupPlayers = MutableLiveData<List<PlayerSetupModel>>()
+    val setupPlayers: LiveData<List<PlayerSetupModel>> get() = _setupPlayers
+
     private val _tabletopType = MutableLiveData<TabletopType>()
     val tabletopType: LiveData<TabletopType> get() = _tabletopType
 
@@ -28,11 +36,10 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
 
     init {
         _startingLife.value = repository.startingLife
-        _numberOfPlayers.value = repository.numberOfPlayers
         _tabletopType.value = repository.tabletopType
+        setNumberOfPlayers(repository.numberOfPlayers)
         _keepScreenOn.value = repository.keepScreenOn
         _hideNavigation.value = repository.hideNavigation
-        _availableTabletopTypes.value = TabletopType.getListForNumber(repository.numberOfPlayers)
     }
 
 //    //TODO: delete
@@ -60,6 +67,9 @@ class SetupViewModel constructor(private val repository: GameRepository) : ViewM
         if (!availableTabletopTypes.contains(currentTabletopType)) {
             setTabletopType(TabletopType.getListForNumber(number)[0])
         }
+        val colors = CounterColor.randomColors(number)
+        _setupPlayers.value =
+            List(number) { index -> PlayerSetupModel(colorResId = colors[index].resId) }
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {

@@ -8,12 +8,14 @@ import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
-import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameViewModel(private val repository: GameRepository) : ViewModel() {
+@HiltViewModel
+class GameViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
 
     val startingLife = repository.startingLife
     val numberOfPlayers = repository.numberOfPlayers

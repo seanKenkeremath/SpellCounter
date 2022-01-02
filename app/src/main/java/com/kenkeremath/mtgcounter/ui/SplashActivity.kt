@@ -4,15 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.counter.CounterColor
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.persistence.AppDatabase
 import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity: AppCompatActivity() {
 
     @Inject
@@ -22,18 +23,16 @@ class SplashActivity: AppCompatActivity() {
     lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         if (datastore.isFirstLaunch) {
-            val stockColors = resources.getIntArray(R.array.counter_palette)
             val stockTemplates = mutableListOf<CounterTemplateEntity>()
             for (counterSymbol in CounterSymbol.values().filter { it.resId != null }) {
                 stockTemplates.add(CounterTemplateEntity(symbolId = counterSymbol.symbolId))
             }
             stockTemplates.add(CounterTemplateEntity(name = "XP"))
             stockTemplates.add(CounterTemplateEntity(name = "CMD"))
-            for (stockColor in stockColors) {
-                stockTemplates.add(CounterTemplateEntity(color = stockColor))
+            for (stockColor in CounterColor.allColors()) {
+                stockTemplates.add(CounterTemplateEntity(colorId = stockColor.colorId))
             }
             lifecycleScope.launch {
                 database.templateDao().insertCounters(

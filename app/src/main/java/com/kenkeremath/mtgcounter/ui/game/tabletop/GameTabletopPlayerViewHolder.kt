@@ -5,7 +5,7 @@ import android.view.View
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.TabletopLayoutViewHolder
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
 import com.kenkeremath.mtgcounter.view.player.PlayerViewHolder

@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
-import com.kenkeremath.mtgcounter.view.counter.CounterView
+import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener

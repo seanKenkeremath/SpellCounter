@@ -1,6 +1,8 @@
 package com.kenkeremath.mtgcounter.model.player
 
-class PlayerSetupModel (
+import androidx.annotation.ColorRes
+
+data class PlayerSetupModel (
     var template: PlayerTemplateModel? = null,
-    var color: Int = 0
+    @ColorRes var colorResId: Int? = null
 )

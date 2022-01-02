@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +9,16 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
+import com.kenkeremath.mtgcounter.ui.setup.tabletop.SetupTabletopFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
-
-    @Inject
-    lateinit var viewModelFactory: SetupViewModelFactory
 
     lateinit var playerNumberButtons: List<Button>
     lateinit var fivePlusPlayersButton: Button
@@ -37,16 +34,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     lateinit var startButton: Button
 
-    private lateinit var viewModel: SetupViewModel
+    private val viewModel: SetupViewModel by viewModels()
 
 
     companion object {
         fun newInstance() = SetupFragment()
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -89,13 +81,13 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         customLifeButton.setOnClickListener {
 //            viewModel.insert()
         }
-        
+
         keepScreenAwakeCheckbox = view.findViewById(R.id.keep_screen_awake_checkbox)
         keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
-        
+
         hideNavigationCheckbox = view.findViewById(R.id.hide_navigation_checkbox)
         hideNavigationCheckbox.setOnCheckedChangeListener(this)
-        
+
         tabletopContainer = view.findViewById(R.id.tabletop_container)
 
         tabletopModeButtons = listOf(
@@ -105,12 +97,21 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         )
 
         startButton = view.findViewById(R.id.start_button)
-        startButton.setOnClickListener { startActivity(Intent(context, GameActivity::class.java)) }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(SetupViewModel::class.java)
+        startButton.setOnClickListener {
+            viewModel.tabletopType.value?.let {
+                if (it == TabletopType.LIST) {
+                    startActivity(Intent(context, GameActivity::class.java))
+                } else {
+                    if (viewModel.tabletopType.value != TabletopType.NONE && viewModel.tabletopType.value != TabletopType.LIST) {
+                        val f = SetupTabletopFragment()
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .add(R.id.container, f)
+                            .addToBackStack("Setup_Tabletop")
+                            .commit()
+                    }
+                }
+            }
+        }
 
         viewModel.numberOfPlayers.observe(viewLifecycleOwner, Observer<Int> { numberOfPlayers ->
             numberOfPlayers?.let {

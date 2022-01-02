@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.ui.game.dagger
+package com.kenkeremath.mtgcounter.ui.game
 
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel

@@ -3,6 +3,7 @@ package com.kenkeremath.mtgcounter.persistence.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.kenkeremath.mtgcounter.model.counter.CounterColor
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity.Companion.TABLE_COUNTER_TEMPLATES
 
@@ -13,8 +14,8 @@ data class CounterTemplateEntity(
     val id: Int = 0,
     @ColumnInfo(name = "name")
     val name: String? = null,
-    @ColumnInfo(name = "color")
-    val color: Int? = null,
+    @ColumnInfo(name = "colorId")
+    val colorId: Long = CounterColor.DEFAULT_ID,
     @ColumnInfo(name = "symbolId")
     val symbolId: Long = CounterSymbol.DEFAULT_ID,
     @ColumnInfo(name = "uri")
@@ -31,6 +32,6 @@ data class CounterTemplateEntity(
     }
 
     override fun toString(): String {
-        return "CounterTemplateEntity(id=$id, name=$name, color=$color, symbolId=$symbolId, uri=$uri, linkToPlayer=$linkToPlayer, deletable=$deletable)"
+        return "CounterTemplateEntity(id=$id, name=$name, colorId=$colorId, symbolId=$symbolId, uri=$uri, linkToPlayer=$linkToPlayer, deletable=$deletable)"
     }
 }

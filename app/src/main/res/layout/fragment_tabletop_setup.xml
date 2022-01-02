@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="@dimen/default_padding"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <com.kenkeremath.mtgcounter.view.TabletopLayout
         android:id="@+id/tabletop_layout"
-        android:rotation="90"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+    <Button
+        android:id="@+id/start_button"
+        android:text="Start"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

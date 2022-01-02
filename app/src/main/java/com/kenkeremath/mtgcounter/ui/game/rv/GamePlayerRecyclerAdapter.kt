@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.ui.game.dagger.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
 
 class GamePlayerRecyclerAdapter(

@@ -84,9 +84,10 @@ class CounterSelectionViewHolder(
         //TODO URI
 
         if (model.template.symbol.resId == null) {
-            if (model.template.color != null) {
+            if (model.template.color.resId != null) {
                 image.setImageResource(R.drawable.ic_circle)
-                image.imageTintList = ColorStateList.valueOf(model.template.color!!)
+                val tintColor = ContextCompat.getColor(itemView.context, model.template.color.resId!!)
+                image.imageTintList = ColorStateList.valueOf(tintColor)
             } else {
                 image.setImageDrawable(null)
             }
