@@ -59,13 +59,13 @@ class GameViewModelTest {
         val counter1 = CounterTemplateEntity(
             id = 1,
             name = "counter1",
-            color = 1234,
+            colorId = 1234,
             linkToPlayer = false
         )
         val counter2 = CounterTemplateEntity(
             id = 2,
             name = "counter2",
-            color = 7,
+            colorId = 7,
             linkToPlayer = true
         )
         every {
