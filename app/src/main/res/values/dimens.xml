@@ -44,4 +44,8 @@
     <dimen name="counter_divider_width">1dp</dimen>
     <dimen name="player_divider_width">1dp</dimen>
 
+    <!-- Reveal Layout -->
+    <dimen name="pull_to_reveal_trigger_distance">8dp</dimen>
+    <dimen name="pull_to_reveal_fling_min_distance">24dp</dimen>
+
 </resources>

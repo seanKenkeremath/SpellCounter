@@ -68,7 +68,11 @@ class TabletopLayout : ConstraintLayout {
 
                 if (childView == null) {
                     return false
-                } else {
+                } else if (touchMap.values.contains(childView) && !touchMap.keys.contains(pointerId)) {
+                    //Pointer was create an a view with an existing touch event. Ignore
+                    return true
+                }
+                else {
                     val childX = parentX - childView.left
                     val childY = parentY - childView.top
 
@@ -170,7 +174,7 @@ class TabletopLayout : ConstraintLayout {
                         val childX = parentX - child.left
                         val childY = parentY - child.top
                         val inBounds = getChildForCoordinate(parentX, parentY) == child
-                        if (!inBounds && false) { //TODO: out of bounds
+                        if (!inBounds) {
                             val passedEvent = MotionEvent.obtain(it)
                             passedEvent.action = MotionEvent.ACTION_CANCEL
                             child.dispatchTouchEvent(passedEvent)
