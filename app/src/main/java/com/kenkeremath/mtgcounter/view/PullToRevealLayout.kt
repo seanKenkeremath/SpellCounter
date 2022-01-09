@@ -19,6 +19,8 @@ class PullToRevealLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    private var pullEnabled = true
+
     private var revealing = false
     private var revealed = false
     private var startTime = 0L
@@ -32,7 +34,14 @@ class PullToRevealLayout @JvmOverloads constructor(
 
     private var animation: ObjectAnimator? = null
 
+    fun setPullEnabled(enabled: Boolean) {
+        pullEnabled = enabled
+    }
+
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (!pullEnabled) {
+            return false
+        }
         revealChild?.let { revealChild ->
             ev?.let {
                 if (it.action == MotionEvent.ACTION_DOWN) {

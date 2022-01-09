@@ -75,6 +75,14 @@ class PlayerViewHolder(
         playerId = data.model.id
         countersAdapter.setData(data.model)
 
+        if (data.pullToReveal) {
+            binding.optionsContainer.visibility = View.GONE
+            binding.pullToRevealContainer.setPullEnabled(true)
+        } else {
+            binding.optionsContainer.visibility = View.VISIBLE
+            binding.pullToRevealContainer.setPullEnabled(false)
+        }
+
         //Scroll to end if there's a new counter, and set ui model flag to false
         if (data.newCounterAdded) {
             binding.countersRecycler.scrollToPosition(countersAdapter.itemCount - 1)

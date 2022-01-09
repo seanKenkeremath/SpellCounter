@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kenkeremath.mtgcounter.view.PullToRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kenkeremath.mtgcounter.view.PullToRevealLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pull_to_reveal_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -76,11 +78,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/add_counter"
+        <FrameLayout
+            android:id="@+id/options_container"
             android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:text="+" />
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/add_counter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="+" />
+        </FrameLayout>
+
     </LinearLayout>
 
 </com.kenkeremath.mtgcounter.view.PullToRevealLayout>

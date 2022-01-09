@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
@@ -53,7 +54,9 @@ class GameViewModel @Inject constructor(private val repository: GameRepository) 
                             id = playerId,
                             life = startingLife,
                             color = 0,
-                        )
+                        ),
+                        //TODO: option from repo
+                        pullToReveal = tabletopType != TabletopType.LIST
                     )
                     playerMap[i] = player
 
