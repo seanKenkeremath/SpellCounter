@@ -33,6 +33,7 @@ class PlayerViewHolder(
     private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(onCounterSelectionListener)
 
     private var counterRowsResized: Boolean = false
+    private var revealHintAnimated: Boolean = false
 
     init {
         binding.countersRecycler.layoutManager =
@@ -89,6 +90,22 @@ class PlayerViewHolder(
         if (data.pullToReveal) {
             binding.optionsContainer.visibility = View.GONE
             binding.pullToRevealContainer.setPullEnabled(true)
+            if (!revealHintAnimated) {
+                binding.pullToRevealContainer.viewTreeObserver.addOnPreDrawListener(object :
+                    ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        binding.pullToRevealContainer.viewTreeObserver.removeOnPreDrawListener(this)
+                        binding.pullToRevealContainer.reveal(false)
+                        binding.pullToRevealContainer.isEnabled = false
+                        binding.pullToRevealContainer.postDelayed({
+                            binding.pullToRevealContainer.isEnabled = true
+                            binding.pullToRevealContainer.hide(true)
+                        }, itemView.resources.getInteger(R.integer.pull_reveal_hint_duration).toLong())
+                        return false
+                    }
+                })
+                revealHintAnimated = true
+            }
         } else {
             binding.optionsContainer.visibility = View.VISIBLE
             binding.pullToRevealContainer.setPullEnabled(false)

@@ -43,7 +43,7 @@ class PullToRevealLayout @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        if (!pullEnabled) {
+        if (!pullEnabled || !isEnabled) {
             return false
         }
         revealChild?.let { revealChild ->
@@ -157,6 +157,31 @@ class PullToRevealLayout @JvmOverloads constructor(
                     }
                 }
             }
+        }
+    }
+
+    //Must be called after measure
+    fun reveal(animate: Boolean) {
+        if (animate) {
+            animateReveal()
+        } else {
+            cancelAnimation()
+            revealChild?.translationY = height.toFloat()
+            revealChild?.translationZ = translationZMax
+            revealed = true
+            revealing = false
+        }
+    }
+
+    fun hide(animate: Boolean) {
+        if (animate) {
+            animateHide()
+        } else {
+            cancelAnimation()
+            revealChild?.translationY = 0f
+            revealChild?.translationZ = 0f
+            revealed = false
+            revealing = false
         }
     }
 
