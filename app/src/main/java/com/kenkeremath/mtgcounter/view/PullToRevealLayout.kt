@@ -74,8 +74,8 @@ class PullToRevealLayout @JvmOverloads constructor(
                                 revealChild.translationY = startTranslationY + translation
                             }
                         }
-                    } else if (it.action == MotionEvent.ACTION_UP || it.action == MotionEvent.ACTION_CANCEL) {
-                        LogUtils.d(tag = LogUtils.TAG_PULL_TO_REVEAL, message = "Resetting PTR")
+                    } else if (it.action == MotionEvent.ACTION_UP) {
+                        LogUtils.d(tag = LogUtils.TAG_PULL_TO_REVEAL, message = "Resetting PTR (ACTION_UP)")
                         val fling =
                             abs(rawTranslation) > flingMinDistance
                                     && System.currentTimeMillis() - startTime < flingMaxTime
@@ -100,6 +100,9 @@ class PullToRevealLayout @JvmOverloads constructor(
                         } else {
                             animateBasedOnTranslation()
                         }
+                    } else if (it.action == MotionEvent.ACTION_CANCEL) {
+                        LogUtils.d(tag = LogUtils.TAG_PULL_TO_REVEAL, message = "Resetting PTR (ACTION_CANCEL)")
+                        animateBasedOnTranslation()
                     }
                 }
             }

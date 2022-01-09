@@ -3,10 +3,12 @@ package com.kenkeremath.mtgcounter.view
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.math.MathUtils.clamp
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
@@ -64,6 +66,7 @@ class TabletopLayout : ConstraintLayout {
                 val parentY = it.getY(pointerIndex)
                 val childView = getChildForCoordinate(parentX, parentY)
 
+                LogUtils.d(tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS, message = "touchEvent: x: $parentX, y: $parentY")
                 var passedEvent: MotionEvent? = null
 
                 if (childView == null) {
@@ -80,6 +83,12 @@ class TabletopLayout : ConstraintLayout {
 
                     when (it.actionMasked) {
                         MotionEvent.ACTION_DOWN -> {
+                            touchMap[pointerId] = childView
+                            touchTimeMap[pointerId] = System.currentTimeMillis()
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started (ACTION_DOWN)"
+                            )
                             passedEvent = MotionEvent.obtain(
                                 it.downTime,
                                 System.currentTimeMillis(),
@@ -88,14 +97,15 @@ class TabletopLayout : ConstraintLayout {
                                 childY,
                                 0,
                             )
-                            touchMap[pointerId] = childView
-                            touchTimeMap[pointerId] = System.currentTimeMillis()
-                            LogUtils.d(
-                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
-                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started (ACTION_DOWN)"
-                            )
                         }
                         MotionEvent.ACTION_UP -> {
+                            if (!touchMap.containsKey(pointerId)) {
+                                return true
+                            }
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete (ACTION_UP)"
+                            )
                             passedEvent = MotionEvent.obtain(
                                 it.downTime,
                                 System.currentTimeMillis(),
@@ -103,10 +113,6 @@ class TabletopLayout : ConstraintLayout {
                                 childX,
                                 childY,
                                 0,
-                            )
-                            LogUtils.d(
-                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
-                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete (ACTION_UP)"
                             )
                             removePointer = true
 
@@ -115,6 +121,10 @@ class TabletopLayout : ConstraintLayout {
                             touchMap[pointerId] = childView
                             val downTime = System.currentTimeMillis()
                             touchTimeMap[pointerId] = downTime
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started x: $childX, y: $childY"
+                            )
                             passedEvent = MotionEvent.obtain(
                                 downTime,
                                 System.currentTimeMillis(),
@@ -123,12 +133,15 @@ class TabletopLayout : ConstraintLayout {
                                 childY,
                                 0,
                             )
-                            LogUtils.d(
-                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
-                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Started x: $childX, y: $childY"
-                            )
                         }
                         MotionEvent.ACTION_POINTER_UP -> {
+                            if (!touchMap.containsKey(pointerId)) {
+                                return true
+                            }
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete"
+                            )
                             passedEvent = MotionEvent.obtain(
                                 touchTimeMap[pointerId]!!,
                                 System.currentTimeMillis(),
@@ -137,13 +150,16 @@ class TabletopLayout : ConstraintLayout {
                                 childY,
                                 0,
                             )
-                            LogUtils.d(
-                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
-                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete"
-                            )
                             removePointer = true
                         }
                         MotionEvent.ACTION_CANCEL -> {
+                            if (!touchMap.containsKey(pointerId)) {
+                                return true
+                            }
+                            LogUtils.d(
+                                tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
+                                message = "pointerId: $pointerId View tag: ${touchMap[pointerId]?.tag} Touch Complete (Cancel)"
+                            )
                             passedEvent = MotionEvent.obtain(
                                 touchTimeMap[pointerId]!!,
                                 System.currentTimeMillis(),
@@ -166,7 +182,8 @@ class TabletopLayout : ConstraintLayout {
                     }
                 }
             } else {
-                for (pointerId in touchMap.keys) {
+                //Make a copy of the keys to avoid concurrent modification
+                for (pointerId in touchMap.keys.toList()) {
                     val index = it.findPointerIndex(pointerId)
                     touchMap[pointerId]?.let { child ->
                         val parentX = it.getX(index)
@@ -175,14 +192,20 @@ class TabletopLayout : ConstraintLayout {
                         val childY = parentY - child.top
                         val inBounds = getChildForCoordinate(parentX, parentY) == child
                         if (!inBounds) {
-                            val passedEvent = MotionEvent.obtain(it)
-                            passedEvent.action = MotionEvent.ACTION_CANCEL
-                            child.dispatchTouchEvent(passedEvent)
-                            passedEvent.recycle()
                             LogUtils.d(
                                 tag = LogUtils.TAG_TABLETOP_TOUCH_EVENTS,
-                                message = "pointerId: $pointerId View tag: ${child.tag} Out of bounds. Touch Complete"
+                                message = "pointerId: $pointerId View tag: ${child.tag} Out of bounds. Touch Complete. x: $childX, y: $childY, left: ${child.left}, top: ${child.top}"
                             )
+                            val passedEvent = MotionEvent.obtain(
+                                touchTimeMap[pointerId]!!,
+                                System.currentTimeMillis(),
+                                MotionEvent.ACTION_CANCEL,
+                                childX,
+                                childY,
+                                0,
+                            )
+                            child.dispatchTouchEvent(passedEvent)
+                            passedEvent.recycle()
                             touchMap.remove(pointerId)
                             touchTimeMap.remove(pointerId)
                         } else {

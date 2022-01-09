@@ -5,12 +5,20 @@ import com.kenkeremath.mtgcounter.BuildConfig
 
 object LogUtils {
 
+    const val TAG_DEFAULT = "SC_Debug"
     const val TAG_INCREMENTER = "SC_Incrementer_Debug"
     const val TAG_TABLETOP_TOUCH_EVENTS = "SC_Tabletop_TE_Debug"
     const val TAG_PULL_TO_REVEAL = "SC_PTR_Debug"
 
-    fun d(message: String, tag: String = "SpellCounterDebug") {
-        if (BuildConfig.DEBUG) {
+    private val whiteList = setOf(
+        TAG_DEFAULT,
+//        TAG_INCREMENTER,
+        TAG_TABLETOP_TOUCH_EVENTS,
+        TAG_PULL_TO_REVEAL,
+    )
+
+    fun d(message: String, tag: String = TAG_DEFAULT) {
+        if (BuildConfig.DEBUG && whiteList.contains(tag)) {
             Log.d(tag, message)
         }
     }
