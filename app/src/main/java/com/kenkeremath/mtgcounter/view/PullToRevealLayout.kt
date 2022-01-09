@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter.view
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
@@ -27,12 +28,15 @@ class PullToRevealLayout @JvmOverloads constructor(
     private var startY = 0f
     private var startTranslationY = 0f
 
-    private val triggerDistance = resources.getDimensionPixelSize(R.dimen.pull_to_reveal_trigger_distance)
+    private val triggerDistance =
+        resources.getDimensionPixelSize(R.dimen.pull_to_reveal_trigger_distance)
     private val flingMaxTime = 800L
     private val animationDuration = 300L
-    private val flingMinDistance = resources.getDimensionPixelSize(R.dimen.pull_to_reveal_fling_min_distance)
+    private val flingMinDistance =
+        resources.getDimensionPixelSize(R.dimen.pull_to_reveal_fling_min_distance)
+    private val translationZMax = resources.getDimension(R.dimen.pull_to_reveal_translation_z_max)
 
-    private var animation: ObjectAnimator? = null
+    private var animation: Animator? = null
 
     fun setPullEnabled(enabled: Boolean) {
         pullEnabled = enabled
@@ -72,6 +76,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                                     message = "Hide Translation Triggered: $translation"
                                 )
                                 revealChild.translationY = startTranslationY + translation
+                                revealChild.translationZ = (revealChild.translationY / revealChild.height) * translationZMax
                             }
                         } else {
                             if (revealing || rawTranslation > triggerDistance) {
@@ -81,10 +86,14 @@ class PullToRevealLayout @JvmOverloads constructor(
                                     message = "Reveal Translation Triggered: $translation"
                                 )
                                 revealChild.translationY = startTranslationY + translation
+                                revealChild.translationZ = (revealChild.translationY / revealChild.height) * translationZMax
                             }
                         }
                     } else if (it.action == MotionEvent.ACTION_UP) {
-                        LogUtils.d(tag = LogUtils.TAG_PULL_TO_REVEAL, message = "Resetting PTR (ACTION_UP)")
+                        LogUtils.d(
+                            tag = LogUtils.TAG_PULL_TO_REVEAL,
+                            message = "Resetting PTR (ACTION_UP)"
+                        )
                         val fling =
                             abs(rawTranslation) > flingMinDistance
                                     && System.currentTimeMillis() - startTime < flingMaxTime
@@ -110,7 +119,10 @@ class PullToRevealLayout @JvmOverloads constructor(
                             animateBasedOnTranslation()
                         }
                     } else if (it.action == MotionEvent.ACTION_CANCEL) {
-                        LogUtils.d(tag = LogUtils.TAG_PULL_TO_REVEAL, message = "Resetting PTR (ACTION_CANCEL)")
+                        LogUtils.d(
+                            tag = LogUtils.TAG_PULL_TO_REVEAL,
+                            message = "Resetting PTR (ACTION_CANCEL)"
+                        )
                         animateBasedOnTranslation()
                     }
                 }
@@ -155,8 +167,13 @@ class PullToRevealLayout @JvmOverloads constructor(
                 tag = LogUtils.TAG_PULL_TO_REVEAL,
                 message = "Hiding"
             )
-            animation =
+            val translationAnimation =
                 ObjectAnimator.ofFloat(it, "translationY", it.translationY, 0f)
+            val elevationAnimation =
+                ObjectAnimator.ofFloat(it, View.TRANSLATION_Z, it.translationZ, 0f)
+            val set = AnimatorSet()
+            set.playTogether(translationAnimation, elevationAnimation)
+            animation = set
             animation?.duration = animationDuration
             animation?.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
@@ -179,8 +196,13 @@ class PullToRevealLayout @JvmOverloads constructor(
                 tag = LogUtils.TAG_PULL_TO_REVEAL,
                 message = "Revealing"
             )
-            animation =
+            val translationAnimation =
                 ObjectAnimator.ofFloat(it, "translationY", it.translationY, height.toFloat())
+            val elevationAnimation =
+                ObjectAnimator.ofFloat(it, View.TRANSLATION_Z, it.translationZ, translationZMax)
+            val set = AnimatorSet()
+            set.playTogether(translationAnimation, elevationAnimation)
+            animation = set
             animation?.duration = animationDuration
             animation?.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
@@ -25,7 +26,12 @@ class SetupTabletopLayoutViewHolder(container: RotateLayout) :
         val color = data.colorResId?.let {
             ContextCompat.getColor(view.context, it)
         } ?: Color.TRANSPARENT
-        colorContainer.setBackgroundColor(color)
+
+        val alphaColor = ColorUtils.setAlphaComponent(
+            color, view.resources.getInteger(R.integer.player_color_alpha)
+        )
+
+        colorContainer.setBackgroundColor(alphaColor)
         templateName.text = data.template?.name
     }
 }

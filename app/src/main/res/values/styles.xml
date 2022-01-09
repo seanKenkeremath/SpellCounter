@@ -20,9 +20,7 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="PlayerContainer">
-        <item name="android:background">@drawable/player_container_bg</item>
-    </style>
+    <style name="PlayerContainer"/>
 
     <style name="DialogStyle" parent="Theme.AppCompat.Dialog">
         <!-- TODO -->

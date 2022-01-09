@@ -47,5 +47,6 @@
     <!-- Reveal Layout -->
     <dimen name="pull_to_reveal_trigger_distance">8dp</dimen>
     <dimen name="pull_to_reveal_fling_min_distance">24dp</dimen>
+    <dimen name="pull_to_reveal_translation_z_max">64dp</dimen>
 
 </resources>

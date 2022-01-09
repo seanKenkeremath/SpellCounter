@@ -1,17 +1,17 @@
 package com.kenkeremath.mtgcounter.view.player
 
-import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
-import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
+import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
@@ -55,19 +55,19 @@ class PlayerViewHolder(
         binding.editCountersRecycler.adapter = addCountersRecyclerAdapter
 
         binding.addCounter.setOnClickListener {
-            binding.gameContainer.visibility = View.GONE
+            binding.playerContainer.visibility = View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
         }
 
         binding.cancel.setOnClickListener {
             onCounterSelectionListener.onCancelCounterChanges(playerId)
-            binding.gameContainer.visibility = View.VISIBLE
+            binding.playerContainer.visibility = View.VISIBLE
             binding.editCountersContainer.visibility = View.GONE
         }
 
         binding.confirm.setOnClickListener {
             onCounterSelectionListener.onConfirmCounterChanges(playerId)
-            binding.gameContainer.visibility = View.VISIBLE
+            binding.playerContainer.visibility = View.VISIBLE
             binding.editCountersContainer.visibility = View.GONE
         }
     }
@@ -76,8 +76,15 @@ class PlayerViewHolder(
         playerId = data.model.id
         countersAdapter.setData(data.model)
 
-        itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, data.model.colorResId))
-        binding.countersRecycler.setBackgroundColor(ContextCompat.getColor(itemView.context, data.model.colorResId))
+        val alphaColor = ColorUtils.setAlphaComponent(
+            ContextCompat.getColor(
+                itemView.context,
+                data.model.colorResId
+            ), itemView.resources.getInteger(R.integer.player_color_alpha)
+        )
+
+        binding.optionsContainerBgImage.setBackgroundColor(alphaColor)
+        binding.playerContainerBgImage.setBackgroundColor(alphaColor)
 
         if (data.pullToReveal) {
             binding.optionsContainer.visibility = View.GONE
