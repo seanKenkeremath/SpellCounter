@@ -100,7 +100,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         startButton.setOnClickListener {
             viewModel.tabletopType.value?.let {
                 if (it == TabletopType.LIST) {
-                    startActivity(Intent(context, GameActivity::class.java))
+                    viewModel.setupPlayers.value?.let { players ->
+                        startActivity(GameActivity.startIntentFromSetup(requireContext(), players))
+                    }
                 } else {
                     if (viewModel.tabletopType.value != TabletopType.NONE && viewModel.tabletopType.value != TabletopType.LIST) {
                         val f = SetupTabletopFragment()

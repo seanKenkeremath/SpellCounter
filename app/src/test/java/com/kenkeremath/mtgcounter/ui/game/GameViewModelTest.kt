@@ -2,10 +2,12 @@ package com.kenkeremath.mtgcounter.ui.game
 
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.core.app.ApplicationProvider
 import com.kenkeremath.mtgcounter.CoroutineTestRule
 import com.kenkeremath.mtgcounter.TestApplication
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.*
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
@@ -36,6 +38,8 @@ class GameViewModelTest {
 
     private lateinit var gameRepository: GameRepository
 
+    private lateinit var savedStateHandle: SavedStateHandle
+
     private lateinit var viewModel: GameViewModel
 
     private lateinit var datastore: Datastore
@@ -56,6 +60,15 @@ class GameViewModelTest {
             DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
         gameRepository =
             GameRepositoryImpl(database, datastore, coroutinesTestRule.testDispatcherProvider)
+        savedStateHandle = SavedStateHandle(
+            mapOf(
+                GameActivity.ARGS_SETUP_PLAYERS to listOf(
+                    PlayerSetupModel(),
+                    PlayerSetupModel(),
+                    PlayerSetupModel(),
+                )
+            )
+        )
         val counter1 = CounterTemplateEntity(
             id = 1,
             name = "counter1",
@@ -93,7 +106,7 @@ class GameViewModelTest {
         datastore.startingLife = 15
         datastore.numberOfPlayers = 3
         datastore.tabletopType = TabletopType.THREE_CIRCLE
-        viewModel = GameViewModel(gameRepository)
+        viewModel = GameViewModel(gameRepository, savedStateHandle)
     }
 
     @Test

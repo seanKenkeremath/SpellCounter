@@ -1,25 +1,30 @@
 package com.kenkeremath.mtgcounter.ui.game
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
+class GameViewModel @Inject constructor(
+    private val repository: GameRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    val setupPlayers = savedStateHandle.get<List<PlayerSetupModel>>(GameActivity.ARGS_SETUP_PLAYERS)
+        ?: throw IllegalArgumentException("PlayerSetupModels must be passed in intent")
 
     val startingLife = repository.startingLife
-    val numberOfPlayers = repository.numberOfPlayers
     val tabletopType = repository.tabletopType
 
     private var availableCounters: List<CounterTemplateModel> = listOf()
@@ -46,14 +51,14 @@ class GameViewModel @Inject constructor(private val repository: GameRepository) 
         viewModelScope.launch {
             repository.getAllCounters().collect {
                 availableCounters = it
-                for (i in 0 until numberOfPlayers) {
+                for (i in 0 until setupPlayers?.size) {
                     val playerId = i
 
                     val player = GamePlayerUiModel(
                         PlayerModel(
                             id = playerId,
                             life = startingLife,
-                            color = 0,
+                            colorResId = setupPlayers[i].colorResId ?: R.color.white,
                         ),
                         //TODO: option from repo
                         pullToReveal = tabletopType != TabletopType.LIST
@@ -178,8 +183,10 @@ class GameViewModel @Inject constructor(private val repository: GameRepository) 
      * counters recyclerview
      */
     private fun generateSelectionUiModelsForPlayer(playerId: Int): List<CounterSelectionUiModel> {
-        return playerMap[playerId]?.let { _ ->
-            availableCounters.map {
+        return playerMap[playerId]?.let { player ->
+            availableCounters.filter {
+                !(it.color.resId != null && it.color.resId == player.model.colorResId)
+            }.map {
                 CounterSelectionUiModel(
                     it,
                     pendingCounterSelectionMap[playerId]?.contains(it.id) == true

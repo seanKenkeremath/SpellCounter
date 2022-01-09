@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.view.player
 
+import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
@@ -74,6 +75,9 @@ class PlayerViewHolder(
     fun bind(data: GamePlayerUiModel) {
         playerId = data.model.id
         countersAdapter.setData(data.model)
+
+        itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, data.model.colorResId))
+        binding.countersRecycler.setBackgroundColor(ContextCompat.getColor(itemView.context, data.model.colorResId))
 
         if (data.pullToReveal) {
             binding.optionsContainer.visibility = View.GONE

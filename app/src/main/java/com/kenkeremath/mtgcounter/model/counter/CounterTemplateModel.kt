@@ -1,7 +1,10 @@
 package com.kenkeremath.mtgcounter.model.counter
 
+import android.os.Parcelable
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CounterTemplateModel(
     val id: Int = 0,
     var name: String? = null,
@@ -9,7 +12,7 @@ data class CounterTemplateModel(
     var symbol: CounterSymbol = CounterSymbol.NONE,
     var uri: String? = null,
     var deletable: Boolean = false,
-) {
+): Parcelable {
     constructor(entity: CounterTemplateEntity) : this(
         id = entity.id,
         name = entity.name,

@@ -40,8 +40,9 @@ class SetupTabletopFragment : Fragment() {
         }
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
-            //TODO: pass player setup model
-            startActivity(Intent(context, GameActivity::class.java))
+            viewModel.setupPlayers.value?.let {
+                startActivity(GameActivity.startIntentFromSetup(requireContext(), it))
+            }
         }
     }
 

@@ -21,13 +21,16 @@ class SecondaryCounterView @JvmOverloads constructor(
             if (counterModel.colorResId != null) {
                 image.setImageResource(R.drawable.ic_circle)
                 image.imageTintList = ColorStateList.valueOf(
-                    counterModel.colorResId
+                    ContextCompat.getColor(context, counterModel.colorResId)
                 )
             }
         } else {
             image.setImageResource(counterModel.symbolResId)
             image.imageTintList = ColorStateList.valueOf(
-                counterModel.colorResId ?: ContextCompat.getColor(context, R.color.default_icon_tint)
+                counterModel.colorResId ?: ContextCompat.getColor(
+                    context,
+                    R.color.default_icon_tint
+                )
             )
         }
 

@@ -1,5 +1,7 @@
 package com.kenkeremath.mtgcounter.ui.game
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
@@ -21,6 +24,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     OnCounterSelectionListener {
+
+    companion object {
+        const val ARGS_SETUP_PLAYERS = "args_setup_players"
+        fun startIntentFromSetup(context: Context, players: List<PlayerSetupModel>): Intent {
+            return Intent(context, GameActivity::class.java).putParcelableArrayListExtra(
+                ARGS_SETUP_PLAYERS, ArrayList(players))
+        }
+    }
 
     private lateinit var tabletopContainer: RotateLayout
     private lateinit var tabletopLayout: TabletopLayout
