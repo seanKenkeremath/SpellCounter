@@ -10,7 +10,7 @@ import android.view.View
 import com.kenkeremath.mtgcounter.util.LogUtils
 import com.kenkeremath.mtgcounter.util.MathUtils
 
-class CounterIncrementerButton @JvmOverloads constructor(
+class HoldableButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -68,7 +68,7 @@ class CounterIncrementerButton @JvmOverloads constructor(
         }
     }
 
-    private var listener: OnCounterIncrementedListener? = null
+    private var listener: HoldableButtonListener? = null
 
     init {
         //Set up timing of increment callbacks while holding down
@@ -80,8 +80,8 @@ class CounterIncrementerButton @JvmOverloads constructor(
         holdIntervals.append(500, MIN_HOLD_INTERVAL)
     }
 
-    fun setOnCounterIncrementedListener(onCounterIncrementedListener: OnCounterIncrementedListener) {
-        listener = onCounterIncrementedListener
+    fun setListener(holdableButtonListener: HoldableButtonListener) {
+        listener = holdableButtonListener
     }
 
     private fun resetHold() {
@@ -152,14 +152,14 @@ class CounterIncrementerButton @JvmOverloads constructor(
         return false
     }
 
-    interface OnCounterIncrementedListener {
-        fun onSingleIncrement()
+    interface HoldableButtonListener {
+        fun onSingleClick()
         fun onHoldContinued(increments: Int)
     }
 
     override fun performClick(): Boolean {
         super.performClick()
-        listener?.onSingleIncrement()
+        listener?.onSingleClick()
         return true
     }
 }

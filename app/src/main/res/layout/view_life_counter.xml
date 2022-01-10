@@ -30,14 +30,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.kenkeremath.mtgcounter.view.CounterIncrementerButton
+        <com.kenkeremath.mtgcounter.view.HoldableButton
             android:id="@+id/increment_button"
             android:background="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <com.kenkeremath.mtgcounter.view.CounterIncrementerButton
+        <com.kenkeremath.mtgcounter.view.HoldableButton
             android:id="@+id/decrement_button"
             android:background="?attr/selectableItemBackground"
             android:layout_width="match_parent"

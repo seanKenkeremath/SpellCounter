@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.util.CounterUtils
-import com.kenkeremath.mtgcounter.view.CounterIncrementerButton
+import com.kenkeremath.mtgcounter.view.HoldableButton
 
 abstract class CounterView(
     layoutResId: Int,
@@ -22,8 +22,8 @@ abstract class CounterView(
 
     private var amountText: TextView
     private var amount: Int = 0
-    private val incrementer: CounterIncrementerButton
-    private val decrementer: CounterIncrementerButton
+    private val incrementer: HoldableButton
+    private val decrementer: HoldableButton
 
     private var listener: OnAmountUpdatedListener? = null
 
@@ -44,9 +44,9 @@ abstract class CounterView(
         decrementer = findViewById(R.id.decrement_button)
         setAmount(0)
 
-        incrementer.setOnCounterIncrementedListener(object:
-            CounterIncrementerButton.OnCounterIncrementedListener {
-            override fun onSingleIncrement() {
+        incrementer.setListener(object:
+            HoldableButton.HoldableButtonListener {
+            override fun onSingleClick() {
                 listener?.onAmountIncremented(1)
             }
             override fun onHoldContinued(increments: Int) {
@@ -54,9 +54,9 @@ abstract class CounterView(
             }
         })
 
-        decrementer.setOnCounterIncrementedListener(object:
-            CounterIncrementerButton.OnCounterIncrementedListener {
-            override fun onSingleIncrement() {
+        decrementer.setListener(object:
+            HoldableButton.HoldableButtonListener {
+            override fun onSingleClick() {
                 listener?.onAmountIncremented(-1)
             }
             override fun onHoldContinued(increments: Int) {

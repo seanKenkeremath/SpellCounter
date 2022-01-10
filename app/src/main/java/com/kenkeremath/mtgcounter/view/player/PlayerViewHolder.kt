@@ -12,6 +12,7 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
+import com.kenkeremath.mtgcounter.view.HoldableButton
 import com.kenkeremath.mtgcounter.view.PullToRevealLayout
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
@@ -63,9 +64,12 @@ class PlayerViewHolder(
             playerMenuListener.onEditCountersOpened(playerId)
         }
 
-        binding.revealedAddCounter.setOnClickListener {
-            playerMenuListener.onEditCountersOpened(playerId)
-        }
+        binding.revealedAddCounterButton.setListener(object: HoldableButton.HoldableButtonListener {
+            override fun onSingleClick() {
+                playerMenuListener.onEditCountersOpened(playerId)
+            }
+            override fun onHoldContinued(increments: Int) {}
+        })
 
         binding.cancel.setOnClickListener {
             playerMenuListener.onCancelCounterChanges(playerId)
