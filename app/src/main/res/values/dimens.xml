@@ -13,6 +13,10 @@
     <dimen name="counter_options_panel_width">56dp</dimen>
     <dimen name="player_life_width">130dp</dimen>
     <dimen name="player_list_item_height">200dp</dimen>
+    <!-- If the player list would not exceed this value in height beyond the view,
+    then cells are sized to fit without scrolling. This may cause player cells to be
+    a few pixels smaller than they normally would -->
+    <dimen name="player_scroll_threshold">100dp</dimen>
 
     <!-- Life Counter -->
 
@@ -24,7 +28,7 @@
     <dimen name="counter_button_height">28dp</dimen>
     <dimen name="counter_width">80dp</dimen>
     <dimen name="counter_recycler_horz_padding">2dp</dimen>
-    <!-- If the counter list would not exceed this value in width,
+    <!-- If the counter list would not exceed this value in width beyond the view,
     then cells are sized to fit without scrolling. This may cause counter cells to be
      a few pixels smaller than they normally would -->
     <dimen name="counter_scroll_threshold">16dp</dimen>
