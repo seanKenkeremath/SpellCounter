@@ -73,6 +73,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                         if (revealed) {
                             if (revealing || rawTranslation < -triggerDistance) {
                                 revealing = true
+                                listener?.onDragging()
                                 LogUtils.d(
                                     tag = LogUtils.TAG_PULL_TO_REVEAL,
                                     message = "Hide Translation Triggered: $translation"
@@ -83,6 +84,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                         } else {
                             if (revealing || rawTranslation > triggerDistance) {
                                 revealing = true
+                                listener?.onDragging()
                                 LogUtils.d(
                                     tag = LogUtils.TAG_PULL_TO_REVEAL,
                                     message = "Reveal Translation Triggered: $translation"
@@ -257,5 +259,6 @@ class PullToRevealLayout @JvmOverloads constructor(
     interface PullToRevealListener {
         fun onReveal()
         fun onHide()
+        fun onDragging()
     }
 }
