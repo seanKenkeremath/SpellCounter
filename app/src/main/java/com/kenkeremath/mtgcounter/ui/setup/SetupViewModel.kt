@@ -28,14 +28,22 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
     private val _setupPlayers = MutableLiveData<List<PlayerSetupModel>>()
     val setupPlayers: LiveData<List<PlayerSetupModel>> get() = _setupPlayers
 
-    private val _tabletopType = MutableLiveData<TabletopType>()
-    val tabletopType: LiveData<TabletopType> get() = _tabletopType
-
-    private val _availableTabletopTypes = MutableLiveData<List<TabletopType>>()
-    val availableTabletopTypes: LiveData<List<TabletopType>> get() = _availableTabletopTypes
+    private val _tabletopTypes = MutableLiveData<List<TabletopLayoutSelectionUiModel>>()
+    val tabletopTypes: LiveData<List<TabletopLayoutSelectionUiModel>> get() = _tabletopTypes
 
     private val _showCustomizeLayoutButton = MutableLiveData<Boolean>(false)
     val showCustomizeLayoutButton: LiveData<Boolean> get() = _showCustomizeLayoutButton
+
+    //Generate 8 unique random colors from list to use for player creation
+    private val playerColors = CounterColor.randomColors(8)
+
+    var selectedTabletopType: TabletopType = TabletopType.NONE
+        private set
+
+    private val availableTabletopTypes: List<TabletopType>
+        get() = TabletopType.getListForNumber(
+            _numberOfPlayers.value ?: 0
+        )
 
     init {
         _startingLife.value = repository.startingLife
@@ -64,15 +72,12 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
     fun setNumberOfPlayers(number: Int) {
         repository.numberOfPlayers = number
         _numberOfPlayers.value = number
-        val availableTabletopTypes = TabletopType.getListForNumber(number)
-        _availableTabletopTypes.value = availableTabletopTypes
-        val currentTabletopType = _tabletopType.value
-        if (!availableTabletopTypes.contains(currentTabletopType)) {
-            setTabletopType(TabletopType.getListForNumber(number)[0])
-        }
-        val colors = CounterColor.randomColors(number)
+        val newTabletopType =
+            if (availableTabletopTypes.contains(selectedTabletopType)) selectedTabletopType
+            else availableTabletopTypes[0]
+        setTabletopType(newTabletopType)
         _setupPlayers.value =
-            List(number) { index -> PlayerSetupModel(colorResId = colors[index].resId) }
+            List(number) { index -> PlayerSetupModel(colorResId = playerColors[index].resId) }
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {
@@ -92,8 +97,14 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
 
     fun setTabletopType(tabletopType: TabletopType) {
         repository.tabletopType = tabletopType
-        _tabletopType.value = tabletopType
+        selectedTabletopType = tabletopType
         _showCustomizeLayoutButton.value =
             tabletopType != TabletopType.LIST && tabletopType != TabletopType.NONE
+        _tabletopTypes.value = availableTabletopTypes.map {
+            TabletopLayoutSelectionUiModel(
+                it,
+                it == selectedTabletopType
+            )
+        }
     }
 }

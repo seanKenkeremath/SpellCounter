@@ -63,13 +63,20 @@ class SetupViewModelTest {
         assertEquals(false, viewModel.keepScreenOn.value)
         assertEquals(15, viewModel.startingLife.value)
         assertEquals(3, viewModel.numberOfPlayers.value)
-        assertEquals(TabletopType.THREE_CIRCLE, viewModel.tabletopType.value)
+        assertEquals(TabletopType.THREE_CIRCLE, viewModel.selectedTabletopType)
         val expectedSetOfTabletopTypes = setOf(
-            TabletopType.THREE_ACROSS,
-            TabletopType.THREE_CIRCLE,
-            TabletopType.LIST
+            TabletopLayoutSelectionUiModel(
+                TabletopType.THREE_ACROSS, selected = false
+            ),
+            TabletopLayoutSelectionUiModel(
+                TabletopType.THREE_CIRCLE, selected = true
+            ),
+            TabletopLayoutSelectionUiModel(
+                TabletopType.LIST, selected = false
+            )
         )
-        assertEquals(expectedSetOfTabletopTypes, viewModel.availableTabletopTypes.value?.toSet())
+
+        assertEquals(expectedSetOfTabletopTypes, viewModel.tabletopTypes.value?.toSet())
     }
 
     @Test
@@ -93,22 +100,22 @@ class SetupViewModelTest {
     @Test
     fun select_number_of_players_maintains_compatible_tabletop_type() {
         viewModel.setTabletopType(TabletopType.LIST)
-        assertEquals(TabletopType.LIST, viewModel.tabletopType.value)
+        assertEquals(TabletopType.LIST, viewModel.selectedTabletopType)
         viewModel.setNumberOfPlayers(5)
-        assertEquals(TabletopType.LIST, viewModel.tabletopType.value)
+        assertEquals(TabletopType.LIST, viewModel.selectedTabletopType)
     }
 
     @Test
     fun select_number_of_players_changes_tabletop_type_when_incompatible() {
         viewModel.setTabletopType(TabletopType.THREE_ACROSS)
-        assertEquals(TabletopType.THREE_ACROSS, viewModel.tabletopType.value)
+        assertEquals(TabletopType.THREE_ACROSS, viewModel.selectedTabletopType)
         viewModel.setNumberOfPlayers(5)
-        assertEquals(TabletopType.FIVE_CIRCLE, viewModel.tabletopType.value)
+        assertEquals(TabletopType.FIVE_CIRCLE, viewModel.selectedTabletopType)
     }
 
     @Test
     fun select_tabletop_type() {
         viewModel.setTabletopType(TabletopType.LIST)
-        assertEquals(TabletopType.LIST, viewModel.tabletopType.value)
+        assertEquals(TabletopType.LIST, viewModel.selectedTabletopType)
     }
 }

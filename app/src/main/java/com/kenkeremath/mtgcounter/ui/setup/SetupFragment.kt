@@ -104,7 +104,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
-            viewModel.tabletopType.value?.let {
+            if (viewModel.selectedTabletopType != TabletopType.NONE) {
                 viewModel.setupPlayers.value?.let { players ->
                     startActivity(GameActivity.startIntentFromSetup(requireContext(), players))
                 }
@@ -156,27 +156,20 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.availableTabletopTypes.observe(viewLifecycleOwner, {
+        viewModel.tabletopTypes.observe(viewLifecycleOwner, {
             it?.let {
                 for (tabletopModeButton in tabletopModeButtons) {
                     tabletopModeButton.visibility = View.GONE
                 }
                 for (i in 0 until kotlin.math.min(3, it.size)) {
-                    tabletopModeButtons[i].tag = it[i]
+                    tabletopModeButtons[i].tag = it[i].tabletopType
                     tabletopModeButtons[i].visibility = View.VISIBLE
+                    tabletopModeButtons[i].isSelected = it[i].selected
                     tabletopModeButtons[i].setOnClickListener {
                         viewModel.setTabletopType(
                             tabletopModeButtons[i].tag as TabletopType
                         )
                     }
-                }
-            }
-        })
-
-        viewModel.tabletopType.observe(viewLifecycleOwner, {
-            it?.let {
-                for (tableTopModeButton in tabletopModeButtons) {
-                    tableTopModeButton.isSelected = tableTopModeButton.tag == it
                 }
             }
         })

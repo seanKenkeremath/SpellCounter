@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.ui.setup.tabletop
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,9 +33,9 @@ class SetupTabletopFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         tabletopLayout = view.findViewById(R.id.tabletop_layout)
         tabletopAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
-        viewModel.tabletopType.value?.let {
-            tabletopAdapter.setPositions(it)
-            tabletopAdapter.updateAll(it, viewModel.setupPlayers.value!!)
+        viewModel.setupPlayers.value?.let {
+            tabletopAdapter.setPositions(viewModel.selectedTabletopType)
+            tabletopAdapter.updateAll(viewModel.selectedTabletopType, it)
         }
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {

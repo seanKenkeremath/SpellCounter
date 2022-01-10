@@ -15,7 +15,7 @@ enum class TabletopType(val numberOfPlayers: Int, val positions: List<TableLayou
     FOUR_ACROSS(4, listOf(TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2,TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2)),
     FIVE_CIRCLE(5, listOf(TableLayoutPosition.TOP_PANEL, TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2,TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2)),
     FIVE_ACROSS(5, listOf(TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2,TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2, TableLayoutPosition.RIGHT_PANEL_3)),
-    SIX_CIRCLE(6, listOf(TableLayoutPosition.TOP_PANEL, TableLayoutPosition.TOP_PANEL, TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2,TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2, TableLayoutPosition.BOTTOM_PANEL)),
+    SIX_CIRCLE(6, listOf(TableLayoutPosition.TOP_PANEL, TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2,TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2, TableLayoutPosition.BOTTOM_PANEL)),
     SIX_ACROSS(6, listOf(TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.LEFT_PANEL_2, TableLayoutPosition.LEFT_PANEL_3, TableLayoutPosition.RIGHT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_2, TableLayoutPosition.RIGHT_PANEL_3));
 
     companion object {
