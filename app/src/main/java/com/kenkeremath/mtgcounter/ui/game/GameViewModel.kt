@@ -108,6 +108,20 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun editCounters(playerId: Int) {
+        playerMap[playerId]?.let { player ->
+            playerMap[playerId] = player.copy(currentMenu = GamePlayerUiModel.Menu.EDIT_COUNTERS)
+        }
+        _players.value = playerMap.values.toList()
+    }
+
+    fun closeSubMenu(playerId: Int) {
+        playerMap[playerId]?.let { player ->
+            playerMap[playerId] = player.copy(currentMenu = GamePlayerUiModel.Menu.MAIN)
+        }
+        _players.value = playerMap.values.toList()
+    }
+
     fun selectCounter(playerId: Int, counterTemplateId: Int) {
         if (!pendingCounterSelectionMap.containsKey(playerId)) {
             pendingCounterSelectionMap[playerId] = mutableSetOf()

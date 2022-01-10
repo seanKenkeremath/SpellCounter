@@ -14,15 +14,15 @@ import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
-import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
+import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 
 /**
  * Generic VH pattern for a player that can be used in a RV or TableTopLayout
  */
 class PlayerViewHolder(
     val itemView: View,
-    onPlayerUpdatedListener: OnPlayerUpdatedListener,
-    onCounterSelectionListener: OnCounterSelectionListener,
+    val onPlayerUpdatedListener: OnPlayerUpdatedListener,
+    val playerMenuListener: PlayerMenuListener,
 ) {
 
     private val binding = ItemPlayerTabletopBinding.bind(itemView)
@@ -30,10 +30,12 @@ class PlayerViewHolder(
     private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
     private var playerId: Int = -1
 
-    private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(onCounterSelectionListener)
+    private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(playerMenuListener)
 
     private var counterRowsResized: Boolean = false
     private var revealHintAnimated: Boolean = false
+
+    private var pullToReveal: Boolean = false
 
     init {
         binding.countersRecycler.layoutManager =
@@ -56,20 +58,28 @@ class PlayerViewHolder(
         binding.editCountersRecycler.adapter = addCountersRecyclerAdapter
 
         binding.addCounter.setOnClickListener {
-            binding.playerContainer.visibility = View.GONE
-            binding.editCountersContainer.visibility = View.VISIBLE
+            playerMenuListener.onEditCountersOpened(playerId)
+        }
+
+        binding.revealedAddCounter.setOnClickListener {
+            playerMenuListener.onEditCountersOpened(playerId)
         }
 
         binding.cancel.setOnClickListener {
-            onCounterSelectionListener.onCancelCounterChanges(playerId)
-            binding.playerContainer.visibility = View.VISIBLE
-            binding.editCountersContainer.visibility = View.GONE
+            playerMenuListener.onCancelCounterChanges(playerId)
+            closeEditCounters()
         }
 
         binding.confirm.setOnClickListener {
-            onCounterSelectionListener.onConfirmCounterChanges(playerId)
-            binding.playerContainer.visibility = View.VISIBLE
-            binding.editCountersContainer.visibility = View.GONE
+            playerMenuListener.onConfirmCounterChanges(playerId)
+            closeEditCounters()
+        }
+    }
+
+    private fun closeEditCounters() {
+        playerMenuListener.onCloseSubMenu(playerId)
+        if (pullToReveal) {
+            binding.pullToRevealContainer.hide(true)
         }
     }
 
@@ -87,9 +97,20 @@ class PlayerViewHolder(
         binding.optionsContainerBgImage.setBackgroundColor(alphaColor)
         binding.playerContainerBgImage.setBackgroundColor(alphaColor)
 
-        if (data.pullToReveal) {
-            binding.optionsContainer.visibility = View.GONE
-            binding.pullToRevealContainer.setPullEnabled(true)
+        pullToReveal = data.pullToReveal
+        binding.pullToRevealContainer.setPullEnabled(pullToReveal)
+        binding.optionsContainer.visibility = if (pullToReveal) View.GONE else View.VISIBLE
+
+        if (data.currentMenu == GamePlayerUiModel.Menu.MAIN) {
+            binding.editCountersContainer.visibility = View.GONE
+            binding.playerContainer.visibility = View.VISIBLE
+            binding.revealOptionsMenu.visibility = View.VISIBLE
+        } else if (data.currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+            binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
+            binding.editCountersContainer.visibility = View.VISIBLE
+            binding.revealOptionsMenu.visibility = View.GONE
+        }
+        if (pullToReveal && !revealHintAnimated) {
             if (!revealHintAnimated) {
                 binding.pullToRevealContainer.viewTreeObserver.addOnPreDrawListener(object :
                     ViewTreeObserver.OnPreDrawListener {
@@ -106,9 +127,6 @@ class PlayerViewHolder(
                 })
                 revealHintAnimated = true
             }
-        } else {
-            binding.optionsContainer.visibility = View.VISIBLE
-            binding.pullToRevealContainer.setPullEnabled(false)
         }
 
         //Scroll to end if there's a new counter, and set ui model flag to false

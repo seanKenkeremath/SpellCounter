@@ -2,8 +2,6 @@ package com.kenkeremath.mtgcounter.view.counter.edit
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 
-class EditCountersRecyclerAdapter(private val onCounterSelectionListener: OnCounterSelectionListener) :
+class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuListener) :
     RecyclerView.Adapter<CounterSelectionViewHolder>() {
 
     init {
@@ -36,7 +34,7 @@ class EditCountersRecyclerAdapter(private val onCounterSelectionListener: OnCoun
         return CounterSelectionViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_counter_selection, parent, false),
-            onCounterSelectionListener
+            playerMenuListener
         )
     }
 
@@ -55,7 +53,7 @@ class EditCountersRecyclerAdapter(private val onCounterSelectionListener: OnCoun
 
 class CounterSelectionViewHolder(
     itemView: View,
-    onCounterSelectionListener: OnCounterSelectionListener,
+    playerMenuListener: PlayerMenuListener,
 ) : RecyclerView.ViewHolder(itemView) {
     val image = itemView.findViewById<ImageView>(R.id.counter_image)
     val text = itemView.findViewById<TextView>(R.id.counter_text)
@@ -67,9 +65,9 @@ class CounterSelectionViewHolder(
     init {
         itemView.setOnClickListener {
             if (selected) {
-                onCounterSelectionListener.onCounterDeselected(playerId, templateId)
+                playerMenuListener.onCounterDeselected(playerId, templateId)
             } else {
-                onCounterSelectionListener.onCounterSelected(playerId, templateId)
+                playerMenuListener.onCounterSelected(playerId, templateId)
             }
         }
     }

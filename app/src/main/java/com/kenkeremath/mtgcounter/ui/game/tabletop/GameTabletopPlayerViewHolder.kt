@@ -7,20 +7,20 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.TabletopLayoutViewHolder
-import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
+import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 import com.kenkeremath.mtgcounter.view.player.PlayerViewHolder
 
 class GameTabletopPlayerViewHolder(
     container: RotateLayout,
     onPlayerUpdatedListener: OnPlayerUpdatedListener,
-    onCounterSelectionListener: OnCounterSelectionListener,
+    playerMenuListener: PlayerMenuListener,
 ) : TabletopLayoutViewHolder<GamePlayerUiModel>(container) {
 
     private val nestedPlayerVH = PlayerViewHolder(
         LayoutInflater.from(container.context)
             .inflate(R.layout.item_player_tabletop, container, false),
         onPlayerUpdatedListener,
-        onCounterSelectionListener,
+        playerMenuListener,
     )
 
     override fun bind(data: GamePlayerUiModel) {

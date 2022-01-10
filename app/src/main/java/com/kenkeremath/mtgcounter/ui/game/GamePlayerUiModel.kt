@@ -8,4 +8,10 @@ data class GamePlayerUiModel(
     var counterSelections: List<CounterSelectionUiModel> = emptyList(),
     var newCounterAdded: Boolean = false,
     var pullToReveal: Boolean = false,
-)
+    var currentMenu: Menu = Menu.MAIN
+) {
+    enum class Menu {
+        MAIN,
+        EDIT_COUNTERS
+    }
+}

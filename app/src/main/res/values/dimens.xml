@@ -49,4 +49,10 @@
     <dimen name="pull_to_reveal_fling_min_distance">24dp</dimen>
     <dimen name="pull_to_reveal_translation_z_max">64dp</dimen>
 
+    <!-- Reveal Menu -->
+    <dimen name="revealed_icon_size">64dp</dimen>
+    <dimen name="revealed_menu_divider_padding">32dp</dimen>
+    <dimen name="revealed_menu_item_padding">16dp</dimen>
+    <dimen name="revealed_menu_icon_margin">8dp</dimen>
+
 </resources>

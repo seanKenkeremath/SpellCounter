@@ -26,4 +26,5 @@
     <string name="create_counter_title">Create Counter</string>
     <string name="add_counter_title">Add Counter</string>
     <string name="edit_counters_title">Edit Counters</string>
+    <string name="rearrange_counters">Rearrange Counters</string>
 </resources>

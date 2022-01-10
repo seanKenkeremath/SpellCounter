@@ -5,12 +5,12 @@ import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.TabletopLayoutAdapter
-import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
+import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 
 class GameTabletopLayoutAdapter(
     parent: TabletopLayout,
     private val onPlayerUpdatedListener: OnPlayerUpdatedListener,
-    private val onCounterSelectionListener: OnCounterSelectionListener,
+    private val playerMenuListener: PlayerMenuListener,
 ) :
     TabletopLayoutAdapter<GameTabletopPlayerViewHolder, GamePlayerUiModel>(parent) {
 
@@ -18,7 +18,7 @@ class GameTabletopLayoutAdapter(
         return GameTabletopPlayerViewHolder(
             container,
             onPlayerUpdatedListener,
-            onCounterSelectionListener,
+            playerMenuListener,
         )
     }
 }

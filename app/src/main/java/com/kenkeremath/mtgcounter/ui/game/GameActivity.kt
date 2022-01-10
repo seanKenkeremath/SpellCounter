@@ -18,12 +18,12 @@ import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayout
-import com.kenkeremath.mtgcounter.view.counter.edit.OnCounterSelectionListener
+import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
-    OnCounterSelectionListener {
+    PlayerMenuListener {
 
     companion object {
         const val ARGS_SETUP_PLAYERS = "args_setup_players"
@@ -130,6 +130,14 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
 
     override fun onCounterAmountSet(playerId: Int, counterId: Int, amount: Int) {
         //TODO
+    }
+
+    override fun onEditCountersOpened(playerId: Int) {
+        viewModel.editCounters(playerId)
+    }
+
+    override fun onCloseSubMenu(playerId: Int) {
+       viewModel.closeSubMenu(playerId)
     }
 
     override fun onCounterSelected(playerId: Int, templateId: Int) {

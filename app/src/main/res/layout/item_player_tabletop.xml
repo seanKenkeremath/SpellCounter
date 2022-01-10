@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:padding="@dimen/player_divider_width" />
 
+
         <LinearLayout
             android:id="@+id/edit_counters_container"
             android:layout_width="match_parent"
@@ -33,7 +34,6 @@
                 android:gravity="center"
                 android:padding="@dimen/default_padding_half"
                 android:text="Select Counters" />
-
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -72,6 +72,67 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reveal_options_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/revealed_add_counter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/revealed_menu_item_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/revealed_icon_size"
+                    android:layout_height="@dimen/revealed_icon_size"
+                    android:src="@drawable/ic_add_counter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/revealed_menu_icon_margin"
+                    android:gravity="center"
+                    android:text="@string/add_counter_title" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/counter_divider_width"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/revealed_menu_divider_padding"
+                android:background="@color/divider_color" />
+
+            <LinearLayout
+                android:id="@+id/revealed_rearrange_counters"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/revealed_menu_item_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/revealed_icon_size"
+                    android:layout_height="@dimen/revealed_icon_size"
+                    android:src="@drawable/ic_rearrange_counters" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/revealed_menu_icon_margin"
+                    android:gravity="center"
+                    android:text="@string/rearrange_counters" />
+            </LinearLayout>
+        </LinearLayout>
+
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,9 +150,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/counters_recycler"
             android:layout_width="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toStartOf="@+id/options_container"
-            android:layout_height="match_parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <FrameLayout
             android:id="@+id/options_container"
