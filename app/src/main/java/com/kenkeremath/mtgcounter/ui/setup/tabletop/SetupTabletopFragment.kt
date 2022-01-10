@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
 import com.kenkeremath.mtgcounter.ui.setup.SetupViewModel
@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SetupTabletopFragment : Fragment() {
 
-    private val viewModel: SetupViewModel by viewModels()
+    private val viewModel: SetupViewModel by activityViewModels()
 
     private lateinit var tabletopLayout: TabletopLayout
     private lateinit var tabletopAdapter: SetupTabletopLayoutAdapter

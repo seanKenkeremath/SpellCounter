@@ -8,8 +8,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
@@ -29,7 +28,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var tabletopModeButtons: List<Button>
     private lateinit var startButton: Button
 
-    private val viewModel: SetupViewModel by viewModels()
+    private val viewModel: SetupViewModel by activityViewModels()
 
 
     companion object {
