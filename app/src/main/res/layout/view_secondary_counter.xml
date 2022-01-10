@@ -14,6 +14,14 @@
         tools:src="@drawable/ic_skull" />
 
     <TextView
+        android:id="@+id/label"
+        style="@style/CounterText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:padding="8dp" />
+
+    <TextView
         android:id="@+id/amount"
         style="@style/CounterText"
         android:layout_width="match_parent"
