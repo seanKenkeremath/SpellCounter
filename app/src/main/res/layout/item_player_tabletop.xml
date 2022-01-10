@@ -28,8 +28,8 @@
             android:visibility="gone">
 
             <TextView
-                style="@style/Header3"
                 android:id="@+id/edit_counters_header"
+                style="@style/Header3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -102,6 +102,7 @@
                     android:src="@drawable/ic_rearrange_counters" />
 
                 <TextView
+                    android:id="@+id/revealed_rearrange_counters_label"
                     style="@style/Header2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -132,6 +133,7 @@
                     android:src="@drawable/ic_add_counter" />
 
                 <TextView
+                    android:id="@+id/revealed_add_counters_label"
                     style="@style/Header2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

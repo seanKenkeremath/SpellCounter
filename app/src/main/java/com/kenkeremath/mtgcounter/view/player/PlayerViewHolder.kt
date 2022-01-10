@@ -33,7 +33,7 @@ class PlayerViewHolder(
 
     private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(playerMenuListener)
 
-    private var counterRowsResized: Boolean = false
+    private var layoutResized: Boolean = false
     private var revealHintAnimated: Boolean = false
 
     private var pullToReveal: Boolean = false
@@ -77,7 +77,7 @@ class PlayerViewHolder(
             closeEditCounters()
         }
 
-        binding.pullToRevealContainer.listener = object: PullToRevealLayout.PullToRevealListener {
+        binding.pullToRevealContainer.listener = object : PullToRevealLayout.PullToRevealListener {
             override fun onReveal() {}
             override fun onHide() {
                 if (currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
@@ -109,6 +109,41 @@ class PlayerViewHolder(
         binding.optionsContainerBgImage.setBackgroundColor(alphaColor)
         binding.playerContainerBgImage.setBackgroundColor(alphaColor)
 
+        // Make usability adjustments based on size (only once measured)
+        if (!layoutResized) {
+            layoutResized = true
+            itemView.viewTreeObserver.addOnPreDrawListener(object :
+                ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    itemView.viewTreeObserver.removeOnPreDrawListener(this)
+
+                    val height = itemView.height
+                    val minRowHeight =
+                        itemView.resources.getDimensionPixelSize(R.dimen.edit_counters_row_min_height)
+                    val rows = height / minRowHeight
+                    binding.editCountersRecycler.layoutManager =
+                        GridLayoutManager(itemView.context, rows, RecyclerView.HORIZONTAL, false)
+
+                    val minHeightToShowEditCountersHeader =
+                        itemView.resources.getDimensionPixelSize(R.dimen.edit_counter_show_header_height_threshold)
+                    binding.editCountersHeader.visibility =
+                        if (itemView.height < minHeightToShowEditCountersHeader) View.GONE else View.VISIBLE
+                    val minHeightToShowMenuText =
+                        itemView.resources.getDimensionPixelSize(R.dimen.revealed_menu_show_text_height_threshold)
+                    val minWidthToShowMenuText =
+                        itemView.resources.getDimensionPixelSize(R.dimen.revealed_menu_show_text_width_threshold)
+                    val showMenuText =
+                        itemView.width > minWidthToShowMenuText && itemView.height > minHeightToShowMenuText
+                    binding.revealedAddCountersLabel.visibility =
+                        if (showMenuText) View.VISIBLE else View.GONE
+                    binding.revealedRearrangeCountersLabel.visibility =
+                        if (showMenuText) View.VISIBLE else View.GONE
+
+                    return false
+                }
+            })
+        }
+
         pullToReveal = data.pullToReveal
         binding.pullToRevealContainer.setPullEnabled(pullToReveal)
         binding.optionsContainer.visibility = if (pullToReveal) View.GONE else View.VISIBLE
@@ -119,10 +154,6 @@ class PlayerViewHolder(
             binding.playerContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.VISIBLE
         } else if (data.currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
-            val minHeightToShowHeader =
-                itemView.resources.getDimensionPixelSize(R.dimen.edit_counter_show_header_height_threshold)
-            binding.editCountersHeader.visibility =
-                if (itemView.height < minHeightToShowHeader) View.GONE else View.VISIBLE
             binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.GONE
@@ -156,22 +187,5 @@ class PlayerViewHolder(
             data.newCounterAdded = false
         }
         addCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
-
-        if (!counterRowsResized) {
-            counterRowsResized = true
-            itemView.viewTreeObserver.addOnPreDrawListener(object :
-                ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    itemView.viewTreeObserver.removeOnPreDrawListener(this)
-                    val height = itemView.height
-                    val minRowHeight =
-                        itemView.resources.getDimensionPixelSize(R.dimen.edit_counters_row_min_height)
-                    val rows = height / minRowHeight
-                    binding.editCountersRecycler.layoutManager =
-                        GridLayoutManager(itemView.context, rows, RecyclerView.HORIZONTAL, false)
-                    return false
-                }
-            })
-        }
     }
 }

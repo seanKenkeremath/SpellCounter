@@ -62,5 +62,7 @@
     <dimen name="revealed_menu_divider_padding">32dp</dimen>
     <dimen name="revealed_menu_item_padding">16dp</dimen>
     <dimen name="revealed_menu_icon_margin">8dp</dimen>
+    <dimen name="revealed_menu_show_text_height_threshold">200dp</dimen>
+    <dimen name="revealed_menu_show_text_width_threshold">300dp</dimen>
 
 </resources>
