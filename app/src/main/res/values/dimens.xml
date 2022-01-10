@@ -5,8 +5,9 @@
 
     <!-- Setup -->
     <dimen name="start_game_button_height">80dp</dimen>
-    <dimen name="setup_section_top_margin">32dp</dimen>
+    <dimen name="setup_section_top_margin">24dp</dimen>
     <dimen name="setup_section_title_bottom_margin">8dp</dimen>
+    <dimen name="setup_padding_horizontal">16dp</dimen>
 
     <!-- Player -->
     <dimen name="counter_options_panel_width">56dp</dimen>
