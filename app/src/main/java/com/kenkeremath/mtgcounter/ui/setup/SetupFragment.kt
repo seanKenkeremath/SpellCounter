@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,18 +19,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
-    lateinit var playerNumberButtons: List<Button>
-
-    lateinit var lifeButtons: List<Button>
-    lateinit var customLifeButton: Button
-
-    lateinit var keepScreenAwakeCheckbox: CheckBox
-    lateinit var hideNavigationCheckbox: CheckBox
-
-    lateinit var tabletopContainer: ViewGroup
-    lateinit var tabletopModeButtons: List<Button>
-
-    lateinit var startButton: Button
+    private lateinit var playerNumberButtons: List<Button>
+    private lateinit var lifeButtons: List<Button>
+    private lateinit var customLifeButton: Button
+    private lateinit var keepScreenAwakeCheckbox: CheckBox
+    private lateinit var hideNavigationCheckbox: CheckBox
+    private lateinit var customizeLayoutButton: View
+    private lateinit var tabletopContainer: ViewGroup
+    private lateinit var tabletopModeButtons: List<Button>
+    private lateinit var startButton: Button
 
     private val viewModel: SetupViewModel by viewModels()
 
@@ -94,26 +90,28 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             view.findViewById(R.id.tabletop_b)
         )
 
+        customizeLayoutButton = view.findViewById(R.id.customize_tabletop_button)
+        customizeLayoutButton.setOnClickListener {
+            val f = SetupTabletopFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.container, f)
+                .addToBackStack("Setup_Tabletop")
+                .commit()
+        }
+        viewModel.showCustomizeLayoutButton.observe(viewLifecycleOwner, {
+            customizeLayoutButton.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
             viewModel.tabletopType.value?.let {
-                if (it == TabletopType.LIST) {
-                    viewModel.setupPlayers.value?.let { players ->
-                        startActivity(GameActivity.startIntentFromSetup(requireContext(), players))
-                    }
-                } else {
-                    if (viewModel.tabletopType.value != TabletopType.NONE && viewModel.tabletopType.value != TabletopType.LIST) {
-                        val f = SetupTabletopFragment()
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .add(R.id.container, f)
-                            .addToBackStack("Setup_Tabletop")
-                            .commit()
-                    }
+                viewModel.setupPlayers.value?.let { players ->
+                    startActivity(GameActivity.startIntentFromSetup(requireContext(), players))
                 }
             }
         }
 
-        viewModel.numberOfPlayers.observe(viewLifecycleOwner, Observer<Int> { numberOfPlayers ->
+        viewModel.numberOfPlayers.observe(viewLifecycleOwner, { numberOfPlayers ->
             numberOfPlayers?.let {
                 for (playerNumberButton in playerNumberButtons) {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
@@ -121,7 +119,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.startingLife.observe(viewLifecycleOwner, Observer<Int> {
+        viewModel.startingLife.observe(viewLifecycleOwner, {
             it?.let {
                 var match = false
                 for (lifeButton in lifeButtons) {
@@ -134,7 +132,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.keepScreenOn.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.keepScreenOn.observe(viewLifecycleOwner, {
             it?.let {
 
                 //Remove listener to avoid infinite loop
@@ -146,7 +144,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.hideNavigation.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.hideNavigation.observe(viewLifecycleOwner, {
             it?.let {
 
                 //Remove listener to avoid infinite loop
@@ -158,7 +156,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.availableTabletopTypes.observe(viewLifecycleOwner, Observer<List<TabletopType>> {
+        viewModel.availableTabletopTypes.observe(viewLifecycleOwner, {
             it?.let {
                 for (tabletopModeButton in tabletopModeButtons) {
                     tabletopModeButton.visibility = View.GONE
@@ -175,7 +173,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         })
 
-        viewModel.tabletopType.observe(viewLifecycleOwner, Observer<TabletopType> {
+        viewModel.tabletopType.observe(viewLifecycleOwner, {
             it?.let {
                 for (tableTopModeButton in tabletopModeButtons) {
                     tableTopModeButton.isSelected = tableTopModeButton.tag == it

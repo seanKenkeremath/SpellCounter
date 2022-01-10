@@ -34,9 +34,12 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
     private val _availableTabletopTypes = MutableLiveData<List<TabletopType>>()
     val availableTabletopTypes: LiveData<List<TabletopType>> get() = _availableTabletopTypes
 
+    private val _showCustomizeLayoutButton = MutableLiveData<Boolean>(false)
+    val showCustomizeLayoutButton: LiveData<Boolean> get() = _showCustomizeLayoutButton
+
     init {
         _startingLife.value = repository.startingLife
-        _tabletopType.value = repository.tabletopType
+        setTabletopType(repository.tabletopType)
         setNumberOfPlayers(repository.numberOfPlayers)
         _keepScreenOn.value = repository.keepScreenOn
         _hideNavigation.value = repository.hideNavigation
@@ -90,5 +93,7 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
     fun setTabletopType(tabletopType: TabletopType) {
         repository.tabletopType = tabletopType
         _tabletopType.value = tabletopType
+        _showCustomizeLayoutButton.value =
+            tabletopType != TabletopType.LIST && tabletopType != TabletopType.NONE
     }
 }

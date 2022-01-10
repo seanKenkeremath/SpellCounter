@@ -32,4 +32,5 @@
     <string name="hide_navigation">Hide Navigation</string>
     <string name="start_game">Start Game</string>
     <string name="select_counters">Select Counters</string>
+    <string name="customize_layout">Customize</string>
 </resources>

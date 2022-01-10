@@ -10,20 +10,20 @@
     <TextView
         android:id="@+id/player_number_label"
         style="@style/Header3"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:text="@string/player_number_label"
         app:layout_constraintTop_toTopOf="parent" />
 
     <GridLayout
         android:id="@+id/player_number_container"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
         android:columnCount="4"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:rowCount="2"
         app:layout_constraintTop_toBottomOf="@id/player_number_label">
 
@@ -89,21 +89,21 @@
 
     <TextView
         android:id="@+id/starting_life_label"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         style="@style/Header3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:text="@string/starting_life_label"
         app:layout_constraintTop_toBottomOf="@+id/player_number_container" />
 
     <LinearLayout
         android:id="@+id/starting_life_container"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/starting_life_label">
@@ -133,21 +133,36 @@
 
     <TextView
         android:id="@+id/tabletop_label"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         style="@style/Header3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:text="@string/tabletop_label"
         app:layout_constraintTop_toBottomOf="@+id/starting_life_container" />
 
+    <TextView
+        android:id="@+id/customize_tabletop_button"
+        style="@style/SelectableText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
+        android:paddingVertical="@dimen/setup_section_title_bottom_margin"
+        android:text="@string/customize_layout"
+        android:foreground="?attr/selectableItemBackground"
+        app:drawableEndCompat="@drawable/ic_chevron_right"
+        app:drawableTint="@color/accent_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/tabletop_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tabletop_label" />
+
     <LinearLayout
         android:id="@+id/tabletop_container"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         app:layout_constraintTop_toBottomOf="@id/tabletop_label">
 
         <Button
@@ -176,12 +191,12 @@
 
     <LinearLayout
         android:id="@+id/keep_screen_awake_container"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/setup_section_top_margin"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         app:layout_constraintTop_toBottomOf="@id/tabletop_container">
 
         <CheckBox
@@ -198,11 +213,11 @@
 
     <LinearLayout
         android:id="@+id/hide_navigation_container"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/setup_padding_horizontal"
         app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
 
         <CheckBox
