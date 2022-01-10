@@ -7,6 +7,7 @@ enum class TabletopType(val numberOfPlayers: Int, val positions: List<TableLayou
     NONE(-1, emptyList()),
     LIST(-1, emptyList()),
     ONE_HORIZONTAL(1, listOf(TableLayoutPosition.SOLO_PANEL)),
+    ONE_VERTICAL(1, listOf(TableLayoutPosition.BOTTOM_PANEL)),
     TWO_HORIZONTAL(2, listOf(TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_1)),
     TWO_VERTICAL(2, listOf(TableLayoutPosition.TOP_PANEL, TableLayoutPosition.BOTTOM_PANEL)),
     THREE_CIRCLE(3, listOf(TableLayoutPosition.TOP_PANEL, TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_1)),
