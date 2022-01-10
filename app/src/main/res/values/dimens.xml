@@ -34,6 +34,8 @@
     <dimen name="color_picker_height">80dp</dimen>
     <dimen name="edit_counter_label_column_width">100dp</dimen>
     <dimen name="edit_counters_row_min_height">80dp</dimen>
+    <dimen name="edit_counter_confirm_button_height">64dp</dimen>
+    <dimen name="edit_counter_show_header_height_threshold">200dp</dimen>
 
     <!-- Edit Player -->
     <dimen name="edit_player_label_column_width">100dp</dimen>

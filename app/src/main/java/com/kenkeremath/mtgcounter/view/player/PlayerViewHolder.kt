@@ -106,6 +106,10 @@ class PlayerViewHolder(
             binding.playerContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.VISIBLE
         } else if (data.currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+            val minHeightToShowHeader =
+                itemView.resources.getDimensionPixelSize(R.dimen.edit_counter_show_header_height_threshold)
+            binding.editCountersHeader.visibility =
+                if (itemView.height < minHeightToShowHeader) View.GONE else View.VISIBLE
             binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.GONE
@@ -118,10 +122,14 @@ class PlayerViewHolder(
                         binding.pullToRevealContainer.viewTreeObserver.removeOnPreDrawListener(this)
                         binding.pullToRevealContainer.reveal(false)
                         binding.pullToRevealContainer.isEnabled = false
-                        binding.pullToRevealContainer.postDelayed({
-                            binding.pullToRevealContainer.isEnabled = true
-                            binding.pullToRevealContainer.hide(true)
-                        }, itemView.resources.getInteger(R.integer.pull_reveal_hint_duration).toLong())
+                        binding.pullToRevealContainer.postDelayed(
+                            {
+                                binding.pullToRevealContainer.isEnabled = true
+                                binding.pullToRevealContainer.hide(true)
+                            },
+                            itemView.resources.getInteger(R.integer.pull_reveal_hint_duration)
+                                .toLong()
+                        )
                         return false
                     }
                 })
