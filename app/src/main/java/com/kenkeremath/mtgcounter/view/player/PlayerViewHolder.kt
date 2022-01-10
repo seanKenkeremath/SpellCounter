@@ -12,6 +12,7 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
+import com.kenkeremath.mtgcounter.view.PullToRevealLayout
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
@@ -36,6 +37,7 @@ class PlayerViewHolder(
     private var revealHintAnimated: Boolean = false
 
     private var pullToReveal: Boolean = false
+    private var currentMenu: GamePlayerUiModel.Menu? = null
 
     init {
         binding.countersRecycler.layoutManager =
@@ -74,6 +76,16 @@ class PlayerViewHolder(
             playerMenuListener.onConfirmCounterChanges(playerId)
             closeEditCounters()
         }
+
+        binding.pullToRevealContainer.listener = object: PullToRevealLayout.PullToRevealListener {
+            override fun onReveal() {}
+            override fun onHide() {
+                if (currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+                    playerMenuListener.onCancelCounterChanges(playerId)
+                }
+                playerMenuListener.onCloseSubMenu(playerId)
+            }
+        }
     }
 
     private fun closeEditCounters() {
@@ -101,7 +113,8 @@ class PlayerViewHolder(
         binding.pullToRevealContainer.setPullEnabled(pullToReveal)
         binding.optionsContainer.visibility = if (pullToReveal) View.GONE else View.VISIBLE
 
-        if (data.currentMenu == GamePlayerUiModel.Menu.MAIN) {
+        currentMenu = data.currentMenu
+        if (currentMenu == GamePlayerUiModel.Menu.MAIN) {
             binding.editCountersContainer.visibility = View.GONE
             binding.playerContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.VISIBLE

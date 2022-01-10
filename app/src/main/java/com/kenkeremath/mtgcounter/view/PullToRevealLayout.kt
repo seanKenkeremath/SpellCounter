@@ -38,6 +38,8 @@ class PullToRevealLayout @JvmOverloads constructor(
 
     private var animation: Animator? = null
 
+    var listener: PullToRevealListener? = null
+
     fun setPullEnabled(enabled: Boolean) {
         pullEnabled = enabled
     }
@@ -170,6 +172,7 @@ class PullToRevealLayout @JvmOverloads constructor(
             revealChild?.translationZ = translationZMax
             revealed = true
             revealing = false
+            listener?.onReveal()
         }
     }
 
@@ -182,6 +185,7 @@ class PullToRevealLayout @JvmOverloads constructor(
             revealChild?.translationZ = 0f
             revealed = false
             revealing = false
+            listener?.onHide()
         }
     }
 
@@ -208,6 +212,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                     )
                     revealing = false
                     revealed = false
+                    listener?.onHide()
                 }
             })
             animation?.start()
@@ -237,6 +242,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                     )
                     revealing = false
                     revealed = true
+                    listener?.onReveal()
                 }
             })
             animation?.start()
@@ -246,5 +252,10 @@ class PullToRevealLayout @JvmOverloads constructor(
     private fun cancelAnimation() {
         animation?.removeAllListeners()
         animation?.cancel()
+    }
+
+    interface PullToRevealListener {
+        fun onReveal()
+        fun onHide()
     }
 }
