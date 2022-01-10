@@ -3,48 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
     tools:context=".ui.setup.SetupFragment">
 
     <TextView
         android:id="@+id/player_number_label"
-        android:text="@string/player_number_label"
-        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Header3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_top_margin"
+        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:text="@string/player_number_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <GridLayout
         android:id="@+id/player_number_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:columnCount="4"
+        android:rowCount="2"
         app:layout_constraintTop_toBottomOf="@id/player_number_label">
+
+        <!-- TODO: dynamic/style? -->
 
         <Button
             android:id="@+id/one_player_button"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="One" />
+            android:text="1" />
 
         <Button
             android:id="@+id/two_player_button"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Two" />
+            android:text="2" />
 
         <Button
             android:id="@+id/three_player_button"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Three" />
+            android:text="3" />
 
 
         <Button
@@ -52,31 +57,46 @@
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Four" />
+            android:text="4" />
 
         <Button
             android:id="@+id/five_player_button"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Five" />
+            android:text="5" />
 
-        <!-- TODO unhide when design is figured out -->
         <Button
-            android:id="@+id/five_plus_player_button"
-            android:visibility="gone"
+            android:id="@+id/six_player_button"
             style="@style/OptionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Five+" />
-    </LinearLayout>
+            android:text="6" />
+
+        <Button
+            android:id="@+id/seven_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/eight_player_button"
+            style="@style/OptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8" />
+    </GridLayout>
 
     <TextView
         android:id="@+id/starting_life_label"
-        android:text="@string/starting_life_label"
-        app:layout_constraintTop_toBottomOf="@+id/player_number_container"
+        style="@style/Header3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_top_margin"
+        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:text="@string/starting_life_label"
+        app:layout_constraintTop_toBottomOf="@+id/player_number_container" />
 
     <LinearLayout
         android:id="@+id/starting_life_container"
@@ -110,50 +130,15 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/keep_screen_awake_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/starting_life_container">
-
-        <CheckBox
-            android:id="@+id/keep_screen_awake_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Keep Screen Awake" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/hide_navigation_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
-
-        <CheckBox
-            android:id="@+id/hide_navigation_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hide Navigation" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tabletop_label"
-        android:text="@string/tabletop_label"
-        app:layout_constraintTop_toBottomOf="@+id/hide_navigation_container"
+        style="@style/Header3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_top_margin"
+        android:layout_marginBottom="@dimen/setup_section_title_bottom_margin"
+        android:text="@string/tabletop_label"
+        app:layout_constraintTop_toBottomOf="@+id/starting_life_container" />
 
     <LinearLayout
         android:id="@+id/tabletop_container"
@@ -186,12 +171,54 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/keep_screen_awake_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/setup_section_top_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tabletop_container">
+
+        <CheckBox
+            android:id="@+id/keep_screen_awake_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/keep_screen_awake" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hide_navigation_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
+
+        <CheckBox
+            android:id="@+id/hide_navigation_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide_navigation" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/start_button"
-        android:text="Start"
-        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/StartGameButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/start_game_button_height"
+        android:text="@string/start_game"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

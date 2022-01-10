@@ -1,9 +1,10 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">?attr/sc_primary_color</item>
-        <item name="colorPrimaryDark">?attr/sc_primary_dark_color</item>
-        <item name="colorAccent">?attr/sc_accent_color</item>
+        <item name="colorPrimary">@color/dark_grey</item>
+        <item name="colorPrimaryDark">@color/darker_grey</item>
+        <item name="colorAccent">@color/accent_blue</item>
+        <item name="colorButtonNormal">@color/dark_grey</item>
     </style>
 
     <style name="AppTheme.Light">
@@ -16,8 +17,13 @@
     </style>
 
     <style name="OptionButton">
-        <item name="android:background">@drawable/option_button_bg</item>
+        <item name="android:backgroundTint">@color/option_button_bg_color</item>
         <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="StartGameButton" parent="Header3">
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="PlayerContainer"/>

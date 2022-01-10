@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false" android:color="?attr/sc_option_button_color_disabled"/>
-    <item android:state_selected="true" android:color="?attr/sc_option_button_color_selected"/>
-    <item android:color="?attr/sc_option_button_color_normal"/>
+    <item android:state_enabled="false" android:color="@color/dark_grey"/>
+    <item android:state_selected="true" android:color="@color/accent_blue"/>
+    <item android:color="@color/dark_grey"/>
 </selector>

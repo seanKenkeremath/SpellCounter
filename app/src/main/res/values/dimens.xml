@@ -3,6 +3,11 @@
     <dimen name="default_padding_half">8dp</dimen>
     <dimen name="default_padding">16dp</dimen>
 
+    <!-- Setup -->
+    <dimen name="start_game_button_height">80dp</dimen>
+    <dimen name="setup_section_top_margin">32dp</dimen>
+    <dimen name="setup_section_title_bottom_margin">8dp</dimen>
+
     <!-- Player -->
     <dimen name="counter_options_panel_width">56dp</dimen>
     <dimen name="player_life_width">130dp</dimen>

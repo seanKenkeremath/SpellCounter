@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     lateinit var playerNumberButtons: List<Button>
-    lateinit var fivePlusPlayersButton: Button
 
     lateinit var lifeButtons: List<Button>
     lateinit var customLifeButton: Button
@@ -55,17 +54,16 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             view.findViewById(R.id.two_player_button),
             view.findViewById(R.id.three_player_button),
             view.findViewById(R.id.four_player_button),
-            view.findViewById(R.id.five_player_button)
+            view.findViewById(R.id.five_player_button),
+            view.findViewById(R.id.six_player_button),
+            view.findViewById(R.id.seven_player_button),
+            view.findViewById(R.id.eight_player_button)
         )
-        fivePlusPlayersButton = view.findViewById(R.id.five_plus_player_button)
+
         //Save us some boilerplate by assuming buttons will be in order and start at 1 player
         playerNumberButtons.forEachIndexed { index, button ->
             button.tag = index + 1
             button.setOnClickListener { viewModel.setNumberOfPlayers(button.tag as Int) }
-        }
-        fivePlusPlayersButton.setOnClickListener { v ->
-            viewModel.setNumberOfPlayers(5)
-            //TODO: open dialog or input box
         }
 
         lifeButtons = listOf(
@@ -120,7 +118,6 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 for (playerNumberButton in playerNumberButtons) {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
                 }
-                fivePlusPlayersButton.isSelected = it >= 5
             }
         })
 
