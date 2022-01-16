@@ -9,6 +9,13 @@
     <dimen name="setup_section_title_bottom_margin">8dp</dimen>
     <dimen name="setup_padding_horizontal">16dp</dimen>
 
+    <!-- Game -->
+    <!-- Game menu button dimensions must add up -->
+    <dimen name="game_menu_button_size">64dp</dimen>
+    <dimen name="game_menu_button_container_padding">4dp</dimen>
+    <dimen name="game_menu_button_container_diameter">72dp</dimen>
+    <dimen name="game_menu_button_container_radius">36dp</dimen>
+
     <!-- Player -->
     <dimen name="counter_options_panel_width">56dp</dimen>
     <dimen name="player_life_width">130dp</dimen>
