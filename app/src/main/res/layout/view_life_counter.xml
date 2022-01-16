@@ -5,14 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:padding="8dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_heart" />
-
     <TextView
         android:id="@+id/amount"
         style="@style/CounterText"
@@ -24,6 +16,15 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         tools:text="1234" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:layout_gravity="bottom"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_heart" />
 
     <LinearLayout
         android:layout_width="match_parent"
