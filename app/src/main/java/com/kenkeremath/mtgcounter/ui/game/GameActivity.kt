@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -29,7 +30,8 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         const val ARGS_SETUP_PLAYERS = "args_setup_players"
         fun startIntentFromSetup(context: Context, players: List<PlayerSetupModel>): Intent {
             return Intent(context, GameActivity::class.java).putParcelableArrayListExtra(
-                ARGS_SETUP_PLAYERS, ArrayList(players))
+                ARGS_SETUP_PLAYERS, ArrayList(players)
+            )
         }
     }
 
@@ -116,6 +118,17 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         }
     }
 
+    override fun onBackPressed() {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.exit_game)
+            .setIcon(R.mipmap.ic_launcher)
+            .setMessage(R.string.are_you_sure_exit)
+            .setPositiveButton(R.string.yes) { _, _ -> finish() }
+            .setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+
+        dialog.show()
+    }
+
     override fun onLifeIncremented(playerId: Int, amountDifference: Int) {
         viewModel.incrementPlayerLife(playerId, amountDifference)
     }
@@ -137,7 +150,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     }
 
     override fun onCloseSubMenu(playerId: Int) {
-       viewModel.closeSubMenu(playerId)
+        viewModel.closeSubMenu(playerId)
     }
 
     override fun onCounterSelected(playerId: Int, templateId: Int) {

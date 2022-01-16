@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
@@ -21,6 +22,7 @@ class SetupTabletopFragment : Fragment() {
     private lateinit var tabletopAdapter: SetupTabletopLayoutAdapter
 
     private lateinit var startButton: View
+    private lateinit var toolbar: Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +33,14 @@ class SetupTabletopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.customize_table_title)
+        toolbar.setNavigationIcon(R.drawable.ic_back)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         tabletopLayout = view.findViewById(R.id.tabletop_layout)
         tabletopAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
         viewModel.setupPlayers.value?.let {

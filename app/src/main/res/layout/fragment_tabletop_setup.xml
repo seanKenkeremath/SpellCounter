@@ -6,6 +6,13 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/dark_grey"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.kenkeremath.mtgcounter.view.TabletopLayout
         android:id="@+id/tabletop_layout"
         android:layout_width="match_parent"
@@ -14,7 +21,7 @@
         android:layout_marginBottom="80dp"
         android:layout_marginHorizontal="32dp"
         app:layout_constraintBottom_toTopOf="@id/start_button"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <Button
         android:id="@+id/start_button"

@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.setup.SetupFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/dark_grey"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/player_number_label"
         style="@style/Header3"
@@ -15,7 +22,7 @@
         android:layout_marginTop="@dimen/setup_section_top_margin"
         android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:text="@string/player_number_label"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <GridLayout
         android:id="@+id/player_number_container"
@@ -146,10 +153,10 @@
         style="@style/SelectableText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
         android:paddingHorizontal="@dimen/setup_padding_horizontal"
         android:paddingVertical="@dimen/setup_section_title_bottom_margin"
         android:text="@string/customize_layout"
-        android:foreground="?attr/selectableItemBackground"
         app:drawableEndCompat="@drawable/ic_chevron_right"
         app:drawableTint="@color/accent_blue"
         app:layout_constraintBottom_toBottomOf="@+id/tabletop_label"

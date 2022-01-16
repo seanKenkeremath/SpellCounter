@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
@@ -18,6 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
+    companion object {
+        fun newInstance() = SetupFragment()
+    }
+
     private lateinit var playerNumberButtons: List<Button>
     private lateinit var lifeButtons: List<Button>
     private lateinit var customLifeButton: Button
@@ -27,13 +32,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var tabletopContainer: ViewGroup
     private lateinit var tabletopModeButtons: List<Button>
     private lateinit var startButton: Button
+    private lateinit var toolbar: Toolbar
 
     private val viewModel: SetupViewModel by activityViewModels()
-
-
-    companion object {
-        fun newInstance() = SetupFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +45,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.setup_game_title)
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher)
+
         playerNumberButtons = listOf(
             view.findViewById(R.id.one_player_button),
             view.findViewById(R.id.two_player_button),
@@ -93,7 +99,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         customizeLayoutButton.setOnClickListener {
             val f = SetupTabletopFragment()
             requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.container, f)
+                .replace(R.id.container, f)
                 .addToBackStack("Setup_Tabletop")
                 .commit()
         }
