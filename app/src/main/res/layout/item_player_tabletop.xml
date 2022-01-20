@@ -179,7 +179,7 @@
             android:layout_height="match_parent"
             android:padding="@dimen/player_divider_width" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.kenkeremath.mtgcounter.view.LockableRecyclerView
             android:id="@+id/counters_recycler"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -88,17 +88,12 @@ class PlayerViewHolder(
                     playerMenuListener.onCancelCounterChanges(playerId)
                 }
                 playerMenuListener.onCloseSubMenu(playerId)
-                binding.countersRecycler.suppressLayout(false)
+                binding.countersRecycler.scrollingEnabled = true
             }
 
             override fun onDragging() {
                 //Prevent RV from capturing drag events
-                /**
-                 * TODO: this makes clicks while dragging register, but not render updates
-                 * After dragging is done the layout will refresh and everyhing will be up to date
-                 * It would be more ideal to just disable scrolling and not layout updates
-                 */
-                binding.countersRecycler.suppressLayout(true)
+                binding.countersRecycler.scrollingEnabled = false
             }
         }
     }
