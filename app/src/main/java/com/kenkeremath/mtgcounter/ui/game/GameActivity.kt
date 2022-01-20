@@ -198,6 +198,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                             this@GameActivity,
                             R.drawable.game_menu_button_container_side_bg
                         )
+                        container.rotation = 90f
                     }
                     TabletopType.SIX_ACROSS -> {
                         //Center in topmost (appears leftmost) intersection
