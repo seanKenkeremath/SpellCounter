@@ -5,23 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/label"
-        style="@style/CounterText"
+    <com.kenkeremath.mtgcounter.view.counter.CounterIconView
+        android:id="@+id/counter_icon_view"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:padding="8dp" />
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom"
         android:padding="8dp"
-        android:scaleType="fitCenter"
-        tools:src="@drawable/ic_skull" />
+        android:layout_gravity="bottom"/>
 
     <TextView
         android:id="@+id/amount"

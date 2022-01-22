@@ -9,4 +9,7 @@
         <attr name="selectedColorIndex" format="integer" />
         <attr name="rows" format="integer" />
     </declare-styleable>
+    <declare-styleable name="CounterIconView">
+        <attr name="labelTextSize" format="dimension|reference" />
+    </declare-styleable>
 </resources>

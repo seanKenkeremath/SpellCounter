@@ -7,11 +7,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class CounterTemplateModel(
     val id: Int = 0,
-    var name: String? = null,
-    var color: CounterColor = CounterColor.NONE,
-    var symbol: CounterSymbol = CounterSymbol.NONE,
-    var uri: String? = null,
-    var deletable: Boolean = false,
+    val name: String? = null,
+    val color: CounterColor = CounterColor.NONE,
+    val symbol: CounterSymbol = CounterSymbol.NONE,
+    val uri: String? = null,
+    val deletable: Boolean = false,
 ): Parcelable {
     constructor(entity: CounterTemplateEntity) : this(
         id = entity.id,

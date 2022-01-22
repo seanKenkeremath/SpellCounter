@@ -1,16 +1,13 @@
 package com.kenkeremath.mtgcounter.view.counter.edit
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.view.counter.CounterIconView
 
 class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuListener) :
     RecyclerView.Adapter<CounterSelectionViewHolder>() {
@@ -55,8 +52,7 @@ class CounterSelectionViewHolder(
     itemView: View,
     playerMenuListener: PlayerMenuListener,
 ) : RecyclerView.ViewHolder(itemView) {
-    val image = itemView.findViewById<ImageView>(R.id.counter_image)
-    val text = itemView.findViewById<TextView>(R.id.counter_text)
+    val iconView = itemView.findViewById<CounterIconView>(R.id.counter_icon_view)
 
     private var selected: Boolean = false
     private var templateId: Int = 0
@@ -77,22 +73,8 @@ class CounterSelectionViewHolder(
         this.templateId = model.template.id
         this.playerId = playerId
 
-        text.visibility = if (model.template.name.isNullOrBlank()) View.GONE else View.VISIBLE
-        text.text = model.template.name
-        //TODO URI
+        iconView.setContent(model.template)
 
-        if (model.template.symbol.resId == null) {
-            if (model.template.color.resId != null) {
-                image.setImageResource(R.drawable.ic_circle)
-                val tintColor = ContextCompat.getColor(itemView.context, model.template.color.resId!!)
-                image.imageTintList = ColorStateList.valueOf(tintColor)
-            } else {
-                image.setImageDrawable(null)
-            }
-        } else {
-            image.setImageResource(model.template.symbol.resId!!)
-            image.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.default_icon_tint))
-        }
         itemView.isSelected = selected
         if (selected) {
             itemView.background = ColorDrawable(Color.YELLOW)

@@ -71,7 +71,7 @@ class GameViewModel @Inject constructor(
                      */
                     pendingCounterSelectionMap[player.model.id] =
                         player.model.counters.map { counter ->
-                            counter.templateId
+                            counter.template.id
                         }.toMutableSet()
 
                     playerMap[i]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
@@ -95,7 +95,7 @@ class GameViewModel @Inject constructor(
     fun incrementCounter(playerId: Int, counterId: Int, amountDifference: Int = 1) {
         playerMap[playerId]?.let { player: GamePlayerUiModel ->
             player.model.counters.find {
-                it.templateId == counterId
+                it.template.id == counterId
             }?.let { counter: CounterModel ->
                 val counterIndex = player.model.counters.indexOf(counter)
                 val countersList = player.model.counters.toMutableList()
@@ -152,7 +152,7 @@ class GameViewModel @Inject constructor(
                 val itr = newCountersList.iterator()
                 while (itr.hasNext()) {
                     val counter = itr.next()
-                    if (!pendingCounterSelection.contains(counter.templateId)) {
+                    if (!pendingCounterSelection.contains(counter.template.id)) {
                         itr.remove()
                     }
                 }
@@ -163,9 +163,9 @@ class GameViewModel @Inject constructor(
                 for (templateId in pendingCounterSelection) {
                     availableCounters.find { it.id == templateId }?.let { template ->
                         //avoid adding duplicates
-                        if (newCountersList.find { it.templateId == template.id } == null) {
+                        if (newCountersList.find { it.template.id == template.id } == null) {
                             newCounter = true
-                            newCountersList.add(CounterModel(template))
+                            newCountersList.add(CounterModel(template = template))
                         }
                     }
                 }
@@ -185,7 +185,7 @@ class GameViewModel @Inject constructor(
         pendingCounterSelectionMap[playerId]?.clear()
         playerMap[playerId]?.model?.counters?.let {
             for (counterModel in it) {
-                pendingCounterSelectionMap[playerId]?.add(counterModel.templateId)
+                pendingCounterSelectionMap[playerId]?.add(counterModel.template.id)
             }
         }
         playerMap[playerId]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)

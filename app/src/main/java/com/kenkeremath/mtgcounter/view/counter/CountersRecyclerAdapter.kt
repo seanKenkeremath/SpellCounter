@@ -37,7 +37,7 @@ class CountersRecyclerAdapter(
 
     override fun getItemId(position: Int): Long {
         val counterId =
-            if (position == 0) ID_LIFE else "${player!!.counters[position - 1].templateId}"
+            if (position == 0) ID_LIFE else "${player!!.counters[position - 1].template.id}"
         return "$counterId##!##${player?.id}".hashCode().toLong()
     }
 
@@ -206,7 +206,7 @@ class CounterViewHolder(
 
     fun bind(playerId: Int, counterModel: CounterModel) {
         this.playerId = playerId
-        this.counterId = counterModel.templateId
+        this.counterId = counterModel.template.id
         this.counterView.setContent(counterModel)
     }
 }

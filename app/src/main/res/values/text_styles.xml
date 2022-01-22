@@ -6,11 +6,7 @@
         <item name="android:ellipsize">none</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="CounterText.Small">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/counter_label_default_text_size</item>
     </style>
 
     <style name="CounterText.Outline">
