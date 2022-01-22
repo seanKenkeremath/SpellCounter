@@ -172,26 +172,39 @@
         android:paddingHorizontal="@dimen/setup_padding_horizontal"
         app:layout_constraintTop_toBottomOf="@id/tabletop_label">
 
-        <Button
+        <FrameLayout
+            android:id="@+id/tabletop_a_button"
+            style="@style/OptionButton"
+            android:layout_width="@dimen/setup_tabletop_layout_button_width"
+            android:layout_height="@dimen/setup_tabletop_layout_button_height">
+
+            <com.kenkeremath.mtgcounter.view.TabletopLayout
+                android:id="@+id/tabletop_a"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/tabletop_b_button"
+            style="@style/OptionButton"
+            android:layout_width="@dimen/setup_tabletop_layout_button_width"
+            android:layout_height="@dimen/setup_tabletop_layout_button_height">
+
+            <com.kenkeremath.mtgcounter.view.TabletopLayout
+                android:id="@+id/tabletop_b"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <ImageButton
             android:id="@+id/tabletop_list"
             style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A" />
-
-        <Button
-            android:id="@+id/tabletop_a"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="B" />
-
-        <Button
-            android:id="@+id/tabletop_b"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="C" />
+            android:layout_width="@dimen/setup_tabletop_layout_button_width"
+            android:layout_height="@dimen/setup_tabletop_layout_button_height"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_list" />
 
 
     </LinearLayout>

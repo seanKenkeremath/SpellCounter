@@ -14,6 +14,8 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
 import com.kenkeremath.mtgcounter.ui.setup.tabletop.SetupTabletopFragment
+import com.kenkeremath.mtgcounter.view.TabletopLayout
+import com.kenkeremath.mtgcounter.view.layoutbutton.TabletopLayoutButtonAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +32,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var hideNavigationCheckbox: CheckBox
     private lateinit var customizeLayoutButton: View
     private lateinit var tabletopContainer: ViewGroup
-    private lateinit var tabletopModeButtons: List<Button>
+    private lateinit var tabletopLayoutButtonA: View
+    private lateinit var tabletopLayoutAdapterA: TabletopLayoutButtonAdapter
+    private lateinit var tabletopLayoutButtonB: View
+    private lateinit var tabletopLayoutAdapterB: TabletopLayoutButtonAdapter
+    private lateinit var tabletopListLayoutButton: View
     private lateinit var startButton: Button
     private lateinit var toolbar: Toolbar
 
@@ -89,11 +95,20 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
         tabletopContainer = view.findViewById(R.id.tabletop_container)
 
-        tabletopModeButtons = listOf(
-            view.findViewById(R.id.tabletop_list),
-            view.findViewById(R.id.tabletop_a),
-            view.findViewById(R.id.tabletop_b)
-        )
+        val tabletopLayoutA = view.findViewById<TabletopLayout>(R.id.tabletop_a)
+        tabletopLayoutButtonA = view.findViewById(R.id.tabletop_a_button)
+        tabletopLayoutAdapterA = TabletopLayoutButtonAdapter(tabletopLayoutA)
+        val tabletopLayoutB = view.findViewById<TabletopLayout>(R.id.tabletop_b)
+        tabletopLayoutButtonB = view.findViewById(R.id.tabletop_b_button)
+        tabletopLayoutAdapterB = TabletopLayoutButtonAdapter(tabletopLayoutB)
+        tabletopListLayoutButton = view.findViewById(R.id.tabletop_list)
+
+        /**
+         * Prevents the tabletop layout from intercepting touch events (so we can put it in a
+         * clickable container)
+         */
+        tabletopLayoutA.isEnabled = false
+        tabletopLayoutB.isEnabled = false
 
         customizeLayoutButton = view.findViewById(R.id.customize_tabletop_button)
         customizeLayoutButton.setOnClickListener {
@@ -163,21 +178,45 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
         viewModel.tabletopTypes.observe(viewLifecycleOwner, {
             it?.let {
-                for (tabletopModeButton in tabletopModeButtons) {
-                    tabletopModeButton.visibility = View.GONE
-                }
-                for (i in 0 until kotlin.math.min(3, it.size)) {
-                    tabletopModeButtons[i].tag = it[i].tabletopType
-                    tabletopModeButtons[i].visibility = View.VISIBLE
-                    tabletopModeButtons[i].isSelected = it[i].selected
-                    tabletopModeButtons[i].setOnClickListener {
-                        viewModel.setTabletopType(
-                            tabletopModeButtons[i].tag as TabletopType
-                        )
+                tabletopLayoutButtonA.visibility = View.GONE
+                tabletopLayoutButtonB.visibility = View.GONE
+                tabletopListLayoutButton.visibility = View.GONE
+                var aIsSet = false
+                for (i in it.indices) {
+                    val type = it[i].tabletopType
+                    if (type == TabletopType.LIST) {
+                        setTabletopLayoutButtonContent(it[i], tabletopListLayoutButton)
+                    } else if (!aIsSet) {
+                        setTabletopLayoutButtonContent(it[i], tabletopLayoutButtonA)
+                        tabletopLayoutAdapterA.setPositions(it[i].tabletopType)
+                        tabletopLayoutAdapterA.updateAll(
+                            type,
+                            List(viewModel.numberOfPlayers.value!!) {})
+                        aIsSet = true
+                    } else {
+                        setTabletopLayoutButtonContent(it[i], tabletopLayoutButtonB)
+                        tabletopLayoutAdapterB.setPositions(it[i].tabletopType)
+                        tabletopLayoutAdapterB.updateAll(
+                            type,
+                            List(viewModel.numberOfPlayers.value!!) {})
                     }
                 }
             }
         })
+    }
+
+    private fun setTabletopLayoutButtonContent(
+        uiModel: TabletopLayoutSelectionUiModel,
+        button: View
+    ) {
+        button.tag = uiModel.tabletopType
+        button.visibility = View.VISIBLE
+        button.isSelected = uiModel.selected
+        button.setOnClickListener {
+            viewModel.setTabletopType(
+                button.tag as TabletopType
+            )
+        }
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {

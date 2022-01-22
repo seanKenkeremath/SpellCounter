@@ -8,6 +8,8 @@
     <dimen name="setup_section_top_margin">24dp</dimen>
     <dimen name="setup_section_title_bottom_margin">8dp</dimen>
     <dimen name="setup_padding_horizontal">16dp</dimen>
+    <dimen name="setup_tabletop_layout_button_width">80dp</dimen>
+    <dimen name="setup_tabletop_layout_button_height">120dp</dimen>
 
     <!-- Game -->
     <!-- Game menu button dimensions must add up -->

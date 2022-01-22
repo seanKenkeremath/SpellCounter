@@ -53,7 +53,15 @@ class TabletopLayout : ConstraintLayout {
         return true
     }
 
+    /**
+     * To ignore child touch events and prevent delegation entirely (e.g. for display only),
+     * set enabled to false
+     */
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (!isEnabled) {
+            return super.onTouchEvent(event)
+        }
         event?.let {
 
             if (it.actionMasked != MotionEvent.ACTION_MOVE) {
