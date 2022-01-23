@@ -4,10 +4,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
@@ -17,6 +14,9 @@ import com.kenkeremath.mtgcounter.view.PullToRevealLayout
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.EditCountersRecyclerAdapter
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
+import com.kenkeremath.mtgcounter.view.counter.edit.RearrangeCountersRecyclerAdapter
+import com.kenkeremath.mtgcounter.view.drag.OnStartDragListener
+import com.kenkeremath.mtgcounter.view.drag.SimpleItemTouchHelperCallback
 
 /**
  * Generic VH pattern for a player that can be used in a RV or TableTopLayout
@@ -25,14 +25,16 @@ class PlayerViewHolder(
     val itemView: View,
     val onPlayerUpdatedListener: OnPlayerUpdatedListener,
     val playerMenuListener: PlayerMenuListener,
-) {
+): OnStartDragListener {
 
     private val binding = ItemPlayerTabletopBinding.bind(itemView)
 
-    private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
     private var playerId: Int = -1
 
-    private val addCountersRecyclerAdapter = EditCountersRecyclerAdapter(playerMenuListener)
+    private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
+    private val editCountersRecyclerAdapter = EditCountersRecyclerAdapter(playerMenuListener)
+    private val rearrangeCountersRecyclerAdapter = RearrangeCountersRecyclerAdapter(playerMenuListener, this)
+    private val rearrangeItemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(rearrangeCountersRecyclerAdapter))
 
     private var layoutResized: Boolean = false
     private var revealHintAnimated: Boolean = false
@@ -57,11 +59,16 @@ class PlayerViewHolder(
             decoration
         )
         binding.countersRecycler.adapter = countersAdapter
-
-        binding.editCountersRecycler.adapter = addCountersRecyclerAdapter
+        binding.editCountersRecycler.adapter = editCountersRecyclerAdapter
+        binding.rearrangeCountersRecycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
+        binding.rearrangeCountersRecycler.adapter = rearrangeCountersRecyclerAdapter
+        rearrangeItemTouchHelper.attachToRecyclerView(binding.rearrangeCountersRecycler)
 
         binding.addCounter.setOnClickListener {
             playerMenuListener.onEditCountersOpened(playerId)
+        }
+        binding.rearrangeCounters.setOnClickListener {
+            playerMenuListener.onRearrangeCountersOpened(playerId)
         }
 
         binding.revealedAddCounterButton.setListener(object: HoldableButton.HoldableButtonListener {
@@ -70,21 +77,38 @@ class PlayerViewHolder(
             }
             override fun onHoldContinued(increments: Int) {}
         })
+        binding.revealedRearrangeCountersButton.setListener(object: HoldableButton.HoldableButtonListener {
+            override fun onSingleClick() {
+                playerMenuListener.onRearrangeCountersOpened(playerId)
+            }
+            override fun onHoldContinued(increments: Int) {}
+        })
 
-        binding.cancel.setOnClickListener {
+        //TODO: make these the same buttons?
+        binding.rearrangeCancel.setOnClickListener {
             playerMenuListener.onCancelCounterChanges(playerId)
-            closeEditCounters()
+            closeCountersSubmenu()
         }
 
-        binding.confirm.setOnClickListener {
+        binding.rearrangeConfirm.setOnClickListener {
             playerMenuListener.onConfirmCounterChanges(playerId)
-            closeEditCounters()
+            closeCountersSubmenu()
+        }
+
+        binding.editCancel.setOnClickListener {
+            playerMenuListener.onCancelCounterChanges(playerId)
+            closeCountersSubmenu()
+        }
+
+        binding.editConfirm.setOnClickListener {
+            playerMenuListener.onConfirmCounterChanges(playerId)
+            closeCountersSubmenu()
         }
 
         binding.pullToRevealContainer.listener = object : PullToRevealLayout.PullToRevealListener {
             override fun onReveal() {}
             override fun onHide() {
-                if (currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+                if (currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS || currentMenu == GamePlayerUiModel.Menu.REARRANGE_COUNTERS) {
                     playerMenuListener.onCancelCounterChanges(playerId)
                 }
                 playerMenuListener.onCloseSubMenu(playerId)
@@ -98,7 +122,7 @@ class PlayerViewHolder(
         }
     }
 
-    private fun closeEditCounters() {
+    private fun closeCountersSubmenu() {
         playerMenuListener.onCloseSubMenu(playerId)
         if (pullToReveal) {
             binding.pullToRevealContainer.hide(true)
@@ -161,11 +185,18 @@ class PlayerViewHolder(
         currentMenu = data.currentMenu
         if (currentMenu == GamePlayerUiModel.Menu.MAIN) {
             binding.editCountersContainer.visibility = View.GONE
+            binding.rearrangeCountersContainer.visibility = View.GONE
             binding.playerContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.VISIBLE
         } else if (data.currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
             binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
+            binding.rearrangeCountersContainer.visibility = View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
+            binding.revealOptionsMenu.visibility = View.GONE
+        } else if (data.currentMenu == GamePlayerUiModel.Menu.REARRANGE_COUNTERS) {
+            binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
+            binding.rearrangeCountersContainer.visibility = View.VISIBLE
+            binding.editCountersContainer.visibility = View.GONE
             binding.revealOptionsMenu.visibility = View.GONE
         }
         if (pullToReveal && !revealHintAnimated) {
@@ -196,6 +227,13 @@ class PlayerViewHolder(
             binding.countersRecycler.scrollToPosition(countersAdapter.itemCount - 1)
             data.newCounterAdded = false
         }
-        addCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
+        editCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
+        rearrangeCountersRecyclerAdapter.setContent(playerId, data.rearrangeCounters)
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
+        viewHolder?.let {
+            rearrangeItemTouchHelper.startDrag(it)
+        }
     }
 }

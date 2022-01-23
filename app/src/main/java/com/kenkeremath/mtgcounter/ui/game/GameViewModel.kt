@@ -9,6 +9,7 @@ import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
+import com.kenkeremath.mtgcounter.view.counter.edit.RearrangeCounterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,9 +42,11 @@ class GameViewModel @Inject constructor(
     val hideNavigation: LiveData<Boolean> = _hideNavigation
 
     /**
-     * Maps player id to a list of selected counter template ids
+     * Maps player id to an ordered list of selected counter template ids
+     * Counters that are removed are replaced with null, to assist in preserving user-selected
+     * order. Once changes are confirmed, nulls are removed
      */
-    private val pendingCounterSelectionMap: MutableMap<Int, MutableSet<Int>> = mutableMapOf()
+    private val pendingCounterSelectionMap: MutableMap<Int, MutableList<Int?>> = mutableMapOf()
 
     init {
         _keepScreenOn.value = repository.keepScreenOn
@@ -72,9 +75,10 @@ class GameViewModel @Inject constructor(
                     pendingCounterSelectionMap[player.model.id] =
                         player.model.counters.map { counter ->
                             counter.template.id
-                        }.toMutableSet()
+                        }.toMutableList()
 
                     playerMap[i]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
+                    playerMap[i]?.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
                 }
                 _players.value = playerMap.values.toList()
             }
@@ -115,6 +119,14 @@ class GameViewModel @Inject constructor(
         _players.value = playerMap.values.toList()
     }
 
+    fun rearrangeCounters(playerId: Int) {
+        playerMap[playerId]?.let { player ->
+            playerMap[playerId] =
+                player.copy(currentMenu = GamePlayerUiModel.Menu.REARRANGE_COUNTERS)
+        }
+        _players.value = playerMap.values.toList()
+    }
+
     fun closeSubMenu(playerId: Int) {
         playerMap[playerId]?.let { player ->
             playerMap[playerId] = player.copy(currentMenu = GamePlayerUiModel.Menu.MAIN)
@@ -124,19 +136,59 @@ class GameViewModel @Inject constructor(
 
     fun selectCounter(playerId: Int, counterTemplateId: Int) {
         if (!pendingCounterSelectionMap.containsKey(playerId)) {
-            pendingCounterSelectionMap[playerId] = mutableSetOf()
+            pendingCounterSelectionMap[playerId] = mutableListOf()
         }
-        pendingCounterSelectionMap[playerId]?.add(counterTemplateId)
-        playerMap[playerId]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
-        _players.value = playerMap.values.toList()
+        playerMap[playerId]?.let { player ->
+            val existingIndex = player.model.counters.indexOfFirst { counter -> counter.template.id == counterTemplateId }
+            if (existingIndex != -1) {
+                /**
+                 * The player had this counter prior to editing. This means we left a null space
+                 * when removing it, and it should be added in that same spot to preserve the
+                 * user-selected order of counters
+                 */
+                pendingCounterSelectionMap[playerId]?.set(existingIndex, counterTemplateId)
+            } else {
+                //This is a new counter for the player, so we will add to the end
+                pendingCounterSelectionMap[playerId]?.add(counterTemplateId)
+            }
+            player.counterSelections = generateSelectionUiModelsForPlayer(playerId)
+            player.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
+            _players.value = playerMap.values.toList()
+        }
     }
 
     fun deselectCounter(playerId: Int, counterTemplateId: Int) {
         if (!pendingCounterSelectionMap.containsKey(playerId)) {
-            pendingCounterSelectionMap[playerId] = mutableSetOf()
+            pendingCounterSelectionMap[playerId] = mutableListOf()
         }
-        pendingCounterSelectionMap[playerId]?.remove(counterTemplateId)
-        playerMap[playerId]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
+        playerMap[playerId]?.let { player ->
+            /**
+             * Set value to null instead of removing. This allows us to preserve ordering if that
+             * counter is added back in before saving
+             */
+            val counterIndex =
+                pendingCounterSelectionMap[playerId]?.indexOf(counterTemplateId) ?: -1
+            if (counterIndex != -1) {
+                pendingCounterSelectionMap[playerId]?.set(counterIndex, null)
+                player.counterSelections = generateSelectionUiModelsForPlayer(playerId)
+                player.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
+                _players.value = playerMap.values.toList()
+            }
+        }
+    }
+
+    fun moveCounter(playerId: Int, counterTemplateId: Int, oldPosition: Int, newPosition: Int) {
+        playerMap[playerId]?.let { player ->
+            if (!pendingCounterSelectionMap.containsKey(playerId)) {
+                pendingCounterSelectionMap[playerId] =
+                    player.model.counters.map { it.template.id }.toMutableList()
+            }
+            pendingCounterSelectionMap[playerId]?.get(oldPosition)?.let {
+                pendingCounterSelectionMap[playerId]?.removeAt(oldPosition)
+                pendingCounterSelectionMap[playerId]?.add(newPosition, it)
+            }
+            player.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
+        }
         _players.value = playerMap.values.toList()
     }
 
@@ -146,31 +198,22 @@ class GameViewModel @Inject constructor(
      */
     fun confirmCounterChanges(playerId: Int) {
         playerMap[playerId]?.let { uiModel ->
-            pendingCounterSelectionMap[playerId]?.let { pendingCounterSelection ->
-                val newCountersList = uiModel.model.counters.toMutableList()
-                //remove deselected counters
-                val itr = newCountersList.iterator()
-                while (itr.hasNext()) {
-                    val counter = itr.next()
-                    if (!pendingCounterSelection.contains(counter.template.id)) {
-                        itr.remove()
-                    }
-                }
 
+            pendingCounterSelectionMap[playerId]?.let { pendingCounterSelection ->
                 var newCounter = false
 
-                //add newly selected counters from templates
-                for (templateId in pendingCounterSelection) {
-                    availableCounters.find { it.id == templateId }?.let { template ->
-                        //avoid adding duplicates
-                        if (newCountersList.find { it.template.id == template.id } == null) {
-                            newCounter = true
-                            newCountersList.add(CounterModel(template = template))
-                        }
-                    }
+                //for every pending id, either find the counter if it exists, or create a new counter
+                //The order of pendingCounterSelection will be used
+                val newCounters = pendingCounterSelection.mapNotNull {
+                    uiModel.model.counters.find { oldCounter -> oldCounter.template.id == it }
+                        ?: availableCounters.find { availableCounter -> availableCounter.id == it }
+                            ?.let { template ->
+                                newCounter = true
+                                CounterModel(template = template)
+                            }
                 }
 
-                uiModel.model = uiModel.model.copy(counters = newCountersList)
+                uiModel.model = uiModel.model.copy(counters = newCounters)
                 uiModel.newCounterAdded = newCounter
                 _players.value = playerMap.values.toList()
             }
@@ -189,6 +232,7 @@ class GameViewModel @Inject constructor(
             }
         }
         playerMap[playerId]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
+        playerMap[playerId]?.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
         _players.value = playerMap.values.toList()
     }
 
@@ -207,6 +251,18 @@ class GameViewModel @Inject constructor(
                 )
             }
 
+        } ?: emptyList()
+    }
+
+    private fun generateRearrangeUiModelsForPlayer(playerId: Int): List<RearrangeCounterUiModel> {
+        return playerMap[playerId]?.let {
+            pendingCounterSelectionMap[playerId]?.mapNotNull {
+                availableCounters.find { availableCounter -> availableCounter.id == it }?.let {
+                    RearrangeCounterUiModel(
+                        it
+                    )
+                }
+            }
         } ?: emptyList()
     }
 }

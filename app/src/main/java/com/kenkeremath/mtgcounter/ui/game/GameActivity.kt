@@ -312,6 +312,10 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         viewModel.editCounters(playerId)
     }
 
+    override fun onRearrangeCountersOpened(playerId: Int) {
+        viewModel.rearrangeCounters(playerId)
+    }
+
     override fun onCloseSubMenu(playerId: Int) {
         viewModel.closeSubMenu(playerId)
     }
@@ -322,6 +326,15 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
 
     override fun onCounterDeselected(playerId: Int, templateId: Int) {
         viewModel.deselectCounter(playerId, templateId)
+    }
+
+    override fun onCounterRearranged(
+        playerId: Int,
+        templateId: Int,
+        oldPosition: Int,
+        newPosition: Int
+    ) {
+        viewModel.moveCounter(playerId, templateId, oldPosition, newPosition)
     }
 
     override fun onCancelCounterChanges(playerId: Int) {
