@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.kenkeremath.mtgcounter.view.PullToRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pull_to_reveal_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -39,8 +40,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:clipToPadding="false"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:clipToPadding="false">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/edit_counters_recycler"
@@ -205,19 +206,23 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <Button
+            <ImageView
                 android:id="@+id/add_counter"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="+" />
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:src="@drawable/ic_add_counter" />
 
-            <Button
+            <ImageView
                 android:id="@+id/rearrange_counters"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="R" />
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:src="@drawable/ic_rearrange_counters" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
