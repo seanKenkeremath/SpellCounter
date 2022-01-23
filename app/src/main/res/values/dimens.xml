@@ -35,7 +35,8 @@
     <dimen name="counter_name_text_height">24dp</dimen>
     <dimen name="counter_name_text_padding">4dp</dimen>
     <dimen name="counter_button_height">28dp</dimen>
-    <dimen name="counter_label_default_text_size">16sp</dimen>
+    <dimen name="counter_label_default_max_text_size">32sp</dimen>
+    <dimen name="counter_label_min_text_size">11sp</dimen>
     <dimen name="counter_width">80dp</dimen>
     <dimen name="counter_recycler_horz_padding">2dp</dimen>
     <!-- If the counter list would not exceed this value in width beyond the view,

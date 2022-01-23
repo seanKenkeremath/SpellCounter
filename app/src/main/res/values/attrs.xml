@@ -10,6 +10,6 @@
         <attr name="rows" format="integer" />
     </declare-styleable>
     <declare-styleable name="CounterIconView">
-        <attr name="labelTextSize" format="dimension|reference" />
+        <attr name="labelMaxTextSize" format="dimension" />
     </declare-styleable>
 </resources>

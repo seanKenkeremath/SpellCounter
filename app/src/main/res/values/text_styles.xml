@@ -6,7 +6,9 @@
         <item name="android:ellipsize">none</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/counter_label_default_text_size</item>
+        <item name="autoSizeMinTextSize">11sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="android:textSize">@dimen/counter_label_default_max_text_size</item>
     </style>
 
     <style name="CounterText.Outline">
@@ -47,7 +49,7 @@
         <item name="android:textColor">@color/accent_blue</item>
     </style>
 
-    <style name="GameButtonLabel" parent= "Header2">
+    <style name="GameButtonLabel" parent="Header2">
         <item name="android:textColor">@color/game_button_color</item>
     </style>
 

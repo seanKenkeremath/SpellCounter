@@ -3,12 +3,14 @@ package com.kenkeremath.mtgcounter.view.counter
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 
@@ -26,14 +28,20 @@ class CounterIconView @JvmOverloads constructor(
         image = findViewById(R.id.image)
         label = findViewById(R.id.label)
 
-        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.LineColorPickerView, 0, 0)
+        val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CounterIconView, 0, 0)
 
         try {
-            val labelSize = a.getDimension(
-                R.styleable.CounterIconView_labelTextSize,
-                resources.getDimension(R.dimen.counter_label_default_text_size)
+            val labelMaxSize = a.getDimensionPixelSize(
+                R.styleable.CounterIconView_labelMaxTextSize,
+                resources.getDimensionPixelSize(R.dimen.counter_label_default_max_text_size)
             )
-            label.textSize = labelSize
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                label,
+                resources.getDimensionPixelSize(R.dimen.counter_label_min_text_size),
+                labelMaxSize,
+                1,
+                TypedValue.COMPLEX_UNIT_PX,
+            )
         } finally {
             a.recycle()
         }
