@@ -64,7 +64,8 @@ class GameViewModel @Inject constructor(
                             colorResId = setupPlayers[i].colorResId ?: R.color.white,
                         ),
                         //TODO: option from repo
-                        pullToReveal = tabletopType != TabletopType.LIST
+                        pullToReveal = tabletopType != TabletopType.LIST,
+                        rearrangeButtonEnabled = false,
                     )
                     playerMap[i] = player
 
@@ -214,6 +215,7 @@ class GameViewModel @Inject constructor(
                 }
 
                 uiModel.model = uiModel.model.copy(counters = newCounters)
+                uiModel.rearrangeButtonEnabled = uiModel.model.counters.size > 1
                 uiModel.newCounterAdded = newCounter
                 _players.value = playerMap.values.toList()
             }

@@ -10,7 +10,8 @@ data class GamePlayerUiModel(
     var rearrangeCounters: List<RearrangeCounterUiModel> = emptyList(),
     var newCounterAdded: Boolean = false,
     var pullToReveal: Boolean = false,
-    var currentMenu: Menu = Menu.MAIN
+    var currentMenu: Menu = Menu.MAIN,
+    var rearrangeButtonEnabled: Boolean = false,
 ) {
     enum class Menu {
         MAIN,

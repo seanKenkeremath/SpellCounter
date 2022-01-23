@@ -95,6 +95,9 @@ class HoldableButton @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (!isEnabled) {
+            return true
+        }
         event?.let {
             val x: Float = it.x + left
             val y: Float = it.y + top

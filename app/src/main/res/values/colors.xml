@@ -7,6 +7,8 @@
 
 
     <color name="divider_color">@color/black</color>
+    <color name="game_button_color_enabled">@color/black</color>
+    <color name="game_button_color_disabled">#40000000</color>
 
     <color name="selected_yellow">#ffff00</color>
 

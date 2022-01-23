@@ -47,4 +47,8 @@
         <item name="android:textColor">@color/accent_blue</item>
     </style>
 
+    <style name="GameButtonLabel" parent= "Header2">
+        <item name="android:textColor">@color/game_button_color</item>
+    </style>
+
 </resources>

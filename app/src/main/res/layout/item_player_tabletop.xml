@@ -113,13 +113,15 @@
                     android:padding="@dimen/revealed_menu_item_padding">
 
                     <ImageView
+                        android:id="@+id/revealed_rearrange_counters_icon"
+                        style="@style/GameButton"
                         android:layout_width="@dimen/revealed_icon_size"
                         android:layout_height="@dimen/revealed_icon_size"
                         android:src="@drawable/ic_rearrange_counters" />
 
                     <TextView
                         android:id="@+id/revealed_rearrange_counters_label"
-                        style="@style/Header2"
+                        style="@style/GameButtonLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/revealed_menu_icon_margin"
@@ -155,13 +157,14 @@
                     android:padding="@dimen/revealed_menu_item_padding">
 
                     <ImageView
+                        style="@style/GameButton"
                         android:layout_width="@dimen/revealed_icon_size"
                         android:layout_height="@dimen/revealed_icon_size"
                         android:src="@drawable/ic_add_counter" />
 
                     <TextView
                         android:id="@+id/revealed_add_counters_label"
-                        style="@style/Header2"
+                        style="@style/GameButtonLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/revealed_menu_icon_margin"
@@ -208,6 +211,7 @@
 
             <ImageView
                 android:id="@+id/add_counter"
+                style="@style/GameButton"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -217,6 +221,7 @@
 
             <ImageView
                 android:id="@+id/rearrange_counters"
+                style="@style/GameButton"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"

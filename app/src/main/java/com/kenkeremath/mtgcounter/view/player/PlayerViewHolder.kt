@@ -214,6 +214,11 @@ class PlayerViewHolder(
             }
         }
 
+        binding.rearrangeCounters.isEnabled = data.rearrangeButtonEnabled
+        binding.revealedRearrangeCountersButton.isEnabled = data.rearrangeButtonEnabled
+        binding.revealedRearrangeCountersLabel.isEnabled = data.rearrangeButtonEnabled
+        binding.revealedRearrangeCountersIcon.isEnabled = data.rearrangeButtonEnabled
+
         //Scroll to end if there's a new counter, and set ui model flag to false
         if (data.newCounterAdded) {
             binding.countersRecycler.scrollToPosition(countersAdapter.itemCount - 1)
