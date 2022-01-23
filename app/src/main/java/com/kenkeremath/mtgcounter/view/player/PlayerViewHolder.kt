@@ -84,17 +84,6 @@ class PlayerViewHolder(
             override fun onHoldContinued(increments: Int) {}
         })
 
-        //TODO: make these the same buttons?
-        binding.rearrangeCancel.setOnClickListener {
-            playerMenuListener.onCancelCounterChanges(playerId)
-            closeCountersSubmenu()
-        }
-
-        binding.rearrangeConfirm.setOnClickListener {
-            playerMenuListener.onConfirmCounterChanges(playerId)
-            closeCountersSubmenu()
-        }
-
         binding.editCancel.setOnClickListener {
             playerMenuListener.onCancelCounterChanges(playerId)
             closeCountersSubmenu()
@@ -185,18 +174,21 @@ class PlayerViewHolder(
         currentMenu = data.currentMenu
         if (currentMenu == GamePlayerUiModel.Menu.MAIN) {
             binding.editCountersContainer.visibility = View.GONE
-            binding.rearrangeCountersContainer.visibility = View.GONE
             binding.playerContainer.visibility = View.VISIBLE
             binding.revealOptionsMenu.visibility = View.VISIBLE
         } else if (data.currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS) {
             binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
-            binding.rearrangeCountersContainer.visibility = View.GONE
             binding.editCountersContainer.visibility = View.VISIBLE
+            binding.editCountersRecycler.visibility = View.VISIBLE
+            binding.rearrangeCountersRecycler.visibility = View.GONE
+            binding.editCountersHeader.setText(R.string.edit_counters_title)
             binding.revealOptionsMenu.visibility = View.GONE
         } else if (data.currentMenu == GamePlayerUiModel.Menu.REARRANGE_COUNTERS) {
             binding.playerContainer.visibility = if (pullToReveal) View.VISIBLE else View.GONE
-            binding.rearrangeCountersContainer.visibility = View.VISIBLE
-            binding.editCountersContainer.visibility = View.GONE
+            binding.editCountersContainer.visibility = View.VISIBLE
+            binding.editCountersRecycler.visibility = View.GONE
+            binding.rearrangeCountersRecycler.visibility = View.VISIBLE
+            binding.editCountersHeader.setText(R.string.rearrange_counters_title)
             binding.revealOptionsMenu.visibility = View.GONE
         }
         if (pullToReveal && !revealHintAnimated) {

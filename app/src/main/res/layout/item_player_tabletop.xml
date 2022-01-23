@@ -20,66 +20,6 @@
             android:padding="@dimen/player_divider_width" />
 
         <LinearLayout
-            android:id="@+id/rearrange_counters_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/rearrange_counters_header"
-                style="@style/Header3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/default_padding_half"
-                android:text="@string/rearrange_counters" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rearrange_counters_recycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/default_padding"
-                    android:paddingVertical="@dimen/default_padding_half" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/rearrange_cancel"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/edit_counter_confirm_button_height"
-                    android:layout_weight="1"
-                    android:text="@string/cancel"
-                    android:textColor="@color/black" />
-
-                <Button
-                    android:id="@+id/rearrange_confirm"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/edit_counter_confirm_button_height"
-                    android:layout_weight="1"
-                    android:text="@string/save"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/edit_counters_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -99,6 +39,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:clipToPadding="false"
                 android:layout_weight="1">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -109,6 +50,17 @@
                     android:clipToPadding="false"
                     android:paddingHorizontal="@dimen/default_padding"
                     android:paddingVertical="@dimen/default_padding_half" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rearrange_counters_recycler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/default_padding"
+                    android:paddingVertical="@dimen/default_padding_half" />
+
             </FrameLayout>
 
             <LinearLayout

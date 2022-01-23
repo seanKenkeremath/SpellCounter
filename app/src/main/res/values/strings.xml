@@ -35,6 +35,7 @@
     <string name="add_counter_title">Add Counter</string>
     <string name="edit_counters_title">Edit Counters</string>
     <string name="rearrange_counters">Rearrange Counters</string>
+    <string name="rearrange_counters_title">Rearrange Counters</string>
     <string name="keep_screen_awake">Keep Screen Awake</string>
     <string name="hide_navigation">Hide Navigation</string>
     <string name="start_game">Start Game</string>
