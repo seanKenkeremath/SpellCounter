@@ -3,17 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="300dp"
     android:gravity="center_horizontal"
+    android:minWidth="300dp"
     android:orientation="vertical"
-    android:padding="@dimen/default_padding">
+    android:paddingBottom="@dimen/default_padding">
+
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:src="@drawable/ic_close" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="40dp"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/default_padding">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -25,7 +35,7 @@
             style="@style/Header1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"/>
+            android:text="@string/app_name" />
     </LinearLayout>
 
     <Button
@@ -33,6 +43,7 @@
         style="@style/StartGameButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/start_game_button_height"
+        android:layout_marginHorizontal="@dimen/default_padding"
         android:text="@string/reset_game"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -41,18 +52,21 @@
         style="@style/StartGameButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/start_game_button_height"
+        android:layout_marginHorizontal="@dimen/default_padding"
         android:text="@string/exit_game"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/default_padding"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/keep_screen_awake_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/setup_section_top_margin"
+            android:layout_marginTop="@dimen/default_padding"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/setup_padding_horizontal"

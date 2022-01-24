@@ -26,6 +26,7 @@ class GameOptionsDialogFragment : DialogFragment(), CompoundButton.OnCheckedChan
     private var listener: Listener? = null
     private val viewModel: GameViewModel by activityViewModels()
 
+    private lateinit var closeButton: View
     private lateinit var resetButton: View
     private lateinit var exitButton: View
     private lateinit var keepScreenAwakeCheckbox: CheckBox
@@ -53,6 +54,10 @@ class GameOptionsDialogFragment : DialogFragment(), CompoundButton.OnCheckedChan
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        closeButton = view.findViewById(R.id.close_button)
+        closeButton.setOnClickListener {
+            dismiss()
+        }
         resetButton = view.findViewById(R.id.reset_game_button)
         resetButton.setOnClickListener {
             listener?.onOpenResetPrompt()
