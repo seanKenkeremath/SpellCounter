@@ -1,12 +1,17 @@
 package com.kenkeremath.mtgcounter.view
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.drawable.RippleDrawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.util.LogUtils
 import com.kenkeremath.mtgcounter.util.MathUtils
 
@@ -78,6 +83,20 @@ class HoldableButton @JvmOverloads constructor(
         holdIntervals.append(30, 150L)
         holdIntervals.append(100, 30L)
         holdIntervals.append(500, MIN_HOLD_INTERVAL)
+        background = ContextCompat.getDrawable(context, R.drawable.incrementer_bg)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            foreground = RippleDrawable(
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.ripple_color
+                    )
+                ),
+                null,
+                null
+            )
+        }
     }
 
     fun setListener(holdableButtonListener: HoldableButtonListener) {
@@ -99,9 +118,10 @@ class HoldableButton @JvmOverloads constructor(
             return true
         }
         event?.let {
-            val x: Float = it.x + left
-            val y: Float = it.y + top
-            background?.setHotspot(x, y)
+            background?.setHotspot(it.x, it.y)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                foreground?.setHotspot(it.x, it.y)
+            }
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
                     LogUtils.d("Hold gesture started", LogUtils.TAG_INCREMENTER)

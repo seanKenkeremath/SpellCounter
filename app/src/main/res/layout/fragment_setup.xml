@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.setup.SetupFragment">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,243 +14,260 @@
         android:background="@color/dark_grey"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/player_number_label"
-        style="@style/Header3"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        android:text="@string/player_number_label"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-    <GridLayout
-        android:id="@+id/player_number_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
-        android:columnCount="4"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        android:rowCount="2"
-        app:layout_constraintTop_toBottomOf="@id/player_number_label">
-
-        <!-- TODO: dynamic/style? -->
-
-        <Button
-            android:id="@+id/one_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1" />
+            android:layout_marginBottom="@dimen/default_padding"
+            tools:context=".ui.setup.SetupFragment">
 
-        <Button
-            android:id="@+id/two_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2" />
-
-        <Button
-            android:id="@+id/three_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3" />
-
-
-        <Button
-            android:id="@+id/four_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4" />
-
-        <Button
-            android:id="@+id/five_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5" />
-
-        <Button
-            android:id="@+id/six_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6" />
-
-        <Button
-            android:id="@+id/seven_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="7" />
-
-        <Button
-            android:id="@+id/eight_player_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8" />
-    </GridLayout>
-
-    <TextView
-        android:id="@+id/starting_life_label"
-        style="@style/Header3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        android:text="@string/starting_life_label"
-        app:layout_constraintTop_toBottomOf="@+id/player_number_container" />
-
-    <LinearLayout
-        android:id="@+id/starting_life_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/starting_life_label">
-
-        <Button
-            android:id="@+id/twenty_life_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20" />
-
-        <Button
-            android:id="@+id/forty_life_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="40" />
-
-        <Button
-            android:id="@+id/custom_life_button"
-            style="@style/OptionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Custom" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tabletop_label"
-        style="@style/Header3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        android:text="@string/tabletop_label"
-        app:layout_constraintTop_toBottomOf="@+id/starting_life_container" />
-
-    <TextView
-        android:id="@+id/customize_tabletop_button"
-        style="@style/SelectableText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        android:paddingVertical="@dimen/setup_section_title_bottom_margin"
-        android:text="@string/customize_layout"
-        app:drawableEndCompat="@drawable/ic_chevron_right"
-        app:drawableTint="@color/accent_blue"
-        app:layout_constraintBottom_toBottomOf="@+id/tabletop_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tabletop_label" />
-
-    <LinearLayout
-        android:id="@+id/tabletop_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tabletop_label">
-
-        <FrameLayout
-            android:id="@+id/tabletop_a_button"
-            style="@style/OptionButton"
-            android:layout_width="@dimen/setup_tabletop_layout_button_width"
-            android:layout_height="@dimen/setup_tabletop_layout_button_height">
-
-            <com.kenkeremath.mtgcounter.view.TabletopLayout
-                android:id="@+id/tabletop_a"
+            <TextView
+                android:id="@+id/player_number_label"
+                style="@style/Header3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_top_margin"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:text="@string/player_number_label"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/tabletop_b_button"
-            style="@style/OptionButton"
-            android:layout_width="@dimen/setup_tabletop_layout_button_width"
-            android:layout_height="@dimen/setup_tabletop_layout_button_height">
-
-            <com.kenkeremath.mtgcounter.view.TabletopLayout
-                android:id="@+id/tabletop_b"
+            <GridLayout
+                android:id="@+id/player_number_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
+                android:columnCount="4"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:rowCount="2"
+                app:layout_constraintTop_toBottomOf="@id/player_number_label">
 
-        </FrameLayout>
+                <!-- TODO: dynamic/style? -->
 
-        <ImageButton
-            android:id="@+id/tabletop_list"
-            style="@style/OptionButton"
-            android:layout_width="@dimen/setup_tabletop_layout_button_width"
-            android:layout_height="@dimen/setup_tabletop_layout_button_height"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_list" />
+                <Button
+                    android:id="@+id/one_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1" />
+
+                <Button
+                    android:id="@+id/two_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2" />
+
+                <Button
+                    android:id="@+id/three_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3" />
 
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/four_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4" />
 
-    <LinearLayout
-        android:id="@+id/keep_screen_awake_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/setup_section_top_margin"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tabletop_container">
+                <Button
+                    android:id="@+id/five_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5" />
 
-        <CheckBox
-            android:id="@+id/keep_screen_awake_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/six_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6" />
 
-        <TextView
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/keep_screen_awake" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/seven_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7" />
 
-    <LinearLayout
-        android:id="@+id/hide_navigation_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/setup_padding_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
+                <Button
+                    android:id="@+id/eight_player_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8" />
+            </GridLayout>
 
-        <CheckBox
-            android:id="@+id/hide_navigation_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/starting_life_label"
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_top_margin"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:text="@string/starting_life_label"
+                app:layout_constraintTop_toBottomOf="@+id/player_number_container" />
 
-        <TextView
-            style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hide_navigation" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/starting_life_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/starting_life_label">
+
+                <Button
+                    android:id="@+id/twenty_life_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20" />
+
+                <Button
+                    android:id="@+id/forty_life_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="40" />
+
+                <Button
+                    android:id="@+id/custom_life_button"
+                    style="@style/OptionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tabletop_label"
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_top_margin"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:text="@string/tabletop_label"
+                app:layout_constraintTop_toBottomOf="@+id/starting_life_container" />
+
+            <TextView
+                android:id="@+id/customize_tabletop_button"
+                style="@style/SelectableText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:paddingVertical="@dimen/setup_section_title_bottom_margin"
+                android:text="@string/customize_layout"
+                app:drawableEndCompat="@drawable/ic_chevron_right"
+                app:drawableTint="@color/accent_blue"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletop_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tabletop_label" />
+
+            <LinearLayout
+                android:id="@+id/tabletop_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tabletop_label">
+
+                <FrameLayout
+                    android:id="@+id/tabletop_a_button"
+                    style="@style/OptionButton"
+                    android:layout_width="@dimen/setup_tabletop_layout_button_width"
+                    android:layout_height="@dimen/setup_tabletop_layout_button_height">
+
+                    <com.kenkeremath.mtgcounter.view.TabletopLayout
+                        android:id="@+id/tabletop_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/tabletop_b_button"
+                    style="@style/OptionButton"
+                    android:layout_width="@dimen/setup_tabletop_layout_button_width"
+                    android:layout_height="@dimen/setup_tabletop_layout_button_height">
+
+                    <com.kenkeremath.mtgcounter.view.TabletopLayout
+                        android:id="@+id/tabletop_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </FrameLayout>
+
+                <ImageButton
+                    android:id="@+id/tabletop_list"
+                    style="@style/OptionButton"
+                    android:layout_width="@dimen/setup_tabletop_layout_button_width"
+                    android:layout_height="@dimen/setup_tabletop_layout_button_height"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_list" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/keep_screen_awake_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setup_section_top_margin"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tabletop_container">
+
+                <CheckBox
+                    android:id="@+id/keep_screen_awake_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/keep_screen_awake" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hide_navigation_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
+
+                <CheckBox
+                    android:id="@+id/hide_navigation_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hide_navigation" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <Button
         android:id="@+id/start_button"
@@ -259,6 +276,4 @@
         android:layout_height="@dimen/start_game_button_height"
         android:text="@string/start_game"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

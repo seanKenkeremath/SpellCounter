@@ -7,8 +7,14 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="autoSizeMinTextSize">11sp</item>
+        <item name="autoSizeMaxTextSize">@dimen/counter_max_text_size</item>
+        <item name="autoSizeStepGranularity">1px</item>
+        <item name="android:gravity">center</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="android:textSize">@dimen/counter_label_default_max_text_size</item>
+    </style>
+
+    <style name="CounterText.Label">
+        <item name="autoSizeMaxTextSize">@dimen/counter_label_max_text_size</item>
     </style>
 
     <style name="CounterText.Outline">

@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import com.kenkeremath.mtgcounter.R
@@ -62,15 +64,19 @@ class CounterIconView @JvmOverloads constructor(
                 label.text = templateModel.name
             }
         } else {
-            label.visibility = View.GONE
-            image.visibility = View.VISIBLE
-            image.setImageResource(templateModel.symbol.resId)
-            image.imageTintList = ColorStateList.valueOf(
-                templateModel.color.resId ?: ContextCompat.getColor(
-                    context,
-                    R.color.default_icon_tint
-                )
-            )
+            setIconDrawable(templateModel.symbol.resId, templateModel.color.resId)
         }
+    }
+
+    fun setIconDrawable(@DrawableRes drawableResId: Int, @ColorRes tintResId: Int? = null) {
+        label.visibility = View.GONE
+        image.visibility = View.VISIBLE
+        image.setImageResource(drawableResId)
+        image.imageTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                context,
+                tintResId ?: R.color.default_icon_tint
+            )
+        )
     }
 }

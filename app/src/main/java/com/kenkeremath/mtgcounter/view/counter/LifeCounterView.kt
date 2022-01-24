@@ -8,5 +8,10 @@ class LifeCounterView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : CounterView(R.layout.view_life_counter, context, attrs, defStyleAttr) {
+) : CounterView(R.layout.view_counter, context, attrs, defStyleAttr) {
+
+    init {
+        val counterIconView = findViewById<CounterIconView>(R.id.counter_icon_view)
+        counterIconView.setIconDrawable(R.drawable.ic_heart)
+    }
 }

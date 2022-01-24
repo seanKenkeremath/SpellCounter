@@ -29,7 +29,7 @@
 
     <!-- Life Counter -->
 
-    <!-- Extra Counters -->
+    <!-- Counters -->
     <dimen name="counter_padding_side">2dp</dimen>
     <dimen name="counter_padding_bottom">@dimen/default_padding_quarter</dimen>
     <dimen name="counter_name_text_height">24dp</dimen>
@@ -37,12 +37,14 @@
     <dimen name="counter_button_height">28dp</dimen>
     <dimen name="counter_label_default_max_text_size">32sp</dimen>
     <dimen name="counter_label_min_text_size">11sp</dimen>
-    <dimen name="counter_width">80dp</dimen>
     <dimen name="counter_recycler_horz_padding">2dp</dimen>
     <!-- If the counter list would not exceed this value in width beyond the view,
     then cells are sized to fit without scrolling. This may cause counter cells to be
      a few pixels smaller than they normally would -->
     <dimen name="counter_scroll_threshold">16dp</dimen>
+    <dimen name="min_counter_width">80dp</dimen>
+    <dimen name="counter_max_text_size">200sp</dimen>
+    <dimen name="counter_label_max_text_size">100sp</dimen>
 
     <!-- Edit Counter -->
     <dimen name="color_picker_width">200dp</dimen>

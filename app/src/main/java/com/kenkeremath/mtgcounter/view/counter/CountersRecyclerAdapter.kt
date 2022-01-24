@@ -93,7 +93,7 @@ class CountersRecyclerAdapter(
     private fun adjustCellWidth(isLifeCounter: Boolean, holder: RecyclerView.ViewHolder) {
         val resources = holder.itemView.resources
         var lifeWidth = resources.getDimensionPixelSize(R.dimen.player_life_width)
-        var counterWidth = resources.getDimensionPixelSize(R.dimen.counter_width)
+        var counterWidth = resources.getDimensionPixelSize(R.dimen.min_counter_width)
         val dividerWidth = resources.getDimensionPixelSize(R.dimen.counter_divider_width)
         val dividersTotalWidth = dividerWidth * (1 + player!!.counters.size)
         val totalWidth = lifeWidth + (player!!.counters.size * counterWidth) + dividersTotalWidth
