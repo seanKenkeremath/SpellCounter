@@ -86,6 +86,10 @@ class RearrangeCounterViewHolder(itemView: View, onStartDragListener: OnStartDra
             onStartDragListener.onStartDrag(this)
             true
         }
+        itemView.setOnLongClickListener {
+            onStartDragListener.onStartDrag(this)
+            true
+        }
     }
 
     fun bind(uiModel: RearrangeCounterUiModel) {
