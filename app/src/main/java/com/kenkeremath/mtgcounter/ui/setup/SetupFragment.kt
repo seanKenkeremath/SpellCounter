@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
@@ -17,6 +19,7 @@ import com.kenkeremath.mtgcounter.ui.setup.tabletop.SetupTabletopFragment
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.layoutbutton.TabletopLayoutButtonAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.min
 
 @AndroidEntryPoint
 class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
@@ -36,7 +39,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var tabletopLayoutAdapterA: TabletopLayoutButtonAdapter
     private lateinit var tabletopLayoutButtonB: View
     private lateinit var tabletopLayoutAdapterB: TabletopLayoutButtonAdapter
-    private lateinit var tabletopListLayoutButton: View
+    private lateinit var tabletopListLayoutButton: LinearLayout
     private lateinit var startButton: Button
     private lateinit var toolbar: Toolbar
 
@@ -186,6 +189,17 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     val type = it[i].tabletopType
                     if (type == TabletopType.LIST) {
                         setTabletopLayoutButtonContent(it[i], tabletopListLayoutButton)
+                        for (child in tabletopListLayoutButton.children) {
+                            child.visibility = View.GONE
+                        }
+                        /**
+                         * List button has 4 player images + 1 ellipsis as part of vertical linear layout.
+                         * Set as many child views to visible as there are players. if greater than 4,
+                         * the ellipsis will show
+                         */
+                        for (buttonPlayerIndex in 0 until min(tabletopListLayoutButton.childCount, viewModel.numberOfPlayers.value!!)) {
+                            tabletopListLayoutButton.getChildAt(buttonPlayerIndex).visibility = View.VISIBLE
+                        }
                     } else if (!aIsSet) {
                         setTabletopLayoutButtonContent(it[i], tabletopLayoutButtonA)
                         tabletopLayoutAdapterA.setPositions(it[i].tabletopType)

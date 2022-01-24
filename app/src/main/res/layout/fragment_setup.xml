@@ -211,13 +211,43 @@
 
                 </FrameLayout>
 
-                <ImageButton
+                <LinearLayout
                     android:id="@+id/tabletop_list"
                     style="@style/OptionButton"
                     android:layout_width="@dimen/setup_tabletop_layout_button_width"
                     android:layout_height="@dimen/setup_tabletop_layout_button_height"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_list" />
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/item_layout_button_player"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+
+                    <include layout="@layout/item_layout_button_player"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+
+                    <include layout="@layout/item_layout_button_player"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+                    <include layout="@layout/item_layout_button_player"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+
+                    <TextView
+                        style="@style/Header3"
+                        android:text="..."
+                        android:textSize="9dp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
 
 
             </LinearLayout>
