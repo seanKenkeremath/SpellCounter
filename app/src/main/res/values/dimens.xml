@@ -50,9 +50,14 @@
     <dimen name="color_picker_width">200dp</dimen>
     <dimen name="color_picker_height">80dp</dimen>
     <dimen name="edit_counter_label_column_width">100dp</dimen>
-    <dimen name="edit_counters_row_min_height">80dp</dimen>
+    <dimen name="edit_counters_row_min_height">100dp</dimen>
     <dimen name="edit_counter_confirm_button_height">64dp</dimen>
-    <dimen name="edit_counter_show_header_height_threshold">200dp</dimen>
+    <dimen name="edit_counter_show_header_height_threshold">240dp</dimen>
+    <dimen name="edit_counter_header_large_text_size_height_threshold">400dp</dimen>
+    <dimen name="edit_counter_header_large_text_size">16sp</dimen>
+    <dimen name="edit_counter_header_small_text_size">11sp</dimen>
+    <dimen name="edit_counter_header_small_padding">4sp</dimen>
+    <dimen name="edit_counter_header_large_padding">8sp</dimen>
     <dimen name="rearrange_counter_item_width">80dp</dimen>
 
     <!-- Edit Player -->

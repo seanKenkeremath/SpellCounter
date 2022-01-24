@@ -31,10 +31,11 @@
             <TextView
                 android:id="@+id/edit_counters_header"
                 style="@style/Header3"
+                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/default_padding_half"
+                android:padding="@dimen/default_padding_quarter"
                 android:text="@string/select_counters" />
 
             <FrameLayout

@@ -25,7 +25,7 @@ class PlayerViewHolder(
     val itemView: View,
     val onPlayerUpdatedListener: OnPlayerUpdatedListener,
     val playerMenuListener: PlayerMenuListener,
-): OnStartDragListener {
+) : OnStartDragListener {
 
     private val binding = ItemPlayerTabletopBinding.bind(itemView)
 
@@ -33,8 +33,10 @@ class PlayerViewHolder(
 
     private val countersAdapter = CountersRecyclerAdapter(onPlayerUpdatedListener)
     private val editCountersRecyclerAdapter = EditCountersRecyclerAdapter(playerMenuListener)
-    private val rearrangeCountersRecyclerAdapter = RearrangeCountersRecyclerAdapter(playerMenuListener, this)
-    private val rearrangeItemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(rearrangeCountersRecyclerAdapter))
+    private val rearrangeCountersRecyclerAdapter =
+        RearrangeCountersRecyclerAdapter(playerMenuListener, this)
+    private val rearrangeItemTouchHelper =
+        ItemTouchHelper(SimpleItemTouchHelperCallback(rearrangeCountersRecyclerAdapter))
 
     private var layoutResized: Boolean = false
     private var revealHintAnimated: Boolean = false
@@ -60,7 +62,8 @@ class PlayerViewHolder(
         )
         binding.countersRecycler.adapter = countersAdapter
         binding.editCountersRecycler.adapter = editCountersRecyclerAdapter
-        binding.rearrangeCountersRecycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
+        binding.rearrangeCountersRecycler.layoutManager =
+            LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
         binding.rearrangeCountersRecycler.adapter = rearrangeCountersRecyclerAdapter
         rearrangeItemTouchHelper.attachToRecyclerView(binding.rearrangeCountersRecycler)
 
@@ -71,16 +74,20 @@ class PlayerViewHolder(
             playerMenuListener.onRearrangeCountersOpened(playerId)
         }
 
-        binding.revealedAddCounterButton.setListener(object: HoldableButton.HoldableButtonListener {
+        binding.revealedAddCounterButton.setListener(object :
+            HoldableButton.HoldableButtonListener {
             override fun onSingleClick() {
                 playerMenuListener.onEditCountersOpened(playerId)
             }
+
             override fun onHoldContinued(increments: Int) {}
         })
-        binding.revealedRearrangeCountersButton.setListener(object: HoldableButton.HoldableButtonListener {
+        binding.revealedRearrangeCountersButton.setListener(object :
+            HoldableButton.HoldableButtonListener {
             override fun onSingleClick() {
                 playerMenuListener.onRearrangeCountersOpened(playerId)
             }
+
             override fun onHoldContinued(increments: Int) {}
         })
 
@@ -139,24 +146,67 @@ class PlayerViewHolder(
                 ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     itemView.viewTreeObserver.removeOnPreDrawListener(this)
-
+                    val res = itemView.resources
                     val height = itemView.height
+                    val width = itemView.width
+
+                    /**
+                     * Selection rows
+                     */
                     val minRowHeight =
                         itemView.resources.getDimensionPixelSize(R.dimen.edit_counters_row_min_height)
                     val rows = height / minRowHeight
                     binding.editCountersRecycler.layoutManager =
                         GridLayoutManager(itemView.context, rows, RecyclerView.HORIZONTAL, false)
 
+                    /**
+                     * Edit Counters Header
+                     */
                     val minHeightToShowEditCountersHeader =
-                        itemView.resources.getDimensionPixelSize(R.dimen.edit_counter_show_header_height_threshold)
+                        res.getDimensionPixelSize(R.dimen.edit_counter_show_header_height_threshold)
+                    val minHeightForLargeEditCountersHeader =
+                        res.getDimensionPixelSize(R.dimen.edit_counter_header_large_text_size_height_threshold)
+                    val smallHeaderTextSize =
+                        res.getDimension(R.dimen.edit_counter_header_small_text_size)
+                    val largeHeaderTextSize =
+                        res.getDimension(R.dimen.edit_counter_header_large_text_size)
+                    val smallHeaderTextPadding =
+                        res.getDimensionPixelSize(R.dimen.edit_counter_header_small_padding)
+                    val largeHeaderTextPadding =
+                        res.getDimensionPixelSize(R.dimen.edit_counter_header_large_padding)
                     binding.editCountersHeader.visibility =
-                        if (itemView.height < minHeightToShowEditCountersHeader) View.GONE else View.VISIBLE
+                        if (height < minHeightToShowEditCountersHeader) View.GONE else View.VISIBLE
+                    if (height < minHeightForLargeEditCountersHeader) {
+                        binding.editCountersHeader.apply {
+                            textSize = smallHeaderTextSize
+                            setPadding(
+                                smallHeaderTextPadding,
+                                smallHeaderTextPadding,
+                                smallHeaderTextPadding,
+                                smallHeaderTextPadding
+                            )
+                        }
+                    } else {
+                        binding.editCountersHeader.apply {
+                            textSize = largeHeaderTextSize
+                            setPadding(
+                                largeHeaderTextPadding,
+                                largeHeaderTextPadding,
+                                largeHeaderTextPadding,
+                                largeHeaderTextPadding
+                            )
+                        }
+                    }
+
+                    /**
+                     * Reveal menu text
+                     */
                     val minHeightToShowMenuText =
-                        itemView.resources.getDimensionPixelSize(R.dimen.revealed_menu_show_text_height_threshold)
+                        res.getDimensionPixelSize(R.dimen.revealed_menu_show_text_height_threshold)
                     val minWidthToShowMenuText =
-                        itemView.resources.getDimensionPixelSize(R.dimen.revealed_menu_show_text_width_threshold)
+                        res.getDimensionPixelSize(R.dimen.revealed_menu_show_text_width_threshold)
                     val showMenuText =
-                        itemView.width > minWidthToShowMenuText && itemView.height > minHeightToShowMenuText
+                        width > minWidthToShowMenuText && height > minHeightToShowMenuText
                     binding.revealedAddCountersLabel.visibility =
                         if (showMenuText) View.VISIBLE else View.GONE
                     binding.revealedRearrangeCountersLabel.visibility =
