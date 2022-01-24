@@ -96,7 +96,11 @@ class RearrangeCounterViewHolder(itemView: View, onStartDragListener: OnStartDra
         counterIconView.setContent(uiModel.templateModel)
     }
 
-    override fun onItemSelected() {}
+    override fun onItemSelected() {
+        itemView.alpha = .4f
+    }
 
-    override fun onItemClear() {}
+    override fun onItemClear() {
+        itemView.alpha = 1f
+    }
 }
