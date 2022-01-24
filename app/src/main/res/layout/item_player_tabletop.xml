@@ -31,10 +31,10 @@
             <TextView
                 android:id="@+id/edit_counters_header"
                 style="@style/Header3"
-                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:maxLines="1"
                 android:padding="@dimen/default_padding_quarter"
                 android:text="@string/select_counters" />
 
@@ -53,8 +53,7 @@
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
-                    android:paddingHorizontal="@dimen/default_padding"
-                    android:paddingVertical="@dimen/default_padding_half" />
+                    android:paddingHorizontal="@dimen/default_padding" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -65,8 +64,7 @@
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
-                    android:paddingHorizontal="@dimen/default_padding"
-                    android:paddingVertical="@dimen/default_padding_half" />
+                    android:paddingHorizontal="@dimen/default_padding" />
 
             </FrameLayout>
 
