@@ -10,6 +10,7 @@
         <item name="autoSizeMaxTextSize">@dimen/counter_max_text_size</item>
         <item name="autoSizeStepGranularity">1px</item>
         <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="autoSizeTextType">uniform</item>
     </style>
 

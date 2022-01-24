@@ -43,7 +43,7 @@
      a few pixels smaller than they normally would -->
     <dimen name="counter_scroll_threshold">16dp</dimen>
     <dimen name="min_counter_width">80dp</dimen>
-    <dimen name="counter_max_text_size">200sp</dimen>
+    <dimen name="counter_max_text_size">300sp</dimen>
     <dimen name="counter_label_max_text_size">100sp</dimen>
 
     <!-- Edit Counter -->
