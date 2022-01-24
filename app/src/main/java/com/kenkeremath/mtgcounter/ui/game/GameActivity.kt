@@ -28,13 +28,16 @@ import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.TypedValue
+import androidx.fragment.app.DialogFragment
+import com.kenkeremath.mtgcounter.ui.game.options.GameOptionsDialogFragment
 
 
 @AndroidEntryPoint
 class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
-    PlayerMenuListener {
+    PlayerMenuListener, GameOptionsDialogFragment.Listener {
 
     companion object {
+        const val TAG_GAME_OPTIONS = "tag_game_options"
         const val ARGS_SETUP_PLAYERS = "args_setup_players"
         fun startIntentFromSetup(context: Context, players: List<PlayerSetupModel>): Intent {
             return Intent(context, GameActivity::class.java).putParcelableArrayListExtra(
@@ -246,8 +249,8 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                     ), null, container.background
                 )
                 container.setOnClickListener {
-                    //TODO: game menu
-                    openExitPrompt()
+                    GameOptionsDialogFragment.newInstance()
+                        .show(supportFragmentManager, TAG_GAME_OPTIONS)
                 }
                 return false
             }
@@ -284,12 +287,35 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     private fun openExitPrompt() {
         val dialog = AlertDialog.Builder(this)
             .setTitle(R.string.exit_game)
-            .setIcon(R.mipmap.ic_launcher)
             .setMessage(R.string.are_you_sure_exit)
-            .setPositiveButton(R.string.yes) { _, _ -> finish() }
+            .setPositiveButton(R.string.yes) { _, _ ->
+                closeGameOptionsDialog()
+                finish()
+            }
             .setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
 
         dialog.show()
+    }
+
+    private fun openResetPrompt() {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.reset_game)
+            .setMessage(R.string.are_you_sure_reset)
+            .setPositiveButton(R.string.yes) { _, _ ->
+                closeGameOptionsDialog()
+                viewModel.resetGame()
+            }
+            .setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+
+        dialog.show()
+    }
+
+    private fun closeGameOptionsDialog() {
+        supportFragmentManager.findFragmentByTag(TAG_GAME_OPTIONS)?.let {
+            if (it is DialogFragment) {
+                it.dismiss()
+            }
+        }
     }
 
     override fun onLifeIncremented(playerId: Int, amountDifference: Int) {
@@ -343,5 +369,13 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
 
     override fun onConfirmCounterChanges(playerId: Int) {
         viewModel.confirmCounterChanges(playerId)
+    }
+
+    override fun onOpenExitPrompt() {
+        openExitPrompt()
+    }
+
+    override fun onOpenResetPrompt() {
+        openResetPrompt()
     }
 }

@@ -12,6 +12,7 @@ import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import com.kenkeremath.mtgcounter.view.counter.edit.RearrangeCounterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
@@ -51,8 +52,14 @@ class GameViewModel @Inject constructor(
     init {
         _keepScreenOn.value = repository.keepScreenOn
         _hideNavigation.value = repository.hideNavigation
+        initializePlayers()
+    }
+
+    private fun initializePlayers() {
         viewModelScope.launch {
-            repository.getAllCounters().collect {
+            val flow = if (availableCounters.isEmpty()) repository.getAllCounters()
+            else flowOf(availableCounters)
+            flow.collect {
                 availableCounters = it
                 for (i in 0 until setupPlayers?.size) {
                     val playerId = i
@@ -140,7 +147,8 @@ class GameViewModel @Inject constructor(
             pendingCounterSelectionMap[playerId] = mutableListOf()
         }
         playerMap[playerId]?.let { player ->
-            val existingIndex = player.model.counters.indexOfFirst { counter -> counter.template.id == counterTemplateId }
+            val existingIndex =
+                player.model.counters.indexOfFirst { counter -> counter.template.id == counterTemplateId }
             if (existingIndex != -1) {
                 /**
                  * The player had this counter prior to editing. This means we left a null space
@@ -266,5 +274,19 @@ class GameViewModel @Inject constructor(
                 }
             }
         } ?: emptyList()
+    }
+
+    fun setKeepScreenOn(keepScreenOn: Boolean) {
+        repository.keepScreenOn = keepScreenOn
+        _keepScreenOn.value = keepScreenOn
+    }
+
+    fun setHideNavigation(hideNavigation: Boolean) {
+        repository.hideNavigation = hideNavigation
+        _hideNavigation.value = hideNavigation
+    }
+
+    fun resetGame() {
+        initializePlayers()
     }
 }
