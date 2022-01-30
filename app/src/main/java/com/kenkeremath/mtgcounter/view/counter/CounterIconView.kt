@@ -62,6 +62,9 @@ class CounterIconView @JvmOverloads constructor(
                 label.visibility = View.VISIBLE
                 image.visibility = View.GONE
                 label.text = templateModel.name
+            } else {
+                label.visibility = View.GONE
+                image.visibility = View.GONE
             }
         } else {
             setIconDrawable(templateModel.symbol.resId, templateModel.color.resId)

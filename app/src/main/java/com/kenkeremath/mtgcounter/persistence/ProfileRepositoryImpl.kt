@@ -93,13 +93,15 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Boolean> {
+    override fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int> {
         invalidateCache()
         return flow {
-            addCounterTemplateInternal(counterTemplate)
-            emit(true)
+            val id = addCounterTemplateInternal(counterTemplate)
+            emit(id)
         }
-            .flatMapConcat { preloadCache() }
+            .flatMapConcat { counterId ->
+                preloadCache().map { counterId }
+            }
             .flowOn(dispatcherProvider.default())
     }
 
@@ -117,14 +119,7 @@ class ProfileRepositoryImpl @Inject constructor(
         deletable: Boolean = true
     ): Int {
         return database.templateDao().insert(
-            CounterTemplateEntity(
-                id = counterTemplate.id,
-                name = counterTemplate.name,
-                colorId = counterTemplate.color.colorId,
-                symbolId = counterTemplate.symbol.symbolId,
-                deletable = deletable,
-                linkToPlayer = false
-            )
+            CounterTemplateEntity(counterTemplate.copy(deletable = deletable))
         ).toInt()
     }
 

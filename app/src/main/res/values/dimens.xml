@@ -47,6 +47,10 @@
     <dimen name="counter_label_max_text_size">100sp</dimen>
 
     <!-- Edit Counter -->
+    <dimen name="edit_counter_section_spacing">32dp</dimen>
+    <dimen name="edit_counter_horizontal_margin">16dp</dimen>
+
+    <!-- Edit Counter (Legacy) -->
     <dimen name="color_picker_width">200dp</dimen>
     <dimen name="color_picker_height">80dp</dimen>
     <dimen name="edit_counter_label_column_width">100dp</dimen>

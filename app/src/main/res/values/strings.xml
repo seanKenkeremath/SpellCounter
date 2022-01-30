@@ -26,6 +26,18 @@
     <string name="profile_counters">Included Counters</string>
     <string name="profile_create_counter">Create Counter</string>
 
+    <string name="create_counter_type_label">Counter Type</string>
+    <string name="create_counter_preview">Preview</string>
+    <string name="create_counter_type_text">Text</string>
+    <string name="create_counter_text_hint">Max 4 Characters</string>
+    <string name="create_counter_type_image">Local Image</string>
+    <string name="create_counter_type_url">URL</string>
+    <string name="create_counter_name_label">Label:</string>
+    <string name="create_counter_url_label">Image URL:</string>
+    <string name="create_counter_url_hint">https://</string>
+    <string name="create_counter_local_uri_label">Local Image:</string>
+    <string name="create_counter_local_uri_hint">No File Selected</string>
+
     <!-- Legacy Strings -->
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
@@ -38,7 +50,6 @@
     <string name="player_starting_value">Starting Life:</string>
     <string name="player_name">Player Name:</string>
 
-    <string name="counter_name">Label:</string>
     <string name="counter_starting_value">Starting Value:</string>
     <string name="edit_counter_title">Edit Counter</string>
     <string name="create_counter_title">Create Counter</string>

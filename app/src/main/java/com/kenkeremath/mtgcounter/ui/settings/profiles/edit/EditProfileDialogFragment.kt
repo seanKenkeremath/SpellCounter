@@ -7,17 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.ui.settings.counters.EditCounterDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedListener {
+class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedListener {
 
     companion object {
         fun newInstance(profile: PlayerTemplateModel? = null): EditProfileDialogFragment {
@@ -27,6 +29,7 @@ class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedLi
             fragment.arguments = args
             return fragment
         }
+
         const val TAG = "fragment_edit_profiles"
         const val ARGS_PROFILE = "args_profile"
     }
@@ -37,13 +40,13 @@ class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedLi
     private val recyclerAdapter = EditProfileRecyclerAdapter(this)
 
     private lateinit var nameEditText: EditText
-    private val textChangedListener = object: TextWatcher {
+    private val textChangedListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             viewModel.updateName(s.toString())
         }
-        override fun afterTextChanged(s: Editable?) {}
 
+        override fun afterTextChanged(s: Editable?) {}
     }
 
     override fun onCreateView(
@@ -59,6 +62,19 @@ class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedLi
         super.onViewCreated(view, savedInstanceState)
 
         val createCounter: View = view.findViewById(R.id.create_counter)
+        createCounter.setOnClickListener {
+            val f = EditCounterDialogFragment.newInstance()
+            f.show(childFragmentManager, EditCounterDialogFragment.TAG)
+            f.setFragmentResultListener(
+                EditCounterDialogFragment.REQUEST_KEY_COUNTER
+            ) { _, bundle ->
+                val newCounter =
+                    bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
+                newCounter?.let {
+                    viewModel.addNewCounter(it)
+                }
+            }
+        }
 
         val save: View = view.findViewById(R.id.save)
         save.setOnClickListener {
@@ -88,7 +104,7 @@ class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedLi
         })
 
         viewModel.saveStatus.observe(viewLifecycleOwner, {
-            when(it) {
+            when (it) {
                 SaveProfileResult.SUCCESSFUL -> requireActivity().onBackPressed()
                 //TODO
                 SaveProfileResult.NAME_CONFLICT -> {}
@@ -97,6 +113,11 @@ class EditProfileDialogFragment: DialogFragment(), OnEditProfileCounterClickedLi
                 else -> {}
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 
     override fun onCounterSelected(id: Int, selected: Boolean) {

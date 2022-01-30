@@ -28,11 +28,10 @@ class EditProfileViewModel @Inject constructor(
     val hasEdits = originalProfile != editedProfile
     val isNameChangeEnabled = originalProfile?.deletable != false
 
-
     private var newProfileInitializedWithCounters = false
     private var loading = false
 
-    private var allCounters: Set<CounterTemplateModel>? = null
+    private var allCounters: MutableSet<CounterTemplateModel>? = null
     private var allProfiles: Set<PlayerTemplateModel>? = null
 
     private val _counterSelections: MutableLiveData<List<CounterSelectionUiModel>> =
@@ -65,7 +64,7 @@ class EditProfileViewModel @Inject constructor(
                 }
                 .collect { data ->
                     loading = false
-                    allCounters = data.first.toSet()
+                    allCounters = data.first.toMutableSet()
                     allProfiles = data.second.toSet()
                     if (isNewProfile && !newProfileInitializedWithCounters) {
                         //Set new profile to match counters in default profile
@@ -81,7 +80,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     private fun updateUi() {
-        _counterSelections.value = allCounters?.map { template ->
+        _counterSelections.value = allCounters?.sortedDescending()?.map { template ->
             CounterSelectionUiModel(
                 template,
                 editedProfile.counters.find { it.id == template.id } != null
@@ -95,6 +94,13 @@ class EditProfileViewModel @Inject constructor(
         }
         editedProfile = editedProfile.copy(name = name.trim())
         _profileName.value = editedProfile.name
+    }
+
+    fun addNewCounter(counterTemplateModel: CounterTemplateModel) {
+        allCounters?.add(counterTemplateModel)
+        editedProfile =
+            editedProfile.copy(counters = editedProfile.counters.plus(counterTemplateModel))
+        updateUi()
     }
 
     fun selectCounter(id: Int, select: Boolean) {

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:minWidth="300dp"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="0dp"
+        app:navigationIcon="@drawable/ic_close"
+        app:title="Create Counter" />
+
+    <Spinner
+        android:id="@+id/counter_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin" />
+
+    <LinearLayout
+        android:id="@+id/counter_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/input_counter_text_label"
+            android:layout_width="@dimen/edit_counter_label_column_width"
+            android:layout_height="wrap_content"
+            android:text="@string/create_counter_name_label" />
+
+        <EditText
+            android:id="@+id/input_counter_text"
+            style="@style/NameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/create_counter_text_hint"
+            android:maxLength="@integer/counter_text_max_chars" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/counter_url_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/input_counter_url_label"
+            android:layout_width="@dimen/edit_counter_label_column_width"
+            android:layout_height="wrap_content"
+            android:text="@string/create_counter_url_label" />
+
+        <EditText
+            android:id="@+id/input_counter_url"
+            style="@style/UrlEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/create_counter_url_hint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/counter_local_image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/edit_counter_horizontal_margin">
+
+        <TextView
+            android:id="@+id/input_counter_local_image_label"
+            android:layout_width="@dimen/edit_counter_label_column_width"
+            android:layout_height="wrap_content"
+            android:text="@string/create_counter_local_uri_label" />
+
+        <TextView
+            android:id="@+id/counter_local_image_uri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/starting_value_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/input_counter_starting_value_label"
+            android:layout_width="@dimen/edit_counter_label_column_width"
+            android:layout_height="wrap_content"
+            android:text="@string/counter_starting_value" />
+
+        <EditText
+            android:id="@+id/input_counter_starting_value"
+            style="@style/ValueEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/counter_preview_label"
+        style="@style/Header2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:gravity="center"
+        android:text="@string/create_counter_preview" />
+
+    <com.kenkeremath.mtgcounter.view.counter.SecondaryCounterView
+        android:id="@+id/counter_preview_view"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="@dimen/default_padding" />
+
+    <Button
+        android:id="@+id/save_button"
+        style="@style/StartGameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:text="@string/save" />
+
+</LinearLayout>

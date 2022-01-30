@@ -211,7 +211,7 @@ class GameViewModel @Inject constructor(
                         ?: availableCountersMap[playerId]?.find { availableCounter -> availableCounter.id == it }
                             ?.let { template ->
                                 newCounter = true
-                                CounterModel(template = template)
+                                CounterModel(template = template, amount = template.startingValue)
                             }
                 }
 
