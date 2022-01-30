@@ -18,6 +18,14 @@
     <string name="reset_game">Reset Game</string>
     <string name="are_you_sure_reset">Are you sure you want to reset the game?</string>
 
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="manage_profiles">Manage Profiles</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="profile_name_label">Profile Name:</string>
+    <string name="profile_counters">Included Counters</string>
+    <string name="profile_create_counter">Create Counter</string>
+
     <!-- Legacy Strings -->
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>

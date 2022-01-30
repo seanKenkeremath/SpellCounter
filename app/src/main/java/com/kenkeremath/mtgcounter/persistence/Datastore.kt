@@ -3,7 +3,6 @@ package com.kenkeremath.mtgcounter.persistence
 import com.kenkeremath.mtgcounter.model.TabletopType
 
 interface Datastore {
-    fun getNewCounterTemplateId() : Int
     fun setFirstLaunchComplete()
     var startingLife : Int
     var numberOfPlayers: Int

@@ -6,11 +6,6 @@ import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {
-    fun getAllPlayerTemplates(): Flow<List<PlayerTemplateModel>>
-    fun getAllCounters(): Flow<List<CounterTemplateModel>>
-    fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean>
-    fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Boolean>
-    fun createNewCounterTemplateId() : Int
     var startingLife : Int
     var numberOfPlayers: Int
     var keepScreenOn : Boolean

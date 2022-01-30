@@ -6,13 +6,18 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CounterTemplateModel(
-    val id: Int = 0,
+    val id: Int = ID_NOT_SET,
     val name: String? = null,
     val color: CounterColor = CounterColor.NONE,
     val symbol: CounterSymbol = CounterSymbol.NONE,
     val uri: String? = null,
-    val deletable: Boolean = false,
+    val deletable: Boolean = true,
 ): Parcelable {
+
+    companion object {
+        //Room treats 0 as not set for auto-generating primary keys
+        const val ID_NOT_SET = 0
+    }
     constructor(entity: CounterTemplateEntity) : this(
         id = entity.id,
         name = entity.name,

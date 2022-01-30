@@ -8,28 +8,28 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
+import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import com.kenkeremath.mtgcounter.view.counter.edit.RearrangeCounterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val repository: GameRepository,
+    private val gameRepository: GameRepository,
+    private val profileRepository: ProfileRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val setupPlayers = savedStateHandle.get<List<PlayerSetupModel>>(GameActivity.ARGS_SETUP_PLAYERS)
         ?: throw IllegalArgumentException("PlayerSetupModels must be passed in intent")
 
-    val startingLife = repository.startingLife
-    val tabletopType = repository.tabletopType
+    val startingLife = gameRepository.startingLife
+    val tabletopType = gameRepository.tabletopType
 
-    private var availableCounters: List<CounterTemplateModel> = listOf()
+    //Maps player ids to their available counters
+    private val availableCountersMap: MutableMap<Int, List<CounterTemplateModel>> = mutableMapOf()
 
     private val playerMap: MutableMap<Int, GamePlayerUiModel> = mutableMapOf()
 
@@ -50,47 +50,39 @@ class GameViewModel @Inject constructor(
     private val pendingCounterSelectionMap: MutableMap<Int, MutableList<Int?>> = mutableMapOf()
 
     init {
-        _keepScreenOn.value = repository.keepScreenOn
-        _hideNavigation.value = repository.hideNavigation
+        _keepScreenOn.value = gameRepository.keepScreenOn
+        _hideNavigation.value = gameRepository.hideNavigation
         initializePlayers()
     }
 
     private fun initializePlayers() {
-        viewModelScope.launch {
-            val flow = if (availableCounters.isEmpty()) repository.getAllCounters()
-            else flowOf(availableCounters)
-            flow.collect {
-                availableCounters = it
-                for (i in 0 until setupPlayers?.size) {
-                    val playerId = i
+        for (i in setupPlayers.indices) {
 
-                    val player = GamePlayerUiModel(
-                        PlayerModel(
-                            id = playerId,
-                            life = startingLife,
-                            colorResId = setupPlayers[i].colorResId ?: R.color.white,
-                        ),
-                        //TODO: option from repo
-                        pullToReveal = tabletopType != TabletopType.LIST,
-                        rearrangeButtonEnabled = false,
-                    )
-                    playerMap[i] = player
+            val player = GamePlayerUiModel(
+                PlayerModel(
+                    id = i,
+                    life = startingLife,
+                    colorResId = setupPlayers[i].colorResId ?: R.color.white,
+                ),
+                //TODO: option from repo
+                pullToReveal = tabletopType != TabletopType.LIST,
+                rearrangeButtonEnabled = false,
+            )
+            playerMap[i] = player
+            availableCountersMap[i] = setupPlayers[i].template?.counters ?: emptyList()
 
-                    /**
-                     * Make sure pending map of selection changes is in sync with whatever templates
-                     * the player starts with
-                     */
-                    pendingCounterSelectionMap[player.model.id] =
-                        player.model.counters.map { counter ->
-                            counter.template.id
-                        }.toMutableList()
+            /**
+             * Make sure pending map of selection changes is in sync with whatever templates
+             * the player starts with
+             */
+            pendingCounterSelectionMap[i] = availableCountersMap[i]?.map { counter ->
+                counter.id
+            }?.toMutableList() ?: mutableListOf()
 
-                    playerMap[i]?.counterSelections = generateSelectionUiModelsForPlayer(playerId)
-                    playerMap[i]?.rearrangeCounters = generateRearrangeUiModelsForPlayer(playerId)
-                }
-                _players.value = playerMap.values.toList()
-            }
+            playerMap[i]?.counterSelections = generateSelectionUiModelsForPlayer(i)
+            playerMap[i]?.rearrangeCounters = generateRearrangeUiModelsForPlayer(i)
         }
+        _players.value = playerMap.values.toList()
     }
 
     fun incrementPlayerLife(playerId: Int, lifeDifference: Int = 1) {
@@ -215,7 +207,7 @@ class GameViewModel @Inject constructor(
                 //The order of pendingCounterSelection will be used
                 val newCounters = pendingCounterSelection.mapNotNull {
                     uiModel.model.counters.find { oldCounter -> oldCounter.template.id == it }
-                        ?: availableCounters.find { availableCounter -> availableCounter.id == it }
+                        ?: availableCountersMap[playerId]?.find { availableCounter -> availableCounter.id == it }
                             ?.let { template ->
                                 newCounter = true
                                 CounterModel(template = template)
@@ -252,37 +244,37 @@ class GameViewModel @Inject constructor(
      */
     private fun generateSelectionUiModelsForPlayer(playerId: Int): List<CounterSelectionUiModel> {
         return playerMap[playerId]?.let { player ->
-            availableCounters.filter {
+            availableCountersMap[playerId]?.filter {
                 !(it.color.resId != null && it.color.resId == player.model.colorResId)
-            }.map {
+            }?.map {
                 CounterSelectionUiModel(
                     it,
                     pendingCounterSelectionMap[playerId]?.contains(it.id) == true
                 )
             }
-
         } ?: emptyList()
     }
 
     private fun generateRearrangeUiModelsForPlayer(playerId: Int): List<RearrangeCounterUiModel> {
         return playerMap[playerId]?.let {
             pendingCounterSelectionMap[playerId]?.mapNotNull {
-                availableCounters.find { availableCounter -> availableCounter.id == it }?.let {
-                    RearrangeCounterUiModel(
-                        it
-                    )
-                }
+                availableCountersMap[playerId]?.find { availableCounter -> availableCounter.id == it }
+                    ?.let {
+                        RearrangeCounterUiModel(
+                            it
+                        )
+                    }
             }
         } ?: emptyList()
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {
-        repository.keepScreenOn = keepScreenOn
+        gameRepository.keepScreenOn = keepScreenOn
         _keepScreenOn.value = keepScreenOn
     }
 
     fun setHideNavigation(hideNavigation: Boolean) {
-        repository.hideNavigation = hideNavigation
+        gameRepository.hideNavigation = hideNavigation
         _hideNavigation.value = hideNavigation
     }
 

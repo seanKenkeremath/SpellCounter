@@ -9,7 +9,10 @@ import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity.Comp
 data class PlayerTemplateEntity(
     @PrimaryKey
     @ColumnInfo(name = COLUMN_PLAYER_TEMPLATE_NAME)
-    val name: String = ""
+    val name: String = "",
+    //Default profiles should not be removable
+    @ColumnInfo(name = "deletable")
+    val deletable: Boolean = false
 ) {
 
     companion object {

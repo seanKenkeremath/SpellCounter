@@ -7,6 +7,7 @@ import com.kenkeremath.mtgcounter.R
  * NOTE: We are using the ordinals of this enum for the default sort order.
  * All IDs should be unique. Comment out any deprecated/removed IDs to maintain proper order/IDs
  */
+//TODO: may remove this since the colors will just be based off of opponents and are not part of templates
 enum class CounterColor(@ColorRes val resId: Int? = null, val colorId: Long) {
     NONE(colorId = CounterSymbol.DEFAULT_ID),
     PINK(colorId = 3L, resId = R.color.light_pink),

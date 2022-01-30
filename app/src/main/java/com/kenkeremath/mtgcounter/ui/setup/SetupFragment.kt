@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
+import com.kenkeremath.mtgcounter.ui.settings.SettingsFragment
 import com.kenkeremath.mtgcounter.ui.setup.tabletop.SetupTabletopFragment
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.layoutbutton.TabletopLayoutButtonAdapter
@@ -49,6 +51,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_setup, container, false)
     }
 
@@ -58,6 +61,16 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.setup_game_title)
         toolbar.setNavigationIcon(R.mipmap.ic_launcher)
+
+        //TODO:
+        val settingsButton = view.findViewById<View>(R.id.settings)
+        settingsButton.setOnClickListener {
+            val f = SettingsFragment.newInstance()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.container, f)
+                .addToBackStack(SettingsFragment.TAG)
+                .commit()
+        }
 
         playerNumberButtons = listOf(
             view.findViewById(R.id.one_player_button),
@@ -217,6 +230,11 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 
     private fun setTabletopLayoutButtonContent(

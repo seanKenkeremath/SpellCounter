@@ -3,15 +3,25 @@ package com.kenkeremath.mtgcounter.ui.setup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.counter.CounterColor
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
+import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
+import com.kenkeremath.mtgcounter.persistence.ProfileRepository
+import com.kenkeremath.mtgcounter.ui.settings.profiles.manage.ProfileUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SetupViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
+class SetupViewModel @Inject constructor(
+    private val gameRepository: GameRepository,
+    private val profilesRepository: ProfileRepository,
+) : ViewModel() {
 
     private val _startingLife = MutableLiveData<Int>()
     val startingLife: LiveData<Int> get() = _startingLife
@@ -28,6 +38,9 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
     private val _setupPlayers = MutableLiveData<List<PlayerSetupModel>>()
     val setupPlayers: LiveData<List<PlayerSetupModel>> get() = _setupPlayers
 
+    private val _profiles = MutableLiveData<List<ProfileUiModel>>()
+    val profiles: LiveData<List<ProfileUiModel>> get() = _profiles
+
     private val _tabletopTypes = MutableLiveData<List<TabletopLayoutSelectionUiModel>>()
     val tabletopTypes: LiveData<List<TabletopLayoutSelectionUiModel>> get() = _tabletopTypes
 
@@ -36,6 +49,8 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
 
     //Generate 8 unique random colors from list to use for player creation
     private val playerColors = CounterColor.randomColors(8)
+
+    private var playerTemplates: List<PlayerTemplateModel>? = null
 
     var selectedTabletopType: TabletopType = TabletopType.NONE
         private set
@@ -46,57 +61,61 @@ class SetupViewModel @Inject constructor(private val repository: GameRepository)
         )
 
     init {
-        _startingLife.value = repository.startingLife
-        setTabletopType(repository.tabletopType)
-        setNumberOfPlayers(repository.numberOfPlayers)
-        _keepScreenOn.value = repository.keepScreenOn
-        _hideNavigation.value = repository.hideNavigation
+        refresh()
     }
 
-//    //TODO: delete
-//    fun insert() = viewModelScope.launch {
-//        val player = PlayerTemplateModel(
-//            name = "Player1",
-//            counters = listOf(
-//                CounterTemplateModel(
-//                    id = repository.createNewCounterTemplateId(),
-//                    startingValue = 21,
-//                    name = "CMD",
-//                    color = 234
-//                )
-//            )
-//        )
-//        repository.insert(player)
-//    }
+    fun refresh() {
+        viewModelScope.launch {
+            profilesRepository.getAllPlayerTemplates()
+                .catch {
+                    //TODO: error handling?
+                }
+                .collect {
+                    playerTemplates = it
+                    _profiles.value = it.map { template ->
+                        ProfileUiModel(template)
+                    }
+                    _startingLife.value = gameRepository.startingLife
+                    setTabletopType(gameRepository.tabletopType)
+                    setNumberOfPlayers(gameRepository.numberOfPlayers)
+                    _keepScreenOn.value = gameRepository.keepScreenOn
+                    _hideNavigation.value = gameRepository.hideNavigation
+                }
+        }
+    }
 
     fun setNumberOfPlayers(number: Int) {
-        repository.numberOfPlayers = number
+        gameRepository.numberOfPlayers = number
         _numberOfPlayers.value = number
         val newTabletopType =
             if (availableTabletopTypes.contains(selectedTabletopType)) selectedTabletopType
             else availableTabletopTypes[0]
         setTabletopType(newTabletopType)
         _setupPlayers.value =
-            List(number) { index -> PlayerSetupModel(colorResId = playerColors[index].resId) }
+            List(number) { index ->
+                PlayerSetupModel(
+                    colorResId = playerColors[index].resId,
+                    template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT })
+            }
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {
-        repository.keepScreenOn = keepScreenOn
+        gameRepository.keepScreenOn = keepScreenOn
         _keepScreenOn.value = keepScreenOn
     }
 
     fun setHideNavigation(hideNavigation: Boolean) {
-        repository.hideNavigation = hideNavigation
+        gameRepository.hideNavigation = hideNavigation
         _hideNavigation.value = hideNavigation
     }
 
     fun setStartingLife(startingLife: Int) {
-        repository.startingLife = startingLife
+        gameRepository.startingLife = startingLife
         _startingLife.value = startingLife
     }
 
     fun setTabletopType(tabletopType: TabletopType) {
-        repository.tabletopType = tabletopType
+        gameRepository.tabletopType = tabletopType
         selectedTabletopType = tabletopType
         _showCustomizeLayoutButton.value =
             tabletopType != TabletopType.LIST && tabletopType != TabletopType.NONE

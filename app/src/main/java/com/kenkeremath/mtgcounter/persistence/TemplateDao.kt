@@ -19,11 +19,13 @@ abstract class TemplateDao {
     @Query("Select * from ${CounterTemplateEntity.TABLE_COUNTER_TEMPLATES}")
     abstract fun getCounterTemplates() : List<CounterTemplateEntity>
 
+    //Returns generated id
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(counterTemplateEntity: CounterTemplateEntity)
+    abstract suspend fun insert(counterTemplateEntity: CounterTemplateEntity): Long
 
+    //Returns generated ids
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCounters(counterTemplateEntities: List<CounterTemplateEntity>)
+    abstract suspend fun insertCounters(counterTemplateEntities: List<CounterTemplateEntity>): Array<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(pairing: PlayerCounterTemplateCrossRefEntity)

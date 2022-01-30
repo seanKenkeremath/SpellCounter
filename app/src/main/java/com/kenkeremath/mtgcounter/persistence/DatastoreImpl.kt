@@ -25,8 +25,6 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         private val KEY_PLAYER_TEMPLATES = "key_templates"
         private val KEY_GAME_TEMPLATES = "key_game_templates"
         private val KEY_THEME = "key_theme"
-        //This is a counter for counters... we are using this for Ids on new counters creating and incrementing each time
-        private val KEY_COUNTER_TEMPLATE_COUNTER = "key_counter_template_counter"
         private val KEY_STARTING_LIFE = "key_starting_life"
         private val KEY_NUMBER_PLAYERS = "key_number_Players"
         private val KEY_KEEP_SCREEN_ON = "key_keep_screen_on"
@@ -111,13 +109,6 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
 
         getEditor().putInt(KEY_DATASTORE_VERSION, DATASTORE_VERSION).apply()
     }
-
-    override fun getNewCounterTemplateId(): Int {
-        val currCounter = prefs.getInt(KEY_COUNTER_TEMPLATE_COUNTER, 1)
-        getEditor().putInt(KEY_COUNTER_TEMPLATE_COUNTER, currCounter + 1).apply()
-        return currCounter
-    }
-
 
 
     //    public ArrayList<GameTemplateModel> getGameTemplates() {

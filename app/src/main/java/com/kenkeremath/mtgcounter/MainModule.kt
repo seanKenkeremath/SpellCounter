@@ -38,7 +38,14 @@ object MainModule {
     }
 
     @Provides
-    fun providesGameRepository(database: AppDatabase, datastore: Datastore): GameRepository {
-        return GameRepositoryImpl(database, datastore)
+    @Singleton
+    fun providesGameRepository(datastore: Datastore): GameRepository {
+        return GameRepositoryImpl(datastore)
+    }
+
+    @Provides
+    @Singleton
+    fun providesProfileRepository(database: AppDatabase, datastore: Datastore): ProfileRepository {
+        return ProfileRepositoryImpl(database, datastore)
     }
 }

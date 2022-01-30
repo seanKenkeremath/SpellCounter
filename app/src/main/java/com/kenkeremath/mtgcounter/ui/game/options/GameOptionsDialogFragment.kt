@@ -49,7 +49,7 @@ class GameOptionsDialogFragment : DialogFragment(), CompoundButton.OnCheckedChan
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return LayoutInflater.from(context).inflate(R.layout.dialog_game_options, container, false)
+        return LayoutInflater.from(context).inflate(R.layout.fragment_game_options, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
