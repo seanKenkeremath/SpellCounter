@@ -72,12 +72,13 @@ class GameViewModel @Inject constructor(
             availableCountersMap[i] = setupPlayers[i].template?.counters ?: emptyList()
 
             /**
-             * Make sure pending map of selection changes is in sync with whatever templates
+             * Make sure pending map of selection changes is in sync with whatever
              * the player starts with
              */
-            pendingCounterSelectionMap[i] = availableCountersMap[i]?.map { counter ->
-                counter.id
-            }?.toMutableList() ?: mutableListOf()
+            pendingCounterSelectionMap[player.model.id] =
+                player.model.counters.map { counter ->
+                    counter.template.id
+                }.toMutableList()
 
             playerMap[i]?.counterSelections = generateSelectionUiModelsForPlayer(i)
             playerMap[i]?.rearrangeCounters = generateRearrangeUiModelsForPlayer(i)
