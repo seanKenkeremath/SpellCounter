@@ -21,7 +21,10 @@ class SecondaryCounterView @JvmOverloads constructor(
         setAmount(counterModel.amount)
         counterModel.template.uri?.let {
             if (counterModel.template.isFullArtImage) {
-                Glide.with(context).load(it).centerCrop().into(backgroundImage)
+                Glide.with(context).load(it)
+                    .error(R.drawable.image_error_placeholder)
+                    .centerCrop()
+                    .into(backgroundImage)
             } else {
                 clearBackground()
             }

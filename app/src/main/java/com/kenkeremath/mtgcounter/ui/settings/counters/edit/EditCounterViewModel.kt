@@ -6,6 +6,7 @@ import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.persistence.images.ImageRepository
+import com.kenkeremath.mtgcounter.persistence.images.ImageSource
 import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -132,7 +133,9 @@ class EditCounterViewModel @Inject constructor(
         viewModelScope.launch {
             /**
              * Save image first to generate local file path. set that as URI before saving template
-             * to database.
+             * to database. For some images (GIFs currently), we will not save locally and will just
+             * use the raw uri or url. This has the side effect that those source images could be removed.
+             * In that case, the user will receive an error and tehy will have to remake the token
              *
              * If the image fails to save, the service will automatically clean up temporary files
              */
@@ -142,12 +145,16 @@ class EditCounterViewModel @Inject constructor(
             } else if (uri.startsWith("http")) {
                 imageRepository.saveUrlImageToDisk(uri)
                     .map {
-                        _newCounterTemplate = _newCounterTemplate.copy(uri = it.absolutePath)
+                        if (it.source == ImageSource.LOCAL_FILE) {
+                            _newCounterTemplate = _newCounterTemplate.copy(uri = it.file?.absolutePath)
+                        }
                     }
             } else {
                 imageRepository.saveLocalImageToDisk(uri)
                     .map {
-                        _newCounterTemplate = _newCounterTemplate.copy(uri = it.absolutePath)
+                        if (it.source == ImageSource.LOCAL_FILE) {
+                            _newCounterTemplate = _newCounterTemplate.copy(uri = it.file?.absolutePath)
+                        }
                     }
             }
 

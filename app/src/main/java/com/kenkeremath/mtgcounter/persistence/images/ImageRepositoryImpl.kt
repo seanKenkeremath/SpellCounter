@@ -11,10 +11,7 @@ import com.kenkeremath.mtgcounter.persistence.images.ImageUtils.IMAGE_COMPRESS_T
 import com.kenkeremath.mtgcounter.persistence.images.ImageUtils.IMAGE_RAW_LIMIT
 import com.kenkeremath.mtgcounter.persistence.images.ImageUtils.imagesDir
 import com.kenkeremath.mtgcounter.util.LogUtils
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import okio.*
 import java.io.File
@@ -37,13 +34,18 @@ class ImageRepositoryImpl(
         return f
     }
 
-    override fun saveUrlImageToDisk(url: String): Flow<File> {
+    override fun saveUrlImageToDisk(url: String): Flow<ImageSaveResult> {
+        if (url.lowercase().endsWith("gif")) {
+            //Do not save gifs locally
+            LogUtils.d("using raw url for gif $url", LogUtils.TAG_IMAGES)
+            return flowOf(ImageSaveResult(source = ImageSource.RAW_URI))
+        }
         LogUtils.d("saving image url $url", LogUtils.TAG_IMAGES)
         val imageDir = generateImageDir()
         val targetFile = File(imageDir, "image")
         return flow {
             downloadImageToFile(targetFile, url)
-            emit(targetFile)
+            emit(ImageSaveResult(targetFile, ImageSource.LOCAL_FILE))
         }
             .catch { e ->
                 LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
@@ -56,10 +58,10 @@ class ImageRepositoryImpl(
     private suspend fun downloadImageToFile(outputFile: File, url: String) =
         withContext(dispatcherProvider.io()) {
             val inputStream = imageApi.downloadFileFromUrl(url).byteStream()
-            downloadBitmapToFile(outputFile, inputStream)
+            downloadImageToFile(outputFile, inputStream)
         }
 
-    private suspend fun downloadBitmapToFile(outputFile: File, inputStream: InputStream) =
+    private suspend fun downloadImageToFile(outputFile: File, inputStream: InputStream) =
         withContext(dispatcherProvider.io()) {
             val bitmapFactoryOptions = BitmapFactory.Options()
             val bitmap =
@@ -79,7 +81,7 @@ class ImageRepositoryImpl(
                 outStream.use {
                     val size = bitmap.byteCount
                     if (size > IMAGE_RAW_LIMIT) {
-                        LogUtils.d("Bitmap too large to compress", LogUtils.TAG_IMAGES)
+                        LogUtils.d("Bitmap too large to compress. Should not store locally", LogUtils.TAG_IMAGES)
                         throw ImageTooLargeException()
                     } else {
                         val quality = if (size < IMAGE_COMPRESS_THRESHOLD)
@@ -106,15 +108,20 @@ class ImageRepositoryImpl(
             } ?: throw ImageSaveFailedException()
         }
 
-    override fun saveLocalImageToDisk(uri: String): Flow<File> {
+    override fun saveLocalImageToDisk(uri: String): Flow<ImageSaveResult> {
+        if (uri.lowercase().endsWith("gif")) {
+            //Do not save gifs locally
+            LogUtils.d("using raw uri for gif $uri", LogUtils.TAG_IMAGES)
+            return flowOf(ImageSaveResult(source = ImageSource.RAW_URI))
+        }
         LogUtils.d("saving local image $uri", LogUtils.TAG_IMAGES)
         val imageDir = generateImageDir()
         val targetFile = File(imageDir, "image")
         return flow {
             val stream: InputStream? = appContext.contentResolver.openInputStream(Uri.parse(uri))
             stream?.let {
-                downloadBitmapToFile(targetFile, stream)
-                emit(targetFile)
+                downloadImageToFile(targetFile, stream)
+                emit(ImageSaveResult(targetFile, ImageSource.LOCAL_FILE))
             } ?: throw ImageSaveFailedException()
         }
             .catch { e ->
