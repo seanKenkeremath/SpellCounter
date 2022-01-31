@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kenkeremath.mtgcounter">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".SpellCounterApplication"
         android:allowBackup="false"

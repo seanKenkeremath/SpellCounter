@@ -23,6 +23,8 @@ data class CounterTemplateEntity(
     val startingValue: Int = 0,
     @ColumnInfo(name = "uri")
     val uri: String? = null,
+    @ColumnInfo(name = "full_art")
+    val isFullArtImage: Boolean = false,
     @ColumnInfo(name = "date_added")
     val dateAdded: Long = 0L,
     @ColumnInfo(name = "link_to_player")
@@ -38,6 +40,7 @@ data class CounterTemplateEntity(
         colorId = counterTemplateModel.color.colorId,
         symbolId = counterTemplateModel.symbol.symbolId,
         uri = counterTemplateModel.uri,
+        isFullArtImage = counterTemplateModel.isFullArtImage,
         startingValue = counterTemplateModel.startingValue,
         dateAdded = counterTemplateModel.dateAdded?.time ?: 0,
         deletable = counterTemplateModel.deletable,

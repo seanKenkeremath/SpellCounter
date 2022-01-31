@@ -12,6 +12,7 @@ data class CounterTemplateModel(
     val color: CounterColor = CounterColor.NONE,
     val symbol: CounterSymbol = CounterSymbol.NONE,
     val uri: String? = null,
+    val isFullArtImage: Boolean = false,
     val startingValue: Int = 0,
     val dateAdded: Date? = null,
     val deletable: Boolean = true,
@@ -27,6 +28,7 @@ data class CounterTemplateModel(
         color = CounterColor.values().find { it.colorId == entity.colorId } ?: CounterColor.NONE,
         symbol = CounterSymbol.values().find { it.symbolId == entity.symbolId } ?: CounterSymbol.NONE,
         uri = entity.uri,
+        isFullArtImage= entity.isFullArtImage,
         startingValue = entity.startingValue,
         dateAdded = Date(entity.dateAdded),
         deletable = entity.deletable

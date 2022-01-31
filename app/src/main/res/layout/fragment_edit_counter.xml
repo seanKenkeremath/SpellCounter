@@ -93,6 +93,29 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/counter_full_art_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/edit_counter_horizontal_margin">
+
+        <TextView
+            android:id="@+id/full_art_label"
+            android:layout_width="@dimen/edit_counter_label_column_width"
+            android:layout_height="wrap_content"
+            android:text="@string/create_counter_full_art_label" />
+
+        <CheckBox
+            android:id="@+id/full_art_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/starting_value_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

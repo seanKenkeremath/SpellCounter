@@ -49,6 +49,11 @@ class EditProfileRecyclerAdapter(private val clickListener: OnEditProfileCounter
     override fun getItemCount(): Int {
         return counters.size
     }
+
+    override fun onViewRecycled(holder: EditProfileCounterViewHolder) {
+        super.onViewRecycled(holder)
+        holder.counterIconView.clearImage()
+    }
 }
 
 class EditProfileCounterViewHolder(
@@ -56,7 +61,7 @@ class EditProfileCounterViewHolder(
     private val clickListener: OnEditProfileCounterClickedListener,
 ) : RecyclerView.ViewHolder(itemView), CompoundButton.OnCheckedChangeListener {
 
-    private val counterIconView = itemView.findViewById<CounterIconView>(R.id.counter_icon_view)
+    val counterIconView = itemView.findViewById<CounterIconView>(R.id.counter_icon_view)
     private val counterCheckbox = itemView.findViewById<CheckBox>(R.id.counter_checkbox)
 
     private var counterId: Int = -1
@@ -69,7 +74,7 @@ class EditProfileCounterViewHolder(
 
     fun bind(model: CounterSelectionUiModel) {
         this.counterId = model.template.id
-        counterIconView.setContent(model.template)
+        counterIconView.setContent(model.template, renderFullArt = true)
         itemView.isSelected = model.selected
 
         //Remove listener before setting to avoid loop

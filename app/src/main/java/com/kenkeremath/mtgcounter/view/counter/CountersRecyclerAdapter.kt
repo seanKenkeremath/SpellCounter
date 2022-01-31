@@ -141,6 +141,13 @@ class CountersRecyclerAdapter(
         super.onDetachedFromRecyclerView(recyclerView)
         this.recyclerView = null
     }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is CounterViewHolder) {
+            holder.counterView.clearBackground()
+        }
+    }
 }
 
 class LifeViewHolder(
@@ -179,7 +186,7 @@ class CounterViewHolder(
     itemView: View,
     onPlayerUpdatedListener: OnPlayerUpdatedListener
 ) : RecyclerView.ViewHolder(itemView) {
-    private var counterView = itemView.findViewById<SecondaryCounterView>(R.id.counter)
+    val counterView = itemView.findViewById<SecondaryCounterView>(R.id.counter)
 
     private var playerId: Int = -1
     private var counterId: Int = -1

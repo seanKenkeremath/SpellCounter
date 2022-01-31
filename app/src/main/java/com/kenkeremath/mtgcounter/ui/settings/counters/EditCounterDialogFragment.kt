@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.ui.settings.counters
 
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.DialogFragment
@@ -39,6 +42,10 @@ class EditCounterDialogFragment : DialogFragment() {
 
     private var _binding: FragmentEditCounterBinding? = null
     private val binding get() = _binding!!
+
+    private val getImageFileHandler = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        viewModel.updateLocalUri(uri?.toString() ?: "")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,6 +119,18 @@ class EditCounterDialogFragment : DialogFragment() {
         binding.inputCounterText.addTextChangedListener(textChangedListener)
         binding.inputCounterStartingValue.addTextChangedListener(startingValueChangedListener)
 
+        binding.counterLocalImageContainer.setOnClickListener {
+            getImageFileHandler.launch("image/*")
+        }
+
+        val fullArtCheckChangedListener =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                viewModel.setIsFullArtImage(
+                    isChecked
+                )
+            }
+        binding.fullArtCheckbox.setOnCheckedChangeListener(fullArtCheckChangedListener)
+
         binding.saveButton.setOnClickListener {
             viewModel.save()
         }
@@ -176,6 +195,12 @@ class EditCounterDialogFragment : DialogFragment() {
             }
         })
 
+        viewModel.isFullArtImage.observe(viewLifecycleOwner, {
+            //Remove listener to prevent loop
+            binding.fullArtCheckbox.setOnCheckedChangeListener(null)
+            binding.fullArtCheckbox.isChecked = it
+            binding.fullArtCheckbox.setOnCheckedChangeListener(fullArtCheckChangedListener)
+        })
 
         viewModel.counterPreview.observe(viewLifecycleOwner, {
             if (it == null) {

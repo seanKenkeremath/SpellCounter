@@ -37,6 +37,7 @@
     <string name="create_counter_url_hint">https://</string>
     <string name="create_counter_local_uri_label">Local Image:</string>
     <string name="create_counter_local_uri_hint">No File Selected</string>
+    <string name="create_counter_full_art_label">Full Art Background:</string>
 
     <!-- Legacy Strings -->
     <string name="cancel">Cancel</string>

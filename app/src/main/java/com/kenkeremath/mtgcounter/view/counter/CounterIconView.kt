@@ -13,6 +13,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
+import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 
@@ -49,10 +50,15 @@ class CounterIconView @JvmOverloads constructor(
         }
     }
 
-    fun setContent(templateModel: CounterTemplateModel) {
+    /**
+     * drawFullArt specifices whether this view should handle rendering counters marked as full art.
+     * In most situations, they will be roundered as the background outside of this view
+     */
+    fun setContent(templateModel: CounterTemplateModel, renderFullArt: Boolean = false) {
+        label.visibility = View.GONE
+        image.visibility = View.GONE
         if (templateModel.symbol.resId == null) {
             if (templateModel.color.resId != null) {
-                label.visibility = View.GONE
                 image.visibility = View.VISIBLE
                 image.setImageResource(R.drawable.ic_circle)
                 image.imageTintList = ColorStateList.valueOf(
@@ -60,15 +66,21 @@ class CounterIconView @JvmOverloads constructor(
                 )
             } else if (templateModel.name != null) {
                 label.visibility = View.VISIBLE
-                image.visibility = View.GONE
                 label.text = templateModel.name
-            } else {
-                label.visibility = View.GONE
-                image.visibility = View.GONE
+            } else if (templateModel.isFullArtImage && !renderFullArt) {
+                //Image may be rendered outside of this view
+            } else if (templateModel.uri != null) {
+                image.visibility = View.VISIBLE
+                Glide.with(context).load(templateModel.uri).fitCenter().into(image)
             }
         } else {
             setIconDrawable(templateModel.symbol.resId, templateModel.color.resId)
         }
+    }
+
+    fun clearImage() {
+        Glide.with(context).clear(image)
+        image.setImageDrawable(null)
     }
 
     fun setIconDrawable(@DrawableRes drawableResId: Int, @ColorRes tintResId: Int? = null) {

@@ -8,16 +8,20 @@ import com.kenkeremath.mtgcounter.livedata.SingleLiveEvent
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
+import com.kenkeremath.mtgcounter.persistence.images.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+@FlowPreview
 @HiltViewModel
-class EditCounterViewModel @Inject constructor(private val profileRepository: ProfileRepository) :
-    ViewModel() {
+class EditCounterViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository,
+    private val imageRepository: ImageRepository,
+) : ViewModel() {
 
     //TODO: edit existing?
 
@@ -38,6 +42,9 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
 
     private val _counterImageUri: MutableLiveData<String> = MutableLiveData<String>("")
     val counterImageUri: LiveData<String> = _counterImageUri
+
+    private val _isFullArtImage: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    val isFullArtImage: LiveData<Boolean> = _isFullArtImage
 
     private val _startingValue: MutableLiveData<Int> = MutableLiveData<Int>(0)
     val startingValue: LiveData<Int> = _startingValue
@@ -70,6 +77,11 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
         updateTemplate()
     }
 
+    fun setIsFullArtImage(fullArt: Boolean) {
+        _isFullArtImage.value = fullArt
+        updateTemplate()
+    }
+
     fun updateStartingValue(startingValue: String) {
         val parsedValue = try {
             Integer.parseInt(startingValue)
@@ -87,6 +99,7 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
                     name = _counterLabel.value,
                     uri = null,
                     startingValue = _startingValue.value ?: 0,
+                    isFullArtImage = _isFullArtImage.value == true,
                 )
             }
             CreateCounterType.IMAGE -> {
@@ -95,6 +108,7 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
                         name = null,
                         uri = _counterImageUri.value,
                         startingValue = _startingValue.value ?: 0,
+                        isFullArtImage = _isFullArtImage.value == true,
                     )
             }
             CreateCounterType.URL -> {
@@ -102,6 +116,7 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
                     name = null,
                     uri = _counterUrl.value,
                     startingValue = _startingValue.value ?: 0,
+                    isFullArtImage = _isFullArtImage.value == true,
                 )
             }
             null -> {}
@@ -116,12 +131,43 @@ class EditCounterViewModel @Inject constructor(private val profileRepository: Pr
     fun save() {
         viewModelScope.launch {
             profileRepository.addCounterTemplate(_newCounterTemplate)
+                .flatMapConcat { id ->
+                    _newCounterTemplate = _newCounterTemplate.copy(id = id)
+                    imageRepository.deleteImagesForCounter(_newCounterTemplate.id)
+                    val uri = _newCounterTemplate.uri
+                    val flow = if (uri == null) {
+                        flowOf(true)
+                    } else if (uri.startsWith("http")) {
+                        imageRepository.saveUrlImageToDisk(id, uri)
+                            .map {
+                                it?.let {
+                                    _newCounterTemplate =
+                                        _newCounterTemplate.copy(uri = it.absolutePath)
+                                    true
+                                } ?: false
+                            }
+                    } else {
+                        imageRepository.saveLocalImageToDisk(id, uri)
+                            .map {
+                                it?.let {
+                                    _newCounterTemplate =
+                                        _newCounterTemplate.copy(uri = it.absolutePath)
+                                    true
+                                } ?: false
+                            }
+                    }
+                    flow
+                }
                 .catch {
                     //TODO
+                    _saveStatus.value = SaveCounterResult.IMAGE_SAVE_FAILED
                 }
-                .collect { generatedId ->
-                    _newCounterTemplate = _newCounterTemplate.copy(id = generatedId)
-                    _saveStatus.value = SaveCounterResult.SUCCESSFUL
+                .collect { result ->
+                    if (result) {
+                        _saveStatus.value = SaveCounterResult.SUCCESSFUL
+                    } else {
+                        _saveStatus.value = SaveCounterResult.GENERIC_ERROR
+                    }
                 }
         }
     }

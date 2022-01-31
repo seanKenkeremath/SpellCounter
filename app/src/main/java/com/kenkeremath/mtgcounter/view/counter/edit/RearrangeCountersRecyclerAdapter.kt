@@ -93,7 +93,7 @@ class RearrangeCounterViewHolder(itemView: View, onStartDragListener: OnStartDra
     }
 
     fun bind(uiModel: RearrangeCounterUiModel) {
-        counterIconView.setContent(uiModel.templateModel)
+        counterIconView.setContent(uiModel.templateModel, renderFullArt = true)
     }
 
     override fun onItemSelected() {

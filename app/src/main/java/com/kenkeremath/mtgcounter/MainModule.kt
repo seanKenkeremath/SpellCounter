@@ -3,12 +3,16 @@ package com.kenkeremath.mtgcounter
 import android.content.Context
 import androidx.room.Room
 import com.kenkeremath.mtgcounter.persistence.*
+import com.kenkeremath.mtgcounter.persistence.images.ImageApi
+import com.kenkeremath.mtgcounter.persistence.images.ImageRepository
+import com.kenkeremath.mtgcounter.persistence.images.ImageRepositoryImpl
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -39,6 +43,15 @@ object MainModule {
 
     @Provides
     @Singleton
+    fun provideImageApi(): ImageApi {
+        return Retrofit.Builder()
+            .baseUrl("https://www.google.com") //using dynamic urls. Need a dummy base url
+            .build()
+            .create(ImageApi::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun providesGameRepository(datastore: Datastore): GameRepository {
         return GameRepositoryImpl(datastore)
     }
@@ -47,5 +60,14 @@ object MainModule {
     @Singleton
     fun providesProfileRepository(database: AppDatabase, datastore: Datastore): ProfileRepository {
         return ProfileRepositoryImpl(database, datastore)
+    }
+
+    @Provides
+    @Singleton
+    fun providesImageRepository(
+        @ApplicationContext appContext: Context,
+        imageApi: ImageApi,
+    ): ImageRepository {
+        return ImageRepositoryImpl(appContext, imageApi)
     }
 }

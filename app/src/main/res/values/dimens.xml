@@ -47,8 +47,12 @@
     <dimen name="counter_label_max_text_size">100sp</dimen>
 
     <!-- Edit Counter -->
-    <dimen name="edit_counter_section_spacing">32dp</dimen>
+    <dimen name="edit_counter_section_spacing">16dp</dimen>
     <dimen name="edit_counter_horizontal_margin">16dp</dimen>
+
+    <!-- Edit Player -->
+    <dimen name="edit_player_label_column_width">100dp</dimen>
+    <dimen name="edit_player_counter_icon_size">60dp</dimen>
 
     <!-- Edit Counter (Legacy) -->
     <dimen name="color_picker_width">200dp</dimen>
@@ -63,9 +67,6 @@
     <dimen name="edit_counter_header_small_padding">4sp</dimen>
     <dimen name="edit_counter_header_large_padding">8sp</dimen>
     <dimen name="rearrange_counter_item_width">80dp</dimen>
-
-    <!-- Edit Player -->
-    <dimen name="edit_player_label_column_width">100dp</dimen>
 
     <!-- Manage Templates-->
     <dimen name="default_indicator_width">64dp</dimen>

@@ -46,6 +46,11 @@ class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuList
     override fun getItemCount(): Int {
         return counters.size
     }
+
+    override fun onViewRecycled(holder: CounterSelectionViewHolder) {
+        super.onViewRecycled(holder)
+        holder.iconView.clearImage()
+    }
 }
 
 class CounterSelectionViewHolder(
@@ -73,7 +78,7 @@ class CounterSelectionViewHolder(
         this.templateId = model.template.id
         this.playerId = playerId
 
-        iconView.setContent(model.template)
+        iconView.setContent(model.template, renderFullArt = true)
 
         itemView.isSelected = selected
         if (selected) {
