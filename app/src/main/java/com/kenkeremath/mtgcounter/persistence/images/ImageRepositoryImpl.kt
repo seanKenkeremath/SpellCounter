@@ -20,6 +20,7 @@ import okio.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.util.*
 
 class ImageRepositoryImpl(
     private val appContext: Context,
@@ -28,17 +29,17 @@ class ImageRepositoryImpl(
 
 ) :
     ImageRepository {
-    private fun getImageDirForCounter(counterId: Int): File {
-        val f = File(appContext.imagesDir, "$counterId")
+    private fun generateImageDir(): File {
+        val f = File(appContext.imagesDir, "${UUID.randomUUID()}")
         if (!f.exists()) {
             f.mkdirs()
         }
         return f
     }
 
-    override fun saveUrlImageToDisk(counterId: Int, url: String): Flow<File?> {
-        LogUtils.d("saving url $url for counterId: $counterId", LogUtils.TAG_IMAGES)
-        val imageDir = getImageDirForCounter(counterId)
+    override fun saveUrlImageToDisk(url: String): Flow<File> {
+        LogUtils.d("saving image url $url", LogUtils.TAG_IMAGES)
+        val imageDir = generateImageDir()
         val targetFile = File(imageDir, "image")
         return flow {
             downloadImageToFile(targetFile, url)
@@ -46,6 +47,7 @@ class ImageRepositoryImpl(
         }
             .catch { e ->
                 LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
+                deleteFile(imageDir.absolutePath)
                 throw ImageSaveFailedException()
             }
             .flowOn(dispatcherProvider.io())
@@ -57,7 +59,7 @@ class ImageRepositoryImpl(
             downloadBitmapToFile(outputFile, inputStream)
         }
 
-    private suspend fun downloadBitmapToFile(outputFile: File, inputStream: InputStream): Boolean =
+    private suspend fun downloadBitmapToFile(outputFile: File, inputStream: InputStream) =
         withContext(dispatcherProvider.io()) {
             val bitmapFactoryOptions = BitmapFactory.Options()
             val bitmap =
@@ -101,33 +103,30 @@ class ImageRepositoryImpl(
                         )
                     }
                 }
-                true
             } ?: throw ImageSaveFailedException()
         }
 
-    override fun saveLocalImageToDisk(counterId: Int, uri: String): Flow<File?> {
-        LogUtils.d("saving local image $uri for counterId: $counterId", LogUtils.TAG_IMAGES)
-        val imageDir = getImageDirForCounter(counterId)
+    override fun saveLocalImageToDisk(uri: String): Flow<File> {
+        LogUtils.d("saving local image $uri", LogUtils.TAG_IMAGES)
+        val imageDir = generateImageDir()
         val targetFile = File(imageDir, "image")
         return flow {
             val stream: InputStream? = appContext.contentResolver.openInputStream(Uri.parse(uri))
             stream?.let {
-                if (downloadBitmapToFile(targetFile, stream)) {
-                    emit(targetFile)
-                } else {
-                    emit(null)
-                }
-            } ?: emit(null)
+                downloadBitmapToFile(targetFile, stream)
+                emit(targetFile)
+            } ?: throw ImageSaveFailedException()
         }
             .catch { e ->
                 LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
+                deleteFile(imageDir.absolutePath)
                 throw ImageSaveFailedException()
             }
             .flowOn(dispatcherProvider.io())
     }
 
-    override fun deleteImagesForCounter(counterId: Int): Boolean {
-        val dir = getImageDirForCounter(counterId)
+    override fun deleteFile(path: String): Boolean {
+        val dir = File(path)
         if (dir.exists()) {
             return dir.deleteRecursively()
         }

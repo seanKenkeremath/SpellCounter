@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
-import com.kenkeremath.mtgcounter.ui.settings.counters.EditCounterDialogFragment
+import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +63,7 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
 
         val createCounter: View = view.findViewById(R.id.create_counter)
         createCounter.setOnClickListener {
-            val f = EditCounterDialogFragment.newInstance()
+            val f = EditCounterDialogFragment.newInstance(viewModel.originalProfileName)
             f.show(childFragmentManager, EditCounterDialogFragment.TAG)
             f.setFragmentResultListener(
                 EditCounterDialogFragment.REQUEST_KEY_COUNTER

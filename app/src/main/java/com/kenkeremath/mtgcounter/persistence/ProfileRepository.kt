@@ -10,8 +10,10 @@ interface ProfileRepository {
     fun getAllCounters(): Flow<List<CounterTemplateModel>>
     fun getAllCountersForProfile(profileName: String): Flow<List<CounterTemplateModel>>
     fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean>
-    fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int>
     fun deletePlayerTemplate(profileName: String): Flow<Boolean>
+    fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int>
+    fun addCounterTemplateToProfile(counterTemplate: CounterTemplateModel, profileName: String): Flow<Int>
+    fun deleteCounterTemplate(counterId: Int): Flow<Boolean>
     fun createStockTemplates(): Flow<Boolean>
     fun preloadCache(): Flow<Boolean>
 }

@@ -8,12 +8,10 @@ import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 
-@FlowPreview
 class ProfileRepositoryImpl @Inject constructor(
     private val database: AppDatabase,
     private val datastore: Datastore,
@@ -83,7 +81,7 @@ class ProfileRepositoryImpl @Inject constructor(
         database.templateDao().replacePlayerTemplate(playerEntity)
         for (counterTemplate in playerTemplate.counters) {
             val counterId =
-                addCounterTemplateInternal(counterTemplate, deletable = playerTemplate.deletable)
+                addCounterTemplateInternal(counterTemplate)
             database.templateDao().insert(
                 PlayerCounterTemplateCrossRefEntity(
                     playerTemplateId = playerEntity.name,
@@ -105,33 +103,71 @@ class ProfileRepositoryImpl @Inject constructor(
             .flowOn(dispatcherProvider.default())
     }
 
+    override fun addCounterTemplateToProfile(
+        counterTemplate: CounterTemplateModel,
+        profileName: String
+    ): Flow<Int> {
+        invalidateCache()
+        return flow {
+            val id = addCounterTemplateInternal(counterTemplate)
+            database.templateDao().insert(
+                PlayerCounterTemplateCrossRefEntity(
+                    playerTemplateId = profileName,
+                    counterTemplateId = id
+                )
+            )
+            emit(id)
+        }
+            .flatMapConcat { counterId ->
+                preloadCache().map { counterId }
+            }
+            .flowOn(dispatcherProvider.default())
+    }
+
+    override fun deleteCounterTemplate(counterId: Int): Flow<Boolean> {
+        invalidateCache()
+        return flow {
+            database.templateDao().deleteCounterTemplate(counterId)
+            emit(true)
+        }
+            .flatMapConcat { counterId ->
+                preloadCache().map { counterId }
+            }
+            .flowOn(dispatcherProvider.default())
+    }
+
     override fun deletePlayerTemplate(profileName: String): Flow<Boolean> {
         invalidateCache()
         return flow {
-            database.templateDao().deletePlayerCounterCrossRefsForPlayerTemplate(profileName)
             database.templateDao().deletePlayerTemplate(profileName)
             emit(true)
         }
+            .flowOn(dispatcherProvider.default())
     }
 
     private suspend fun addCounterTemplateInternal(
-        counterTemplate: CounterTemplateModel,
-        deletable: Boolean = true
+        counterTemplate: CounterTemplateModel
     ): Int {
         return database.templateDao().insert(
-            CounterTemplateEntity(counterTemplate.copy(deletable = deletable))
+            CounterTemplateEntity(counterTemplate)
         ).toInt()
     }
 
     override fun createStockTemplates(): Flow<Boolean> {
         val stockCounterTemplates = mutableListOf<CounterTemplateModel>()
         for (counterSymbol in CounterSymbol.values().filter { it.resId != null }) {
-            stockCounterTemplates.add(CounterTemplateModel(symbol = counterSymbol))
+            stockCounterTemplates.add(
+                CounterTemplateModel(
+                    symbol = counterSymbol,
+                    deletable = false
+                )
+            )
         }
-        stockCounterTemplates.add(CounterTemplateModel(name = "XP"))
-//        for (stockColor in CounterColor.allColors()) {
+        //        for (stockColor in CounterColor.allColors()) {
 //            stockCounterTemplates.add(CounterTemplateModel(color = stockColor))
 //        }
+        //This one is deletable
+        stockCounterTemplates.add(CounterTemplateModel(name = "XP"))
         val stockPlayerProfile = PlayerTemplateModel(
             name = PlayerTemplateModel.NAME_DEFAULT,
             counters = stockCounterTemplates,

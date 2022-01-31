@@ -22,9 +22,10 @@
     <string name="settings">Settings</string>
     <string name="manage_profiles">Manage Profiles</string>
     <string name="create_profile">Create Profile</string>
+    <string name="manage_counters">Custom Counters</string>
     <string name="profile_name_label">Profile Name:</string>
     <string name="profile_counters">Included Counters</string>
-    <string name="profile_create_counter">Create Counter</string>
+    <string name="create_counter">Create Counter</string>
 
     <string name="create_counter_type_label">Counter Type</string>
     <string name="create_counter_preview">Preview</string>

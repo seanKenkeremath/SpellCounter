@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.ui.settings.counters
+package com.kenkeremath.mtgcounter.ui.settings.counters.edit
 
 import com.kenkeremath.mtgcounter.R
 

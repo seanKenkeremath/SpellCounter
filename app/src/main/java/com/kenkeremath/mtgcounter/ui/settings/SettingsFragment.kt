@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.ui.settings.counters.manage.ManageCountersFragment
 import com.kenkeremath.mtgcounter.ui.settings.profiles.manage.ManageProfilesFragment
 
 class SettingsFragment: Fragment() {
@@ -29,11 +30,19 @@ class SettingsFragment: Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val manageProfiles: View = view.findViewById(R.id.manage_profiles)
+        val manageCounters: View = view.findViewById(R.id.manage_counters)
         manageProfiles.setOnClickListener {
             val f = ManageProfilesFragment.newInstance()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.container, f)
                 .addToBackStack(ManageProfilesFragment.TAG)
+                .commit()
+        }
+        manageCounters.setOnClickListener {
+            val f = ManageCountersFragment.newInstance()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.container, f)
+                .addToBackStack(ManageCountersFragment.TAG)
                 .commit()
         }
         return view

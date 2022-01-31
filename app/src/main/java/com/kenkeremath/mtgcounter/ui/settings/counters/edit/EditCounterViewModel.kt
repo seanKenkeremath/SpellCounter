@@ -1,27 +1,27 @@
-package com.kenkeremath.mtgcounter.ui.settings.counters
+package com.kenkeremath.mtgcounter.ui.settings.counters.edit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.kenkeremath.mtgcounter.livedata.SingleLiveEvent
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.persistence.images.ImageRepository
+import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-@FlowPreview
 @HiltViewModel
 class EditCounterViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val imageRepository: ImageRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    private val profileToLink: String? =
+        savedStateHandle.get(EditCounterDialogFragment.ARGS_PROFILE_NAME)
 
     //TODO: edit existing?
 
@@ -130,44 +130,44 @@ class EditCounterViewModel @Inject constructor(
 
     fun save() {
         viewModelScope.launch {
-            profileRepository.addCounterTemplate(_newCounterTemplate)
-                .flatMapConcat { id ->
-                    _newCounterTemplate = _newCounterTemplate.copy(id = id)
-                    imageRepository.deleteImagesForCounter(_newCounterTemplate.id)
-                    val uri = _newCounterTemplate.uri
-                    val flow = if (uri == null) {
-                        flowOf(true)
-                    } else if (uri.startsWith("http")) {
-                        imageRepository.saveUrlImageToDisk(id, uri)
-                            .map {
-                                it?.let {
-                                    _newCounterTemplate =
-                                        _newCounterTemplate.copy(uri = it.absolutePath)
-                                    true
-                                } ?: false
-                            }
-                    } else {
-                        imageRepository.saveLocalImageToDisk(id, uri)
-                            .map {
-                                it?.let {
-                                    _newCounterTemplate =
-                                        _newCounterTemplate.copy(uri = it.absolutePath)
-                                    true
-                                } ?: false
-                            }
+            /**
+             * Save image first to generate local file path. set that as URI before saving template
+             * to database.
+             *
+             * If the image fails to save, the service will automatically clean up temporary files
+             */
+            val uri = _newCounterTemplate.uri
+            val saveImageFlow = if (uri == null) {
+                flowOf(true)
+            } else if (uri.startsWith("http")) {
+                imageRepository.saveUrlImageToDisk(uri)
+                    .map {
+                        _newCounterTemplate = _newCounterTemplate.copy(uri = it.absolutePath)
                     }
-                    flow
+            } else {
+                imageRepository.saveLocalImageToDisk(uri)
+                    .map {
+                        _newCounterTemplate = _newCounterTemplate.copy(uri = it.absolutePath)
+                    }
+            }
+
+            saveImageFlow.flatMapConcat {
+                if (profileToLink != null) {
+                    profileRepository.addCounterTemplateToProfile(
+                        _newCounterTemplate,
+                        profileToLink
+                    )
+                } else {
+                    profileRepository.addCounterTemplate(_newCounterTemplate)
                 }
+            }
                 .catch {
-                    //TODO
+                    LogUtils.d("Failed to save counter")
                     _saveStatus.value = SaveCounterResult.IMAGE_SAVE_FAILED
                 }
-                .collect { result ->
-                    if (result) {
-                        _saveStatus.value = SaveCounterResult.SUCCESSFUL
-                    } else {
-                        _saveStatus.value = SaveCounterResult.GENERIC_ERROR
-                    }
+                .collect {
+                    LogUtils.d("Counter successfully saved: ${_newCounterTemplate.id}")
+                    _saveStatus.value = SaveCounterResult.SUCCESSFUL
                 }
         }
     }

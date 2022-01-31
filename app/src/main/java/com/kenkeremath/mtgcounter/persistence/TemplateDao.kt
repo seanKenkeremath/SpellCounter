@@ -39,10 +39,19 @@ abstract class TemplateDao {
     @Query("DELETE FROM ${PlayerTemplateEntity.TABLE_PLAYER_TEMPLATES} WHERE ${PlayerTemplateEntity.COLUMN_PLAYER_TEMPLATE_NAME} = :playerTemplateName")
     abstract suspend fun deletePlayerTemplateFromPlayerTable(playerTemplateName: String)
 
+    @Query("DELETE FROM ${CounterTemplateEntity.TABLE_COUNTER_TEMPLATES} WHERE ${CounterTemplateEntity.COLUMN_COUNTER_TEMPLATE_ID} = :counterTemplateId")
+    abstract suspend fun deleteCounterTemplateFromCounterTable(counterTemplateId: Int)
+
     @Transaction
     open suspend fun deletePlayerTemplate(playerTemplateName: String) {
         deletePlayerTemplateFromPlayerTable(playerTemplateName)
         deletePlayerCounterCrossRefsForPlayerTemplate(playerTemplateName)
+    }
+
+    @Transaction
+    open suspend fun deleteCounterTemplate(counterTemplateId: Int) {
+        deleteCounterTemplateFromCounterTable(counterTemplateId)
+        deletePlayerCounterCrossRefsForCounter(counterTemplateId)
     }
 
     @Transaction

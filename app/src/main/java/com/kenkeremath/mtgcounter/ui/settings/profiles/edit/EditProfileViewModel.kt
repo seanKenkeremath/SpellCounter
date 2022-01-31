@@ -24,6 +24,9 @@ class EditProfileViewModel @Inject constructor(
         savedStateHandle.get<PlayerTemplateModel>(EditProfileDialogFragment.ARGS_PROFILE)
     private var editedProfile = originalProfile ?: PlayerTemplateModel()
 
+    val originalProfileName
+        get() = originalProfile?.name
+
     val isNewProfile = originalProfile == null
     val hasEdits = originalProfile != editedProfile
     val isNameChangeEnabled = originalProfile?.deletable != false

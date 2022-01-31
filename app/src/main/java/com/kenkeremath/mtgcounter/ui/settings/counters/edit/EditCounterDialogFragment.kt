@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.ui.settings.counters
+package com.kenkeremath.mtgcounter.ui.settings.counters.edit
 
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -26,13 +26,16 @@ class EditCounterDialogFragment : DialogFragment() {
 
     companion object {
         //TODO: pass existing template to edit?
-        fun newInstance(): EditCounterDialogFragment {
+        fun newInstance(profileName: String? = null): EditCounterDialogFragment {
             val args = Bundle()
+            args.putString(ARGS_PROFILE_NAME, profileName)
             val fragment = EditCounterDialogFragment()
             fragment.arguments = args
             return fragment
         }
 
+        //Which profile this counter should be added to. If null, no link is made
+        const val ARGS_PROFILE_NAME = "args_profile_name"
         const val TAG = "fragment_edit_counter"
         const val REQUEST_KEY_COUNTER = "request_key_counter"
         const val RESULT_COUNTER = "result_counter"

@@ -25,4 +25,17 @@
             android:text="@string/manage_profiles"/>
 
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/manage_counters"
+        android:padding="@dimen/default_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/manage_counters"/>
+
+    </FrameLayout>
 </LinearLayout>
