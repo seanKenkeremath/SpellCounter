@@ -172,7 +172,8 @@ class EditCounterViewModel @Inject constructor(
                     LogUtils.d("Failed to save counter")
                     _saveStatus.value = SaveCounterResult.IMAGE_SAVE_FAILED
                 }
-                .collect {
+                .collect { generatedId ->
+                    _newCounterTemplate = _newCounterTemplate.copy(id = generatedId)
                     LogUtils.d("Counter successfully saved: ${_newCounterTemplate.id}")
                     _saveStatus.value = SaveCounterResult.SUCCESSFUL
                 }

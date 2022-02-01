@@ -48,9 +48,17 @@ class ImageRepositoryImpl(
             emit(ImageSaveResult(targetFile, ImageSource.LOCAL_FILE))
         }
             .catch { e ->
-                LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
-                deleteFile(imageDir.absolutePath)
-                throw ImageSaveFailedException()
+                if (e is NotCompressibleException) {
+                    LogUtils.d(
+                        "Image cannot be compressed. using raw url $url",
+                        LogUtils.TAG_IMAGES
+                    )
+                    emit(ImageSaveResult(source = ImageSource.RAW_URI))
+                } else {
+                    LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
+                    deleteFile(imageDir.absolutePath)
+                    throw ImageSaveFailedException()
+                }
             }
             .flowOn(dispatcherProvider.io())
     }
@@ -71,18 +79,28 @@ class ImageRepositoryImpl(
                     bitmapFactoryOptions
                 )
             bitmap?.let {
-                LogUtils.d("Bitmap Downloaded", LogUtils.TAG_IMAGES)
-                val transparency = bitmapFactoryOptions.outMimeType.lowercase().contains("png")
                 LogUtils.d(
-                    "Bitmap Data: transparency: $transparency, mime: $${bitmapFactoryOptions.outMimeType}, size: ${bitmap.byteCount}",
+                    "Bitmap Data: mime: $${bitmapFactoryOptions.outMimeType}, size: ${bitmap.byteCount}",
                     LogUtils.TAG_IMAGES
                 )
+                if (bitmapFactoryOptions.outMimeType.lowercase().contains("gif")) {
+                    LogUtils.d(
+                        "Gif cannot be compressed. Should not store locally",
+                        LogUtils.TAG_IMAGES
+                    )
+                    throw NotCompressibleException()
+                }
+                LogUtils.d("Bitmap Downloaded", LogUtils.TAG_IMAGES)
+                val transparency = bitmapFactoryOptions.outMimeType.lowercase().contains("png")
                 val outStream = FileOutputStream(outputFile)
                 outStream.use {
                     val size = bitmap.byteCount
                     if (size > IMAGE_RAW_LIMIT) {
-                        LogUtils.d("Bitmap too large to compress. Should not store locally", LogUtils.TAG_IMAGES)
-                        throw ImageTooLargeException()
+                        LogUtils.d(
+                            "Bitmap too large to compress $size. Should not store locally",
+                            LogUtils.TAG_IMAGES
+                        )
+                        throw NotCompressibleException()
                     } else {
                         val quality = if (size < IMAGE_COMPRESS_THRESHOLD)
                             90
@@ -125,9 +143,17 @@ class ImageRepositoryImpl(
             } ?: throw ImageSaveFailedException()
         }
             .catch { e ->
-                LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
-                deleteFile(imageDir.absolutePath)
-                throw ImageSaveFailedException()
+                if (e is NotCompressibleException) {
+                    LogUtils.d(
+                        "Image cannot be compressed. using raw uri $uri",
+                        LogUtils.TAG_IMAGES
+                    )
+                    emit(ImageSaveResult(source = ImageSource.RAW_URI))
+                } else {
+                    LogUtils.d("Save Failed: $e", LogUtils.TAG_IMAGES)
+                    deleteFile(imageDir.absolutePath)
+                    throw ImageSaveFailedException()
+                }
             }
             .flowOn(dispatcherProvider.io())
     }

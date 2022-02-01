@@ -16,6 +16,7 @@ object ImageUtils {
             return dir
         }
 
+    //Above this the image will not be copied locally
     const val IMAGE_RAW_LIMIT = 8_000_000L
     const val IMAGE_COMPRESS_THRESHOLD = 1_000_000L
 }
