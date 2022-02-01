@@ -53,7 +53,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+            dismiss()
         }
 
         val allColors = CounterColor.values().map {
