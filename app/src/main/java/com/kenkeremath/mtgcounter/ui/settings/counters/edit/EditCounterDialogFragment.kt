@@ -72,6 +72,10 @@ class EditCounterDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         val previewBackgroundColor = ColorUtils.setAlphaComponent(
             ContextCompat.getColor(
                 requireContext(),

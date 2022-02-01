@@ -94,7 +94,8 @@ class SetupViewModel @Inject constructor(
         _setupPlayers.value =
             List(number) { index ->
                 PlayerSetupModel(
-                    colorResId = playerColors[index].resId,
+                    id = index,
+                    color = playerColors[index],
                     template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT })
             }
     }
@@ -124,6 +125,29 @@ class SetupViewModel @Inject constructor(
                 it,
                 it == selectedTabletopType
             )
+        }
+    }
+
+    fun findSetupPlayerById(id: Int): PlayerSetupModel? {
+        return _setupPlayers.value?.find { it.id == id }
+    }
+
+    fun updatePlayer(playerSetupModel: PlayerSetupModel) {
+        _setupPlayers.value?.let { playerList ->
+            playerList.find { it.id == playerSetupModel.id }?.let { existingPlayer ->
+                val existingColor = existingPlayer.color
+                _setupPlayers.value = playerList.map {
+                    if (it.id == playerSetupModel.id) {
+                        playerSetupModel
+                    } else if (it.color == playerSetupModel.color) {
+                        //If there was already a player with this new color, swap colors
+                        it.copy(color = existingColor)
+                    } else {
+                        it
+                    }
+                }
+            }
+
         }
     }
 }

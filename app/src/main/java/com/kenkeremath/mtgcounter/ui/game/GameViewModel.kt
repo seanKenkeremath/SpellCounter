@@ -60,9 +60,9 @@ class GameViewModel @Inject constructor(
 
             val player = GamePlayerUiModel(
                 PlayerModel(
-                    id = i,
+                    id = setupPlayers[i].id,
                     life = startingLife,
-                    colorResId = setupPlayers[i].colorResId ?: R.color.white,
+                    colorResId = setupPlayers[i].color.resId ?: R.color.white,
                 ),
                 //TODO: option from repo
                 pullToReveal = tabletopType != TabletopType.LIST,

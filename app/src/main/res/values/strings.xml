@@ -11,6 +11,9 @@
     <string name="starting_life_label">Starting Life:</string>
     <string name="keep_screen_awake_label">Keep Screen Awake</string>
     <string name="tabletop_label">Tabletop:</string>
+    <string name="customize_player">Customize Player</string>
+    <string name="customize_player_profile">Profile:</string>
+    <string name="customize_player_color">Select Color:</string>
 
     <!-- Game -->
     <string name="exit_game">Exit Game</string>

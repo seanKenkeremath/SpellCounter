@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
 import com.kenkeremath.mtgcounter.ui.setup.SetupViewModel
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SetupTabletopFragment : Fragment() {
+class SetupTabletopFragment : Fragment(), OnPlayerSelectedListener {
 
     private val viewModel: SetupViewModel by activityViewModels()
 
@@ -42,15 +44,33 @@ class SetupTabletopFragment : Fragment() {
         }
 
         tabletopLayout = view.findViewById(R.id.tabletop_layout)
-        tabletopAdapter = SetupTabletopLayoutAdapter(tabletopLayout)
-        viewModel.setupPlayers.value?.let {
-            tabletopAdapter.setPositions(viewModel.selectedTabletopType)
-            tabletopAdapter.updateAll(viewModel.selectedTabletopType, it)
-        }
+        tabletopAdapter = SetupTabletopLayoutAdapter(tabletopLayout, this)
+
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
             viewModel.setupPlayers.value?.let {
                 startActivity(GameActivity.startIntentFromSetup(requireContext(), it))
+            }
+        }
+
+        viewModel.setupPlayers.observe(viewLifecycleOwner, {
+            tabletopAdapter.setPositions(viewModel.selectedTabletopType)
+            tabletopAdapter.updateAll(viewModel.selectedTabletopType, it)
+        })
+    }
+
+    override fun onPlayerSelected(playerId: Int) {
+        viewModel.findSetupPlayerById(playerId)?.let { existingPlayer ->
+            val f = SelectPlayerOptionsDialogFragment.newInstance(existingPlayer)
+            f.show(childFragmentManager, SelectPlayerOptionsDialogFragment.TAG)
+            f.setFragmentResultListener(
+                SelectPlayerOptionsDialogFragment.REQUEST_CUSTOMIZE
+            ) { _, bundle ->
+                val updatedPlayer =
+                    bundle.getParcelable<PlayerSetupModel>(SelectPlayerOptionsDialogFragment.RESULT_MODEL)
+                updatedPlayer?.let {
+                    viewModel.updatePlayer(updatedPlayer)
+                }
             }
         }
     }

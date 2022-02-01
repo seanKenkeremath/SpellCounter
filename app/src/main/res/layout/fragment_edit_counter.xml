@@ -15,7 +15,7 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="0dp"
         app:navigationIcon="@drawable/ic_close"
-        app:title="Create Counter" />
+        app:title="@string/create_counter" />
 
     <Spinner
         android:id="@+id/counter_type_spinner"

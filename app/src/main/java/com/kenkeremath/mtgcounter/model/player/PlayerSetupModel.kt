@@ -1,11 +1,12 @@
 package com.kenkeremath.mtgcounter.model.player
 
 import android.os.Parcelable
-import androidx.annotation.ColorRes
+import com.kenkeremath.mtgcounter.model.counter.CounterColor
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PlayerSetupModel (
-    var template: PlayerTemplateModel? = null,
-    @ColorRes var colorResId: Int? = null
+    val id: Int = 0,
+    val template: PlayerTemplateModel? = null,
+    val color: CounterColor = CounterColor.NONE
 ) : Parcelable

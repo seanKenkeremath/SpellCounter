@@ -13,34 +13,47 @@ import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.TabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TabletopLayoutViewHolder
 
-class SetupTabletopLayoutAdapter(parent: TabletopLayout) :
+class SetupTabletopLayoutAdapter(
+    parent: TabletopLayout,
+    private val onPlayerSelectedListener: OnPlayerSelectedListener
+) :
     TabletopLayoutAdapter<SetupTabletopLayoutViewHolder, PlayerSetupModel>(parent) {
     override fun createViewHolder(container: RotateLayout): SetupTabletopLayoutViewHolder {
-        return SetupTabletopLayoutViewHolder(container)
+        return SetupTabletopLayoutViewHolder(container, onPlayerSelectedListener)
     }
 }
 
-class SetupTabletopLayoutViewHolder(container: RotateLayout) :
+class SetupTabletopLayoutViewHolder(
+    container: RotateLayout,
+    private val onPlayerSelectedListener: OnPlayerSelectedListener
+) :
     TabletopLayoutViewHolder<PlayerSetupModel>(container) {
 
     override val view: View =
         LayoutInflater.from(container.context).inflate(R.layout.item_setup_player, container, false)
 
-    private val colorContainer: View = view.findViewById(R.id.player_setup_color_container)
-    private val templateContainer: View = view.findViewById(R.id.player_setup_template_container)
+    private val playerContainer: View = view.findViewById(R.id.player_container)
     private val templateName: TextView = view.findViewById(R.id.player_setup_template_name)
 
+    private var playerId: Int = -1
+
+    init {
+        view.setOnClickListener {
+            onPlayerSelectedListener.onPlayerSelected(playerId)
+        }
+    }
 
     override fun bind(data: PlayerSetupModel) {
-        val color = data.colorResId?.let {
+        playerId = data.id
+        val color = data.color.resId?.let {
             ContextCompat.getColor(view.context, it)
-        } ?: Color.TRANSPARENT
+        } ?: Color.WHITE
 
         val alphaColor = ColorUtils.setAlphaComponent(
             color, view.resources.getInteger(R.integer.player_color_alpha)
         )
 
-        colorContainer.setBackgroundColor(alphaColor)
+        playerContainer.setBackgroundColor(alphaColor)
         templateName.text = data.template?.name
     }
 }
