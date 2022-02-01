@@ -20,6 +20,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.FragmentEditCounterBinding
+import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,6 +56,8 @@ class EditCounterDialogFragment : DialogFragment() {
             viewModel.updateLocalUri(it.toString())
         }
     }
+
+    private var debounceUrlInputRunnable: Runnable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,7 +114,15 @@ class EditCounterDialogFragment : DialogFragment() {
         val urlChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.updateUrl(s.toString())
+                debounceUrlInputRunnable?.let {
+                    binding.inputCounterUrl.removeCallbacks(it)
+                }
+                //Debounce to prevent excessive network requests
+                debounceUrlInputRunnable = Runnable {
+                    LogUtils.d("Updating url input with: ${s.toString()}")
+                    viewModel.updateUrl(s.toString())
+                }
+                binding.inputCounterUrl.postDelayed(debounceUrlInputRunnable, 1500L)
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -148,15 +159,18 @@ class EditCounterDialogFragment : DialogFragment() {
             binding.counterLocalImageContainer.visibility = View.GONE
             binding.counterTextContainer.visibility = View.GONE
             binding.counterUrlContainer.visibility = View.GONE
+            binding.counterFullArtContainer.visibility = View.GONE
             when (it) {
                 CreateCounterType.TEXT -> {
                     binding.counterTextContainer.visibility = View.VISIBLE
                 }
                 CreateCounterType.IMAGE -> {
                     binding.counterLocalImageContainer.visibility = View.VISIBLE
+                    binding.counterFullArtContainer.visibility = View.VISIBLE
                 }
                 CreateCounterType.URL -> {
                     binding.counterUrlContainer.visibility = View.VISIBLE
+                    binding.counterFullArtContainer.visibility = View.VISIBLE
                 }
                 else -> {}
             }
@@ -238,5 +252,8 @@ class EditCounterDialogFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        debounceUrlInputRunnable?.let {
+            binding.inputCounterUrl.removeCallbacks(it)
+        }
     }
 }

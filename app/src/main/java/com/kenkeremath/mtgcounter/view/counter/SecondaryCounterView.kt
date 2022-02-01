@@ -17,6 +17,7 @@ class SecondaryCounterView @JvmOverloads constructor(
     private val backgroundImage = findViewById<ImageView>(R.id.background_image)
 
     fun setContent(counterModel: CounterModel) {
+        clearBackground()
         counterIconView.setContent(counterModel.template)
         setAmount(counterModel.amount)
         counterModel.template.uri?.let {
@@ -25,8 +26,6 @@ class SecondaryCounterView @JvmOverloads constructor(
                     .error(R.drawable.image_error_placeholder)
                     .centerCrop()
                     .into(backgroundImage)
-            } else {
-                clearBackground()
             }
         }
     }

@@ -57,6 +57,7 @@ class CounterIconView @JvmOverloads constructor(
     fun setContent(templateModel: CounterTemplateModel, renderFullArt: Boolean = false) {
         label.visibility = View.GONE
         image.visibility = View.GONE
+        clearImage()
         if (templateModel.symbol.resId == null) {
             if (templateModel.color.resId != null) {
                 image.visibility = View.VISIBLE

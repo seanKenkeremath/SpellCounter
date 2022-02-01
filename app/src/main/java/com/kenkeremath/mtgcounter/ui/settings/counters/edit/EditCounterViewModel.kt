@@ -69,7 +69,16 @@ class EditCounterViewModel @Inject constructor(
     }
 
     fun updateUrl(url: String) {
-        _counterUrl.value = url
+        val resolvedUrl = url.let {
+            if (it.isBlank())
+                ""
+            else if (!it.contains("http")) {
+                ""
+            } else {
+                it.trim()
+            }
+        }
+        _counterUrl.value = resolvedUrl
         updateTemplate()
     }
 
@@ -107,7 +116,7 @@ class EditCounterViewModel @Inject constructor(
                 _newCounterTemplate =
                     _newCounterTemplate.copy(
                         name = null,
-                        uri = _counterImageUri.value,
+                        uri = _counterImageUri.value.let { if (it.isNullOrBlank()) null else it },
                         startingValue = _startingValue.value ?: 0,
                         isFullArtImage = _isFullArtImage.value == true,
                     )
@@ -115,7 +124,7 @@ class EditCounterViewModel @Inject constructor(
             CreateCounterType.URL -> {
                 _newCounterTemplate = _newCounterTemplate.copy(
                     name = null,
-                    uri = _counterUrl.value,
+                    uri = _counterUrl.value.let { if (it.isNullOrBlank()) null else it },
                     startingValue = _startingValue.value ?: 0,
                     isFullArtImage = _isFullArtImage.value == true,
                 )
@@ -146,14 +155,16 @@ class EditCounterViewModel @Inject constructor(
                 imageRepository.saveUrlImageToDisk(uri)
                     .map {
                         if (it.source == ImageSource.LOCAL_FILE) {
-                            _newCounterTemplate = _newCounterTemplate.copy(uri = it.file?.absolutePath)
+                            _newCounterTemplate =
+                                _newCounterTemplate.copy(uri = it.file?.absolutePath)
                         }
                     }
             } else {
                 imageRepository.saveLocalImageToDisk(uri)
                     .map {
                         if (it.source == ImageSource.LOCAL_FILE) {
-                            _newCounterTemplate = _newCounterTemplate.copy(uri = it.file?.absolutePath)
+                            _newCounterTemplate =
+                                _newCounterTemplate.copy(uri = it.file?.absolutePath)
                         }
                     }
             }
