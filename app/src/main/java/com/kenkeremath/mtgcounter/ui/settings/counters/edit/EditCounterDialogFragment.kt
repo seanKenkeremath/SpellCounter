@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.ui.settings.counters.edit
 
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -46,8 +47,13 @@ class EditCounterDialogFragment : DialogFragment() {
     private var _binding: FragmentEditCounterBinding? = null
     private val binding get() = _binding!!
 
-    private val getImageFileHandler = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        viewModel.updateLocalUri(uri?.toString() ?: "")
+    //Use OpenDocument instead of GetContent() so we can get a persistent URI
+    private val getImageFileHandler = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        uri?.let {
+            //Make this URI persistent so it can be saved
+            requireActivity().contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            viewModel.updateLocalUri(it.toString())
+        }
     }
 
     override fun onCreateView(
@@ -123,7 +129,7 @@ class EditCounterDialogFragment : DialogFragment() {
         binding.inputCounterStartingValue.addTextChangedListener(startingValueChangedListener)
 
         binding.counterLocalImageContainer.setOnClickListener {
-            getImageFileHandler.launch("image/*")
+            getImageFileHandler.launch(arrayOf("image/*"))
         }
 
         val fullArtCheckChangedListener =
