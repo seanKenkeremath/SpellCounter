@@ -40,21 +40,20 @@
 
     <Button
         android:id="@+id/reset_game_button"
-        style="@style/StartGameButton"
+        style="@style/StartGameButton.Round"
         android:layout_width="match_parent"
         android:layout_height="@dimen/start_game_button_height"
         android:layout_marginHorizontal="@dimen/default_padding"
-        android:text="@string/reset_game"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:text="@string/reset_game" />
 
     <Button
         android:id="@+id/exit_game_button"
-        style="@style/StartGameButton"
+        style="@style/StartGameButton.Round"
         android:layout_width="match_parent"
         android:layout_height="@dimen/start_game_button_height"
+        android:layout_marginTop="@dimen/default_padding"
         android:layout_marginHorizontal="@dimen/default_padding"
-        android:text="@string/exit_game"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:text="@string/exit_game" />
 
     <LinearLayout
         android:layout_width="wrap_content"

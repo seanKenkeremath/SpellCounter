@@ -10,14 +10,16 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/toolbar_logo"
+        app:title="@string/app_name" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:overScrollMode="never"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
@@ -34,75 +36,61 @@
                 android:layout_marginTop="@dimen/setup_section_top_margin"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
                 android:text="@string/player_number_label"
+                app:drawableStartCompat="@drawable/ic_users"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <GridLayout
                 android:id="@+id/player_number_container"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/setup_section_title_bottom_margin"
                 android:columnCount="4"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
                 android:rowCount="2"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/player_number_label">
 
                 <!-- TODO: dynamic/style? -->
 
                 <Button
                     android:id="@+id/one_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="1" />
 
                 <Button
                     android:id="@+id/two_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="2" />
 
                 <Button
                     android:id="@+id/three_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="3" />
 
 
                 <Button
                     android:id="@+id/four_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="4" />
 
                 <Button
                     android:id="@+id/five_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="5" />
 
                 <Button
                     android:id="@+id/six_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="6" />
 
                 <Button
                     android:id="@+id/seven_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="7" />
 
                 <Button
                     android:id="@+id/eight_player_button"
-                    style="@style/OptionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/OptionButton.Number"
                     android:text="8" />
             </GridLayout>
 
@@ -114,6 +102,7 @@
                 android:layout_marginTop="@dimen/setup_section_top_margin"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
                 android:text="@string/starting_life_label"
+                app:drawableStartCompat="@drawable/ic_heart"
                 app:layout_constraintTop_toBottomOf="@+id/player_number_container" />
 
             <LinearLayout
@@ -129,21 +118,21 @@
 
                 <Button
                     android:id="@+id/twenty_life_button"
-                    style="@style/OptionButton"
+                    style="@style/OptionButton.Number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20" />
 
                 <Button
                     android:id="@+id/forty_life_button"
-                    style="@style/OptionButton"
+                    style="@style/OptionButton.Number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="40" />
 
                 <Button
                     android:id="@+id/custom_life_button"
-                    style="@style/OptionButton"
+                    style="@style/OptionButton.Number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Custom" />
@@ -158,6 +147,7 @@
                 android:layout_marginTop="@dimen/setup_section_top_margin"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
                 android:text="@string/tabletop_label"
+                app:drawableStartCompat="@drawable/ic_table"
                 app:layout_constraintTop_toBottomOf="@+id/starting_life_container" />
 
             <TextView
@@ -219,31 +209,37 @@
 
                     <include
                         layout="@layout/item_layout_button_player"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                    <include layout="@layout/item_layout_button_player"
-                        android:layout_weight="1"
+                    <include
+                        layout="@layout/item_layout_button_player"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                    <include layout="@layout/item_layout_button_player"
-                        android:layout_weight="1"
+                    <include
+                        layout="@layout/item_layout_button_player"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
-                    <include layout="@layout/item_layout_button_player"
-                        android:layout_weight="1"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <include
+                        layout="@layout/item_layout_button_player"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         style="@style/Header3"
-                        android:text="..."
-                        android:textSize="9dp"
-                        android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:duplicateParentState="true"
+                        android:gravity="center"
+                        android:text="..."
+                        android:textColor="@color/option_button_text_color"
+                        android:textSize="9dp"
                         tools:ignore="HardcodedText" />
 
                 </LinearLayout>
@@ -259,6 +255,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/tabletop_container">
 
                 <CheckBox
@@ -280,6 +277,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/setup_padding_horizontal"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/keep_screen_awake_container">
 
                 <CheckBox
@@ -300,9 +298,10 @@
 
     <Button
         android:id="@+id/start_button"
-        style="@style/StartGameButton"
+        style="@style/StartGameButton.Round"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/start_game_button_height"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/start_button_margin"
         android:text="@string/start_game"
         app:layout_constraintBottom_toBottomOf="parent" />
 </LinearLayout>

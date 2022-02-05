@@ -92,6 +92,9 @@
 
         <Button
             android:id="@+id/counter_local_image_browse"
+            style="@style/StartGameButton.Round"
+            android:minHeight="48dp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_counter_browse_button" />

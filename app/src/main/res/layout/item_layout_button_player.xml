@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/player_container_outline_bg"
-    android:padding="4dp"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/player_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/player_setup_container_outline_bg"
+    android:duplicateParentState="true"
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/image"
-        android:src='@drawable/ic_user'
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:duplicateParentState="true"
+        android:src='@drawable/ic_user'
+        app:tint="@color/option_button_text_color" />
 
 </FrameLayout>

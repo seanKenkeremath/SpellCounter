@@ -8,8 +8,8 @@
     <color name="primary_text">#242424</color>
     <color name="nav_menu_divider_color">@color/primary_text</color>
 
-    <color name="player_divider_color">@color/black</color>
-    <color name="game_button_color_enabled">@color/black</color>
+    <color name="player_divider_color">@color/primary_text</color>
+    <color name="game_button_color_enabled">@color/primary_text</color>
     <color name="game_button_color_disabled">#40000000</color>
     <color name="game_button_pressed_state_color">#10000000</color>
     <color name="ripple_color">#40000000</color>
@@ -47,6 +47,7 @@
         <item>@color/cool_purple</item>
     </integer-array>
 
-    <color name="default_icon_tint">@color/black</color>
+    <color name="default_icon_tint">@color/primary_text</color>
+    <color name="start_button_color">@color/primary_text</color>
 
 </resources>

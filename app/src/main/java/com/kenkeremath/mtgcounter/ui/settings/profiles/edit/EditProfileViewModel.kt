@@ -29,7 +29,10 @@ class EditProfileViewModel @Inject constructor(
 
     val isNewProfile = originalProfile == null
     val hasEdits = originalProfile != editedProfile
-    val isNameChangeEnabled = originalProfile?.deletable != false
+
+    //Disable name change for all existing profiles
+    //TODO: if we use a separate ID as a primary key for profile names, we can allow edits
+    val isNameChangeEnabled = originalProfile == null
 
     private var newProfileInitializedWithCounters = false
     private var loading = false

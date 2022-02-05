@@ -1,7 +1,6 @@
 package com.kenkeremath.mtgcounter.ui.setup
 
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var tabletopLayoutButtonB: View
     private lateinit var tabletopLayoutAdapterB: TabletopLayoutButtonAdapter
     private lateinit var tabletopListLayoutButton: LinearLayout
-    private lateinit var startButton: Button
+    private lateinit var startButton: View
     private lateinit var toolbar: Toolbar
 
     private val viewModel: SetupViewModel by activityViewModels()
@@ -59,7 +58,6 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar = view.findViewById(R.id.toolbar)
-        toolbar.setTitle(R.string.setup_game_title)
         toolbar.inflateMenu(R.menu.setup)
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {

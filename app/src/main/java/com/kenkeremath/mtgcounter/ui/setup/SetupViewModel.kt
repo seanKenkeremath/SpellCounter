@@ -91,13 +91,31 @@ class SetupViewModel @Inject constructor(
             if (availableTabletopTypes.contains(selectedTabletopType)) selectedTabletopType
             else availableTabletopTypes[0]
         setTabletopType(newTabletopType)
-        _setupPlayers.value =
-            List(number) { index ->
+        /**
+         * Add to existing player models or create a sublist if the number has decreased
+         */
+        val newList = (_setupPlayers.value?.take(number))?.map { player ->
+            /**
+             * Templates may have been edited or deleted since these models were created.
+             * So we should update templates and reset them to default if they no longer
+             * exist
+             */
+            player.copy(template = playerTemplates?.find { it.name == player.template?.name }
+                ?: playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }
+            )
+        }?.toMutableList() ?: mutableListOf()
+        while (newList.size < number) {
+            newList.add(
                 PlayerSetupModel(
-                    id = index,
-                    color = playerColors[index],
-                    template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT })
-            }
+                    id = newList.size, //next index
+                    //Find the first color that is not currently taken by a player
+                    color = playerColors.find { color -> newList.find { it.color == color } == null }
+                        ?: CounterColor.NONE,
+                    template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }
+                )
+            )
+        }
+        _setupPlayers.value = newList
     }
 
     fun setKeepScreenOn(keepScreenOn: Boolean) {

@@ -47,6 +47,8 @@
 
     <Button
         android:id="@+id/save"
+        style="@style/StartGameButton.Round"
+        android:layout_margin="@dimen/start_button_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save" />

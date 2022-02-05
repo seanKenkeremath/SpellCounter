@@ -82,7 +82,7 @@
                     android:layout_height="@dimen/edit_counter_confirm_button_height"
                     android:layout_weight="1"
                     android:text="@string/cancel"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/primary_text" />
 
                 <Button
                     android:id="@+id/edit_confirm"
@@ -91,7 +91,7 @@
                     android:layout_height="@dimen/edit_counter_confirm_button_height"
                     android:layout_weight="1"
                     android:text="@string/save"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/primary_text" />
 
             </LinearLayout>
         </LinearLayout>
