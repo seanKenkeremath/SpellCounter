@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:foreground="?attr/selectableItemBackground"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground">
 
-    <com.kenkeremath.mtgcounter.view.counter.CounterIconView
-        android:id="@+id/counter_icon_view"
-        android:layout_width="@dimen/edit_player_counter_icon_size"
-        android:layout_height="@dimen/edit_player_counter_icon_size"
+    <TextView
+        android:id="@+id/profile_name_text"
+        style="@style/NavMenuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/default_padding" />
+        android:layout_margin="@dimen/default_padding"
+        android:drawablePadding="8dp"
+        app:drawableStartCompat="@drawable/ic_user"
+        tools:text="Default" />
 
     <ImageView
-        android:id="@+id/counter_delete"
+        android:id="@+id/profile_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"

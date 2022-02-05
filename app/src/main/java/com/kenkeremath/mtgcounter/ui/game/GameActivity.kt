@@ -81,7 +81,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         decoration.setDrawable(
             ContextCompat.getDrawable(
                 this,
-                R.drawable.divider
+                R.drawable.player_divider
             )!!
         )
         playersRecyclerView.addItemDecoration(

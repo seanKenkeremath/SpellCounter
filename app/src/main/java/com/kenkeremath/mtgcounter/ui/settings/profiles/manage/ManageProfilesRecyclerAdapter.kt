@@ -9,7 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 
 class ManageProfilesRecyclerAdapter(private val clickListener: OnProfileClickedListener) :
-    RecyclerView.Adapter<ProfileViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val TYPE_CREATE = 0
+        private const val TYPE_PROFILE = 1
+        private const val ID_CREATE = -1L
+    }
 
     init {
         setHasStableIds(true)
@@ -24,33 +30,55 @@ class ManageProfilesRecyclerAdapter(private val clickListener: OnProfileClickedL
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
-        return ProfileViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_profile, parent, false),
-            clickListener
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_CREATE) {
+            CreateProfileViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_manage_profile_create, parent, false),
+                clickListener
+            )
+        } else {
+            ManageProfileViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_manage_profile, parent, false),
+                clickListener
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        holder.bind(profiles[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ManageProfileViewHolder) {
+            //Offset by one for "Create" button
+            holder.bind(profiles[position - 1])
+        }
     }
 
     override fun getItemId(position: Int): Long {
-        return profiles[position].name.hashCode().toLong()
+        //Offset by one for "Create" button
+        return if (position == 0) ID_CREATE else profiles[position - 1].name.hashCode().toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) {
+            TYPE_CREATE
+        } else {
+            TYPE_PROFILE
+        }
     }
 
     override fun getItemCount(): Int {
-        return profiles.size
+        //add one for the "Create" button
+        return profiles.size + 1
     }
 }
 
-class ProfileViewHolder(
+class ManageProfileViewHolder(
     itemView: View,
     private val onProfileClickedListener: OnProfileClickedListener,
 ) : RecyclerView.ViewHolder(itemView) {
 
     private val nameTextView = itemView.findViewById<TextView>(R.id.profile_name_text)
+    private val deleteButton = itemView.findViewById<View>(R.id.profile_delete)
 
     private var profileName: String? = null
 
@@ -60,10 +88,27 @@ class ProfileViewHolder(
                 onProfileClickedListener.onProfileClicked(it)
             }
         }
+        deleteButton.setOnClickListener {
+            profileName?.let {
+                onProfileClickedListener.onProfileDeleteClicked(it)
+            }
+        }
     }
 
     fun bind(model: ProfileUiModel) {
         profileName = model.name
         nameTextView.text = model.name
+    }
+}
+
+class CreateProfileViewHolder(
+    itemView: View,
+    private val onProfileClickedListener: OnProfileClickedListener,
+) : RecyclerView.ViewHolder(itemView) {
+
+    init {
+        itemView.setOnClickListener {
+            onProfileClickedListener.onProfileCreateClicked()
+        }
     }
 }

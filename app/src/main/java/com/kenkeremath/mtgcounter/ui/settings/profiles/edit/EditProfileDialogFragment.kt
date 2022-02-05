@@ -7,19 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
+import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedListener {
+class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedListener,
+    OnManageCounterClickedListener {
 
     companion object {
         fun newInstance(profile: PlayerTemplateModel? = null): EditProfileDialogFragment {
@@ -37,7 +41,7 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
     private val viewModel: EditProfileViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
-    private val recyclerAdapter = EditProfileRecyclerAdapter(this)
+    private val recyclerAdapter = EditProfileRecyclerAdapter(this, this)
 
     private lateinit var nameEditText: EditText
     private val textChangedListener = object : TextWatcher {
@@ -61,21 +65,6 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val createCounter: View = view.findViewById(R.id.create_counter)
-        createCounter.setOnClickListener {
-            val f = EditCounterDialogFragment.newInstance(viewModel.originalProfileName)
-            f.show(childFragmentManager, EditCounterDialogFragment.TAG)
-            f.setFragmentResultListener(
-                EditCounterDialogFragment.REQUEST_KEY_COUNTER
-            ) { _, bundle ->
-                val newCounter =
-                    bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
-                newCounter?.let {
-                    viewModel.addNewCounter(it)
-                }
-            }
-        }
-
         val save: View = view.findViewById(R.id.save)
         save.setOnClickListener {
             viewModel.saveChanges()
@@ -84,6 +73,11 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
         recyclerView = view.findViewById(R.id.profile_counters_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = recyclerAdapter
+        val dividers = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        ContextCompat.getDrawable(requireContext(), R.drawable.nav_menu_divider)?.let {
+            dividers.setDrawable(it)
+        }
+        recyclerView.addItemDecoration(dividers)
 
         nameEditText = view.findViewById(R.id.profile_name_edit_text)
         nameEditText.addTextChangedListener(textChangedListener)
@@ -122,5 +116,23 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
 
     override fun onCounterSelected(id: Int, selected: Boolean) {
         viewModel.selectCounter(id, selected)
+    }
+
+    override fun onCounterRemoveClicked(id: Int) {
+        //Not used
+    }
+
+    override fun onCounterCreateClicked() {
+        val f = EditCounterDialogFragment.newInstance(viewModel.originalProfileName)
+        f.show(childFragmentManager, EditCounterDialogFragment.TAG)
+        f.setFragmentResultListener(
+            EditCounterDialogFragment.REQUEST_KEY_COUNTER
+        ) { _, bundle ->
+            val newCounter =
+                bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
+            newCounter?.let {
+                viewModel.addNewCounter(it)
+            }
+        }
     }
 }

@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
@@ -43,18 +45,14 @@ class ManageProfilesFragment : Fragment(), OnProfileClickedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val createProfile: View = view.findViewById(R.id.create_profile)
-        createProfile.setOnClickListener {
-            val f = EditProfileDialogFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.container, f)
-                .addToBackStack(EditProfileDialogFragment.TAG)
-                .commit()
-        }
-
         recyclerView = view.findViewById(R.id.profiles_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = recyclerAdapter
+        val dividers = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        ContextCompat.getDrawable(requireContext(), R.drawable.nav_menu_divider)?.let {
+            dividers.setDrawable(it)
+        }
+        recyclerView.addItemDecoration(dividers)
 
         viewModel.profiles.observe(viewLifecycleOwner, {
             recyclerAdapter.setProfiles(it)
@@ -74,5 +72,17 @@ class ManageProfilesFragment : Fragment(), OnProfileClickedListener {
                 .addToBackStack(EditProfileDialogFragment.TAG)
                 .commit()
         }
+    }
+
+    override fun onProfileDeleteClicked(name: String) {
+        viewModel.deleteProfile(name)
+    }
+
+    override fun onProfileCreateClicked() {
+        val f = EditProfileDialogFragment.newInstance()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, f)
+            .addToBackStack(EditProfileDialogFragment.TAG)
+            .commit()
     }
 }

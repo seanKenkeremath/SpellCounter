@@ -44,7 +44,10 @@ class EditCounterViewModel @Inject constructor(
     private val _counterImageUri: MutableLiveData<String> = MutableLiveData<String>("")
     val counterImageUri: LiveData<String> = _counterImageUri
 
-    private val _isFullArtImage: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    private val _counterImageFileName: MutableLiveData<String> = MutableLiveData<String>("")
+    val counterImageFileName: LiveData<String> = _counterImageFileName
+
+    private val _isFullArtImage: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
     val isFullArtImage: LiveData<Boolean> = _isFullArtImage
 
     private val _startingValue: MutableLiveData<Int> = MutableLiveData<Int>(0)
@@ -82,8 +85,9 @@ class EditCounterViewModel @Inject constructor(
         updateTemplate()
     }
 
-    fun updateLocalUri(uri: String) {
+    fun updateLocalUri(uri: String, fileName: String) {
         _counterImageUri.value = uri
+        _counterImageFileName.value = fileName
         updateTemplate()
     }
 

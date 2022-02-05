@@ -8,11 +8,23 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.ui.settings.counters.manage.CreateCounterViewHolder
+import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
 import com.kenkeremath.mtgcounter.view.counter.CounterIconView
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 
-class EditProfileRecyclerAdapter(private val clickListener: OnEditProfileCounterClickedListener) :
-    RecyclerView.Adapter<EditProfileCounterViewHolder>() {
+class EditProfileRecyclerAdapter(
+    private val editProfileCounterClickedListener: OnEditProfileCounterClickedListener,
+    private val onManageCounterClickedListener: OnManageCounterClickedListener
+) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val TYPE_CREATE = 0
+        private const val TYPE_COUNTER = 1
+        private const val ID_CREATE = -1L
+    }
+
 
     init {
         setHasStableIds(true)
@@ -30,29 +42,52 @@ class EditProfileRecyclerAdapter(private val clickListener: OnEditProfileCounter
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): EditProfileCounterViewHolder {
-        return EditProfileCounterViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_profile_counter, parent, false),
-            clickListener
-        )
+    ): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_CREATE) {
+            CreateCounterViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_manage_counter_create, parent, false),
+                onManageCounterClickedListener
+            )
+        } else {
+            EditProfileCounterViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_profile_counter, parent, false),
+                editProfileCounterClickedListener
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: EditProfileCounterViewHolder, position: Int) {
-        holder.bind(counters[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is EditProfileCounterViewHolder) {
+            //Offset by one for "Create" button
+            holder.bind(counters[position - 1])
+        }
     }
 
     override fun getItemId(position: Int): Long {
-        return counters[position].template.id.toLong()
+        return if (position == 0) {
+            ID_CREATE
+        } else {
+            //Offset by one for "Create" button
+            return counters[position - 1].template.id.toLong()
+        }
     }
 
     override fun getItemCount(): Int {
-        return counters.size
+        //add one for the "Create" button
+        return counters.size + 1
     }
 
-    override fun onViewRecycled(holder: EditProfileCounterViewHolder) {
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) TYPE_CREATE else TYPE_COUNTER
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
-        holder.counterIconView.clearImage()
+        if (holder is EditProfileCounterViewHolder) {
+            holder.counterIconView.clearImage()
+        }
     }
 }
 

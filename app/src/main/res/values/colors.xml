@@ -5,8 +5,10 @@
     <color name="white">#fff</color>
     <color name="darker_grey">#868686</color>
 
+    <color name="primary_text">#242424</color>
+    <color name="nav_menu_divider_color">@color/primary_text</color>
 
-    <color name="divider_color">@color/black</color>
+    <color name="player_divider_color">@color/black</color>
     <color name="game_button_color_enabled">@color/black</color>
     <color name="game_button_color_disabled">#40000000</color>
     <color name="game_button_pressed_state_color">#10000000</color>

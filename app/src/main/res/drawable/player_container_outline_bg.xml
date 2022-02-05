@@ -3,5 +3,5 @@
     android:shape="rectangle">
     <stroke
         android:width="@dimen/player_divider_width"
-        android:color="@color/divider_color" />
+        android:color="@color/player_divider_color" />
 </shape>

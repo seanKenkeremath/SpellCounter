@@ -19,7 +19,7 @@ class ManageProfilesViewModel @Inject constructor(
 
     private var loading = false
 
-    private var allProfiles: Set<PlayerTemplateModel>? = null
+    private var allProfiles: MutableSet<PlayerTemplateModel>? = null
 
     private val _profiles: MutableLiveData<List<ProfileUiModel>> = MutableLiveData(emptyList())
     val profiles: LiveData<List<ProfileUiModel>> = _profiles
@@ -41,17 +41,34 @@ class ManageProfilesViewModel @Inject constructor(
                 }
                 .collect {
                     loading = false
-                    allProfiles = it.toSet()
-                    _profiles.value = it.sorted().map { template ->
-                        ProfileUiModel(
-                            template
-                        )
-                    }
+                    allProfiles = it.toMutableSet()
+                    generateUiModels()
                 }
         }
     }
 
+    private fun generateUiModels() {
+        _profiles.value = allProfiles?.sorted()?.map { template ->
+            ProfileUiModel(
+                template
+            )
+        } ?: emptyList()
+    }
+
     fun getProfileByName(name: String): PlayerTemplateModel? {
         return allProfiles?.find { it.name == name }
+    }
+
+    fun deleteProfile(name: String) {
+        viewModelScope.launch {
+            //optimistic removal from list for better responsiveness
+            allProfiles?.removeAll { it.name == name }
+            generateUiModels()
+            profileRepository.deletePlayerTemplate(name)
+                .catch { }
+                .collect {
+                    //No Op
+                }
+        }
     }
 }

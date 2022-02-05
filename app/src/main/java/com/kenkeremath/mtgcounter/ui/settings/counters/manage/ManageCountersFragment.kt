@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
@@ -16,7 +18,7 @@ import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFra
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ManageCountersFragment : Fragment(), OnManageProfileClickedListener {
+class ManageCountersFragment : Fragment(), OnManageCounterClickedListener {
 
     companion object {
         fun newInstance(): ManageCountersFragment {
@@ -46,24 +48,14 @@ class ManageCountersFragment : Fragment(), OnManageProfileClickedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val createCounter: View = view.findViewById(R.id.create_counter)
-        createCounter.setOnClickListener {
-            val f = EditCounterDialogFragment.newInstance(PlayerTemplateModel.NAME_DEFAULT)
-            f.show(childFragmentManager, EditCounterDialogFragment.TAG)
-            f.setFragmentResultListener(
-                EditCounterDialogFragment.REQUEST_KEY_COUNTER
-            ) { _, bundle ->
-                val newCounter =
-                    bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
-                newCounter?.let {
-                    viewModel.addNewCounter(it)
-                }
-            }
-        }
-
         recyclerView = view.findViewById(R.id.manage_counters_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = recyclerAdapter
+        val dividers = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        ContextCompat.getDrawable(requireContext(), R.drawable.nav_menu_divider)?.let {
+            dividers.setDrawable(it)
+        }
+        recyclerView.addItemDecoration(dividers)
 
         viewModel.counters.observe(viewLifecycleOwner, {
             recyclerAdapter.setCounters(it)
@@ -77,5 +69,19 @@ class ManageCountersFragment : Fragment(), OnManageProfileClickedListener {
 
     override fun onCounterRemoveClicked(id: Int) {
         viewModel.removeCounter(id)
+    }
+
+    override fun onCounterCreateClicked() {
+        val f = EditCounterDialogFragment.newInstance(PlayerTemplateModel.NAME_DEFAULT)
+        f.show(childFragmentManager, EditCounterDialogFragment.TAG)
+        f.setFragmentResultListener(
+            EditCounterDialogFragment.REQUEST_KEY_COUNTER
+        ) { _, bundle ->
+            val newCounter =
+                bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
+            newCounter?.let {
+                viewModel.addNewCounter(it)
+            }
+        }
     }
 }

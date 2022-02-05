@@ -79,16 +79,22 @@
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/edit_counter_horizontal_margin">
 
-        <TextView
-            android:id="@+id/input_counter_local_image_label"
-            android:layout_width="@dimen/edit_counter_label_column_width"
-            android:layout_height="wrap_content"
-            android:text="@string/create_counter_local_uri_label" />
 
         <TextView
-            android:id="@+id/counter_local_image_uri"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:id="@+id/counter_local_image_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingEnd="8dp"
+            android:text="@string/create_counter_local_uri_hint" />
+
+        <Button
+            android:id="@+id/counter_local_image_browse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_counter_browse_button" />
 
     </LinearLayout>
 

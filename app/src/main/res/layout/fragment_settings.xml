@@ -11,31 +11,48 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/dark_grey"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings" />
 
     <FrameLayout
         android:id="@+id/manage_profiles"
-        android:padding="@dimen/default_padding"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/default_padding">
 
         <TextView
+            style="@style/NavMenuText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/manage_profiles"/>
+            android:text="@string/manage_profiles"
+            app:drawableStartCompat="@drawable/ic_users" />
 
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_menu_divider_width"
+        android:background="@color/nav_menu_divider_color" />
 
     <FrameLayout
         android:id="@+id/manage_counters"
-        android:padding="@dimen/default_padding"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/default_padding">
 
         <TextView
+            style="@style/NavMenuText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/manage_counters"/>
+            android:text="@string/manage_counters"
+            app:drawableStartCompat="@drawable/ic_custom_counter" />
 
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_menu_divider_width"
+        android:background="@color/nav_menu_divider_color" />
 </LinearLayout>

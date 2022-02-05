@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.ui.settings.counters.manage
 
-interface OnManageProfileClickedListener {
+interface OnManageCounterClickedListener {
     fun onCounterRemoveClicked(id: Int)
+    fun onCounterCreateClicked()
 }

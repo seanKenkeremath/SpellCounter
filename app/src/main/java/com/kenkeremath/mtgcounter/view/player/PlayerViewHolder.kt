@@ -54,7 +54,7 @@ class PlayerViewHolder(
         decoration.setDrawable(
             ContextCompat.getDrawable(
                 itemView.context,
-                R.drawable.divider
+                R.drawable.player_divider
             )!!
         )
         binding.countersRecycler.addItemDecoration(

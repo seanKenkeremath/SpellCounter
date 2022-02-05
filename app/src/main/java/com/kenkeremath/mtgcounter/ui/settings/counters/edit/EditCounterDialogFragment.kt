@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.ui.settings.counters.edit
 
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +23,8 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.FragmentEditCounterBinding
 import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
+import android.provider.MediaStore
+
 
 @AndroidEntryPoint
 class EditCounterDialogFragment : DialogFragment() {
@@ -49,13 +52,38 @@ class EditCounterDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     //Use OpenDocument instead of GetContent() so we can get a persistent URI
-    private val getImageFileHandler = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        uri?.let {
-            //Make this URI persistent so it can be saved
-            requireActivity().contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            viewModel.updateLocalUri(it.toString())
+    private val getImageFileHandler =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri?.let {
+                //Make this URI persistent so it can be saved
+                requireActivity().contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+
+                //Get file name to display
+                val fileName: String = if (uri.scheme.equals("file")) {
+                    uri.lastPathSegment ?: ""
+                } else {
+                    var cursor: Cursor? = null
+                    try {
+                        cursor = requireActivity().contentResolver.query(
+                            uri, arrayOf(
+                                MediaStore.Images.ImageColumns.DISPLAY_NAME
+                            ), null, null, null
+                        )
+                        if (cursor?.moveToFirst() == true) {
+                            cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+                        } else {
+                            ""
+                        }
+                    } finally {
+                        cursor?.close()
+                    }
+                }
+                viewModel.updateLocalUri(it.toString(), fileName)
+            }
         }
-    }
 
     private var debounceUrlInputRunnable: Runnable? = null
 
@@ -89,7 +117,7 @@ class EditCounterDialogFragment : DialogFragment() {
         }.toTypedArray()
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.item_spinner_text,
             spinnerOptions
         )
         binding.counterTypeSpinner.adapter = spinnerAdapter
@@ -143,7 +171,7 @@ class EditCounterDialogFragment : DialogFragment() {
         binding.inputCounterText.addTextChangedListener(textChangedListener)
         binding.inputCounterStartingValue.addTextChangedListener(startingValueChangedListener)
 
-        binding.counterLocalImageContainer.setOnClickListener {
+        binding.counterLocalImageBrowse.setOnClickListener {
             getImageFileHandler.launch(arrayOf("image/*"))
         }
 
@@ -214,8 +242,8 @@ class EditCounterDialogFragment : DialogFragment() {
             }
         })
 
-        viewModel.counterImageUri.observe(viewLifecycleOwner, {
-            binding.counterLocalImageUri.text = if (!it.isNullOrBlank()) {
+        viewModel.counterImageFileName.observe(viewLifecycleOwner, {
+            binding.counterLocalImageName.text = if (!it.isNullOrBlank()) {
                 it
             } else {
                 getString(R.string.create_counter_local_uri_hint)

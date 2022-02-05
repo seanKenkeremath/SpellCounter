@@ -81,7 +81,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             }
             val spinnerAdapter = ArrayAdapter(
                 requireContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.item_spinner_text,
                 spinnerOptions
             )
             binding.profileSpinner.adapter = spinnerAdapter

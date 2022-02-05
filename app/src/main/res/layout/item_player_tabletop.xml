@@ -145,7 +145,7 @@
                 android:layout_width="@dimen/counter_divider_width"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/revealed_menu_divider_padding"
-                android:background="@color/divider_color" />
+                android:background="@color/player_divider_color" />
 
             <FrameLayout
                 android:id="@+id/revealed_add_counter_container"

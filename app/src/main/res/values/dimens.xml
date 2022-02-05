@@ -52,7 +52,7 @@
 
     <!-- Edit Player -->
     <dimen name="edit_player_label_column_width">100dp</dimen>
-    <dimen name="edit_player_counter_icon_size">60dp</dimen>
+    <dimen name="edit_player_counter_icon_size">48dp</dimen>
 
     <!-- Edit Counter (Legacy) -->
     <dimen name="color_picker_width">200dp</dimen>
@@ -79,6 +79,7 @@
     <!-- Divider -->
     <dimen name="counter_divider_width">1dp</dimen>
     <dimen name="player_divider_width">1dp</dimen>
+    <dimen name="nav_menu_divider_width">1px</dimen>
 
     <!-- Reveal Layout -->
     <dimen name="pull_to_reveal_trigger_distance">8dp</dimen>

@@ -6,6 +6,6 @@
         android:width="@dimen/counter_divider_width"
         android:height="@dimen/counter_divider_width" />
 
-    <solid android:color="@color/divider_color" />
+    <solid android:color="@color/player_divider_color" />
 
 </shape>

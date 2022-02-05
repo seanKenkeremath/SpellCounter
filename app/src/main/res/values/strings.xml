@@ -29,6 +29,9 @@
     <string name="profile_name_label">Profile Name:</string>
     <string name="profile_counters">Included Counters</string>
     <string name="create_counter">Create Counter</string>
+    <string name="profile_edit_select_counters_header">Counters:</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="create_counter_browse_button">Browse</string>
 
     <string name="create_counter_type_label">Counter Type</string>
     <string name="create_counter_preview">Preview</string>
@@ -40,7 +43,7 @@
     <string name="create_counter_url_label">Image URL:</string>
     <string name="create_counter_url_hint">https://</string>
     <string name="create_counter_local_uri_label">Local Image:</string>
-    <string name="create_counter_local_uri_hint">No File Selected</string>
+    <string name="create_counter_local_uri_hint">Select Image/GIF</string>
     <string name="create_counter_full_art_label">Full Art Background:</string>
 
     <!-- Legacy Strings -->
