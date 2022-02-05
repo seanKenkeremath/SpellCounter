@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
@@ -64,6 +65,11 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         val save: View = view.findViewById(R.id.save)
         save.setOnClickListener {

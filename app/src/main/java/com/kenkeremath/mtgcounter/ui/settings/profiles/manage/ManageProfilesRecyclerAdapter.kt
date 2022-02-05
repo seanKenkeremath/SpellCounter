@@ -98,6 +98,7 @@ class ManageProfileViewHolder(
     fun bind(model: ProfileUiModel) {
         profileName = model.name
         nameTextView.text = model.name
+        deleteButton.visibility = if (model.deletable) View.VISIBLE else View.GONE
     }
 }
 

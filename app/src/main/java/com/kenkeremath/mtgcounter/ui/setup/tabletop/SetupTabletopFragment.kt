@@ -38,7 +38,6 @@ class SetupTabletopFragment : Fragment(), OnPlayerSelectedListener {
 
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.customize_table_title)
-        toolbar.setNavigationIcon(R.drawable.ic_back)
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }

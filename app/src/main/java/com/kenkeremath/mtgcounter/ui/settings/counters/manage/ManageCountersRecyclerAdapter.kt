@@ -103,6 +103,7 @@ class ManageCounterViewHolder(
     fun bind(model: ManageCounterUiModel) {
         this.counterId = model.template.id
         counterIconView.setContent(model.template, renderFullArt = true)
+        counterRemoveButton.visibility = if (model.template.deletable) View.VISIBLE else View.GONE
     }
 }
 

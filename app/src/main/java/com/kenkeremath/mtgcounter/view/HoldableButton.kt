@@ -85,18 +85,16 @@ class HoldableButton @JvmOverloads constructor(
         holdIntervals.append(500, MIN_HOLD_INTERVAL)
         background = ContextCompat.getDrawable(context, R.drawable.incrementer_bg)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            foreground = RippleDrawable(
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.ripple_color
-                    )
-                ),
-                null,
-                null
-            )
-        }
+        foreground = RippleDrawable(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    R.color.ripple_color
+                )
+            ),
+            null,
+            null
+        )
     }
 
     fun setListener(holdableButtonListener: HoldableButtonListener) {
@@ -119,9 +117,7 @@ class HoldableButton @JvmOverloads constructor(
         }
         event?.let {
             background?.setHotspot(it.x, it.y)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                foreground?.setHotspot(it.x, it.y)
-            }
+            foreground?.setHotspot(it.x, it.y)
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
                     LogUtils.d("Hold gesture started", LogUtils.TAG_INCREMENTER)

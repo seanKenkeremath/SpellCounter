@@ -67,7 +67,7 @@ class ManageCountersViewModel @Inject constructor(
 
     fun removeCounter(counterId: Int) {
         customCounters?.find {
-            it.id == counterId
+            it.id == counterId && it.deletable
         }?.let { template ->
             viewModelScope.launch {
                 profileRepository.deleteCounterTemplate(counterId)

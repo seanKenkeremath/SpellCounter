@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/dark_grey"
+        app:navigationIcon="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.kenkeremath.mtgcounter.view.TabletopLayout

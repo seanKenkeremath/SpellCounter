@@ -60,16 +60,21 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
 
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.setup_game_title)
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher)
-
-        //TODO:
-        val settingsButton = view.findViewById<View>(R.id.settings)
-        settingsButton.setOnClickListener {
-            val f = SettingsFragment.newInstance()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.container, f)
-                .addToBackStack(SettingsFragment.TAG)
-                .commit()
+        toolbar.inflateMenu(R.menu.setup)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_settings -> {
+                    val f = SettingsFragment.newInstance()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, f)
+                        .addToBackStack(SettingsFragment.TAG)
+                        .commit()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
         }
 
         playerNumberButtons = listOf(
@@ -210,8 +215,12 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                          * Set as many child views to visible as there are players. if greater than 4,
                          * the ellipsis will show
                          */
-                        for (buttonPlayerIndex in 0 until min(tabletopListLayoutButton.childCount, viewModel.numberOfPlayers.value!!)) {
-                            tabletopListLayoutButton.getChildAt(buttonPlayerIndex).visibility = View.VISIBLE
+                        for (buttonPlayerIndex in 0 until min(
+                            tabletopListLayoutButton.childCount,
+                            viewModel.numberOfPlayers.value!!
+                        )) {
+                            tabletopListLayoutButton.getChildAt(buttonPlayerIndex).visibility =
+                                View.VISIBLE
                         }
                     } else if (!aIsSet) {
                         setTabletopLayoutButtonContent(it[i], tabletopLayoutButtonA)

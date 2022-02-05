@@ -62,7 +62,7 @@ class ManageProfilesViewModel @Inject constructor(
     fun deleteProfile(name: String) {
         viewModelScope.launch {
             //optimistic removal from list for better responsiveness
-            allProfiles?.removeAll { it.name == name }
+            allProfiles?.removeAll { it.name == name && it.deletable }
             generateUiModels()
             profileRepository.deletePlayerTemplate(name)
                 .catch { }

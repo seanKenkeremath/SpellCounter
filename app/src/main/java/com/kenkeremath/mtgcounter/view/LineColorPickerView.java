@@ -3,9 +3,11 @@ package com.kenkeremath.mtgcounter.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -18,7 +20,7 @@ import androidx.annotation.Nullable;
 import com.kenkeremath.mtgcounter.R;
 
 /**
- * Legacy code, forked from a library
+ * Legacy code, forked from a library + adapted
  */
 
 public class LineColorPickerView extends View {
@@ -29,7 +31,8 @@ public class LineColorPickerView extends View {
     int[] colors = new int[1];
 
     private Paint paint;
-    private Rect rect = new Rect();
+    private Paint highlightPaint;
+    private RectF rect = new RectF();
 
     // indicate if nothing selected
     boolean isColorSelected = false;
@@ -41,6 +44,8 @@ public class LineColorPickerView extends View {
     private int mCellWidth;
     private int mCellHeight;
     private int mRowLength;
+    private int mHighlightColor;
+    private float mHighlightStrokeWidth;
 
     private int mOrientation = HORIZONTAL;
 
@@ -51,7 +56,7 @@ public class LineColorPickerView extends View {
     }
 
     public LineColorPickerView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0, 0);
+        this(context, attrs, 0, 0);
     }
 
     public LineColorPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -61,14 +66,13 @@ public class LineColorPickerView extends View {
     public LineColorPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs);
 
-        paint = new Paint();
-        paint.setStyle(Style.FILL);
-
         final TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.LineColorPickerView, 0, 0);
 
         try {
             mOrientation = a.getInteger(R.styleable.LineColorPickerView_orientation, HORIZONTAL);
             mRows = a.getInteger(R.styleable.LineColorPickerView_rows, 1);
+            mHighlightColor = a.getColor(R.styleable.LineColorPickerView_highlightColor, Color.BLACK);
+            mHighlightStrokeWidth = a.getDimension(R.styleable.LineColorPickerView_highlightStrokeWidth, 8f);
 
             if (!isInEditMode()) {
                 final int colorsArrayResId = a.getResourceId(R.styleable.LineColorPickerView_colors, -1);
@@ -94,14 +98,20 @@ public class LineColorPickerView extends View {
         } finally {
             a.recycle();
         }
-    }
 
+        paint = new Paint();
+        paint.setStyle(Style.FILL);
+
+        highlightPaint = new Paint();
+        highlightPaint.setStyle(Style.STROKE);
+        highlightPaint.setStrokeWidth(mHighlightStrokeWidth);
+        highlightPaint.setColor(mHighlightColor);
+    }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if (mOrientation == HORIZONTAL) {
             drawHorizontalPicker(canvas);
         } else {
@@ -163,13 +173,15 @@ public class LineColorPickerView extends View {
             rect.top = row * mCellHeight;
             rect.bottom = rect.top + mCellHeight;
 
-            if (isColorSelected && colors[i] == selectedColor) {
-                paint.setAlpha(255);
-            } else {
-                paint.setAlpha(100);
-            }
-
             canvas.drawRect(rect, paint);
+
+            if (isColorSelected && colors[i] == selectedColor) {
+                //stroke is centered on boundary. need to inset to get full stroke width inside rect
+                float insetAmount = mHighlightStrokeWidth / 2;
+                rect.inset(insetAmount, insetAmount);
+                canvas.drawRect(rect, highlightPaint);
+                rect.inset(-insetAmount, -insetAmount);
+            }
         }
     }
 
@@ -415,7 +427,7 @@ public class LineColorPickerView extends View {
             mCellHeight = Math.round(screenH / ((colors.length * 1f) / mRows));
             mCellWidth = screenW / mRows;
         }
-        mRowLength = (int) Math.ceil(colors.length / mRows *1f);
+        mRowLength = (int) Math.ceil(colors.length / mRows * 1f);
     }
 
     /**

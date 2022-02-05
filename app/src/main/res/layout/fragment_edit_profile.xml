@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/dark_grey"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
         app:title="@string/edit_profile_title" />
 
     <TextView

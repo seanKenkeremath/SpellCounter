@@ -8,6 +8,8 @@
         <attr name="colors" format="reference" />
         <attr name="selectedColorIndex" format="integer" />
         <attr name="rows" format="integer" />
+        <attr name="highlightColor" format="color|reference" />
+        <attr name="highlightStrokeWidth" format="dimension" />
     </declare-styleable>
     <declare-styleable name="CounterIconView">
         <attr name="labelMaxTextSize" format="dimension" />
