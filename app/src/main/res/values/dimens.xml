@@ -8,6 +8,7 @@
     <dimen name="start_game_button_height">80dp</dimen>
     <dimen name="spinner_start_margin">16dp</dimen>
     <dimen name="header_section_header_top_margin">8dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
 
     <!-- Setup -->
     <dimen name="setup_section_top_margin">24dp</dimen>

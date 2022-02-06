@@ -1,0 +1,59 @@
+<resources>
+
+    <!-- Common Components -->
+    <dimen name="start_button_margin">16dp</dimen>
+    <dimen name="start_game_button_height">120dp</dimen>
+
+    <!-- Setup -->
+    <dimen name="setup_tabletop_layout_button_width">100dp</dimen>
+    <dimen name="setup_tabletop_layout_button_height">150dp</dimen>
+    <dimen name="setup_player_list_item_height">180dp</dimen>
+    <dimen name="dialog_width">500dp</dimen>
+
+    <!-- Game -->
+    <!-- Game menu button dimensions must add up -->
+    <dimen name="game_menu_button_size">80dp</dimen>
+    <dimen name="game_menu_button_container_padding">8dp</dimen>
+    <dimen name="game_menu_button_container_diameter">96dp</dimen>
+    <dimen name="game_menu_button_container_radius">48dp</dimen>
+
+    <!-- Reveal Layout -->
+    <dimen name="pull_to_reveal_trigger_distance">8dp</dimen>
+    <dimen name="pull_to_reveal_fling_min_distance">24dp</dimen>
+    <dimen name="pull_to_reveal_translation_z_max">64dp</dimen>
+
+    <!-- Reveal Menu -->
+
+    <!-- Edit Player Game Counters -->
+    <dimen name="edit_counters_row_min_height">120dp</dimen>
+    <dimen name="edit_counter_confirm_button_height">120dp</dimen>
+    <dimen name="edit_counter_header_large_text_size">24sp</dimen>
+    <dimen name="edit_counter_header_small_text_size">14sp</dimen>
+    <dimen name="edit_counter_header_small_padding">8sp</dimen>
+    <dimen name="edit_counter_header_large_padding">8sp</dimen>
+
+    <!-- Rearrange Player Game Counters -->
+    <dimen name="rearrange_counter_item_width">100dp</dimen>
+
+    <!-- Player -->
+    <dimen name="player_options_panel_width">80dp</dimen>
+    <dimen name="player_life_width">150dp</dimen>
+    <dimen name="player_list_item_height">230dp</dimen>
+    <!-- If the player list would not exceed this value in height beyond the view,
+    then cells are sized to fit without scrolling. This may cause player cells to be
+    a few pixels smaller than they normally would -->
+
+    <!-- Counters -->
+    <dimen name="min_counter_width">100dp</dimen>
+
+    <!-- Edit Counter Template -->
+
+    <!-- Setup Player Options -->
+    <dimen name="color_picker_height">100dp</dimen>
+
+    <!-- Edit Profile -->
+    <dimen name="edit_player_counter_icon_size">64dp</dimen>
+
+    <!-- Divider -->
+
+</resources>
