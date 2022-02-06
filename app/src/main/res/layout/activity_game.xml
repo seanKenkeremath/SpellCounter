@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/game_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary_text">
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
         android:id="@+id/tabletop_container"
@@ -17,12 +18,27 @@
 
     </com.github.rongi.rotate_layout.layout.RotateLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/players_recycler_view"
+    <LinearLayout
+        android:id="@+id/recycler_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <!-- Menu button is added programmatically -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@mipmap/ic_launcher"
+            app:title="@string/app_name" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/players_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
+
+    </LinearLayout>
+
+    <!-- Menu button is added programmatically for non-list layouts -->
 </FrameLayout>

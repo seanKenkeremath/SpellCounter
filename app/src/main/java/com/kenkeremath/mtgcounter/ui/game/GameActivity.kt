@@ -28,6 +28,8 @@ import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.TypedValue
+import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import com.kenkeremath.mtgcounter.ui.game.options.GameOptionsDialogFragment
 
@@ -52,6 +54,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
     private lateinit var tabletopLayout: TabletopLayout
     private lateinit var tabletopLayoutAdapter: GameTabletopLayoutAdapter
 
+    private lateinit var playersRecyclerViewContainer: ViewGroup
     private lateinit var playersRecyclerView: RecyclerView
     private lateinit var playersRecyclerAdapter: GamePlayerRecyclerAdapter
 
@@ -63,6 +66,11 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
 
         hideSystemUI()
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            openGameMenu()
+        }
+
         gameContainer = findViewById(R.id.game_container)
 
         tabletopContainer = findViewById(R.id.tabletop_container)
@@ -70,6 +78,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         tabletopLayoutAdapter = GameTabletopLayoutAdapter(tabletopLayout, this, this)
         tabletopLayoutAdapter.setPositions(viewModel.tabletopType)
 
+        playersRecyclerViewContainer = findViewById(R.id.recycler_view_container)
         playersRecyclerView = findViewById(R.id.players_recycler_view)
         playersRecyclerView.layoutManager = LinearLayoutManager(this)
         playersRecyclerAdapter = GamePlayerRecyclerAdapter(this, this)
@@ -91,12 +100,13 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         if (viewModel.tabletopType == TabletopType.LIST) {
             playersRecyclerView.visibility = View.VISIBLE
             tabletopContainer.visibility = View.GONE
+            playersRecyclerViewContainer.visibility = View.VISIBLE
         } else {
             playersRecyclerView.visibility = View.GONE
             tabletopContainer.visibility = View.VISIBLE
+            playersRecyclerViewContainer.visibility = View.GONE
+            addMenuButton()
         }
-
-        addMenuButton()
 
         viewModel.players.observe(this) {
             tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
@@ -144,20 +154,27 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
 
                 when (viewModel.tabletopType) {
                     TabletopType.NONE,
-                    TabletopType.LIST,
+                    TabletopType.LIST -> {
+                        //Hide (use toolbar instead)
+                        container.visibility = View.GONE
+                    }
                     TabletopType.ONE_VERTICAL -> {
                         //Top left
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_corner_bg
+                            R.drawable.game_menu_button_container_bg
                         )
+                        containerLp.topMargin = containerPadding
+                        containerLp.leftMargin = containerPadding
                     }
                     TabletopType.ONE_HORIZONTAL -> {
                         //Top right (appears as top left)
-                        containerLp.leftMargin = tabletopLayout.width - containerSize
+                        containerLp.topMargin = containerPadding
+                        containerLp.leftMargin =
+                            tabletopLayout.width - containerSize - containerPadding
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_corner_bg
+                            R.drawable.game_menu_button_container_bg
                         )
                         container.rotation = 90f
                     }
@@ -249,12 +266,16 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                     ), null, container.background
                 )
                 container.setOnClickListener {
-                    GameOptionsDialogFragment.newInstance()
-                        .show(supportFragmentManager, TAG_GAME_OPTIONS)
+                    openGameMenu()
                 }
                 return false
             }
         })
+    }
+
+    private fun openGameMenu() {
+        GameOptionsDialogFragment.newInstance()
+            .show(supportFragmentManager, TAG_GAME_OPTIONS)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
