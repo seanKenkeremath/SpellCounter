@@ -22,7 +22,7 @@ object LogUtils {
     )
 
     fun d(message: String, tag: String = TAG_DEFAULT) {
-        if (true || BuildConfig.DEBUG && whiteList.contains(tag)) {
+        if (BuildConfig.DEBUG && whiteList.contains(tag)) {
             Log.d(tag, message)
         }
     }
