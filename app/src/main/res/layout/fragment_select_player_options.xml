@@ -42,11 +42,11 @@
 
     <TextView
         style="@style/Label"
-        android:textSize="12sp"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/customize_player_profiles_hint" />
+        android:layout_marginTop="8dp"
+        android:text="@string/customize_player_profiles_hint"
+        android:textSize="12sp" />
 
     <TextView
         style="@style/Header3"
@@ -63,6 +63,7 @@
         android:layout_marginStart="@dimen/default_padding"
         android:layout_marginTop="@dimen/default_padding"
         android:layout_marginEnd="@dimen/default_padding"
+        android:elevation="4dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:orientation="horizontal"

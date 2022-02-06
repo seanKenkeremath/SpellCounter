@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewOutlineProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.math.MathUtils.clamp
 import com.github.rongi.rotate_layout.layout.RotateLayout
@@ -47,6 +48,11 @@ class TabletopLayout : ConstraintLayout {
         for (key in panels.keys) {
             panels[key]?.tag = key
         }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        outlineProvider = ViewOutlineProvider.BOUNDS
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {

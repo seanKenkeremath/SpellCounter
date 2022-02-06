@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
 
@@ -356,6 +357,7 @@ public class LineColorPickerView extends View {
         recalcCellSize();
 
         super.onSizeChanged(w, h, oldw, oldh);
+        setOutlineProvider(ViewOutlineProvider.BOUNDS);
     }
 
     // @Override

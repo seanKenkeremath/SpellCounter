@@ -31,6 +31,7 @@
         android:layout_marginHorizontal="@dimen/setup_tabletop_padding_horizontal"
         android:layout_marginTop="@dimen/default_padding"
         android:layout_marginBottom="@dimen/setup_tabletop_padding_bottom"
+        android:elevation="4dp"
         app:layout_constraintBottom_toTopOf="@id/start_button"
         app:layout_constraintTop_toBottomOf="@+id/customize_tabletop_section_title" />
 
@@ -41,6 +42,7 @@
         android:layout_marginHorizontal="@dimen/setup_tabletop_padding_horizontal"
         android:layout_marginTop="@dimen/default_padding"
         android:layout_marginBottom="@dimen/setup_tabletop_padding_bottom"
+        android:elevation="4dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@id/start_button"
         app:layout_constraintTop_toBottomOf="@+id/customize_tabletop_section_title" />
