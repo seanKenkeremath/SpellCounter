@@ -73,6 +73,7 @@
     <style name="ValueEditText">
         <item name="android:ems">4</item>
         <item name="android:hint">0</item>
+        <item name="android:maxEms">4</item>
         <item name="android:imeOptions">flagNoExtractUi</item>
         <item name="android:selectAllOnFocus">true</item>
         <item name="android:maxLength">4</item>

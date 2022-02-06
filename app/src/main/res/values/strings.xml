@@ -19,6 +19,9 @@
     <string name="customize_player_profiles_hint">Profiles can be created and edited in Settings</string>
     <string name="customize_layout">Customize</string>
     <string name="start_game">Start Game</string>
+    <string name="custom_life">Custom Life</string>
+    <string name="custom_life_button_label">Custom</string>
+    <string name="starting_life_total_label">Starting Life Total:</string>
 
     <!-- Game -->
     <string name="exit_game">Exit Game</string>

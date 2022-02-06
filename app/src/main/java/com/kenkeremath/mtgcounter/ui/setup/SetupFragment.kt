@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
@@ -103,7 +104,12 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         }
         customLifeButton = view.findViewById(R.id.custom_life_button)
         customLifeButton.setOnClickListener {
-//            viewModel.insert()
+            val f = CustomLifeDialogFragment.newInstance()
+            f.show(childFragmentManager, CustomLifeDialogFragment.TAG)
+            f.setFragmentResultListener(CustomLifeDialogFragment.REQUEST_CUSTOM_LIFE) { _, bundle ->
+                val startingLife = bundle.getInt(CustomLifeDialogFragment.RESULT_LIFE_TOTAL, 0)
+                viewModel.setStartingLife(startingLife)
+            }
         }
 
         keepScreenAwakeCheckbox = view.findViewById(R.id.keep_screen_awake_checkbox)
@@ -165,11 +171,19 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             it?.let {
                 var match = false
                 for (lifeButton in lifeButtons) {
-                    lifeButton.isSelected = lifeButton.tag == it
-                    match = true
+                    if (lifeButton.tag == it) {
+                        lifeButton.isSelected = lifeButton.tag == it
+                        match = true
+                    } else {
+                        lifeButton.isSelected = false
+                    }
                 }
                 if (!match) {
+                    customLifeButton.text = "$it"
                     customLifeButton.isSelected = true
+                } else {
+                    customLifeButton.isSelected = false
+                    customLifeButton.text = getString(R.string.custom_life_button_label)
                 }
             }
         })
