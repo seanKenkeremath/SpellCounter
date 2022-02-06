@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.kenkeremath.mtgcounter.persistence.Datastore
+import com.kenkeremath.mtgcounter.legacy.MigrationHelper
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
@@ -17,22 +16,17 @@ import javax.inject.Inject
 class SplashActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var datastore: Datastore
+    lateinit var migrationHelper: MigrationHelper
 
     @Inject
     lateinit var profilesRepository: ProfileRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (datastore.isFirstLaunch) {
+        if (migrationHelper.needsMigration) {
             lifecycleScope.launch {
-                profilesRepository.createStockTemplates()
-                    .catch {
-                        //TODO: error handling?
-                        finish()
-                    }
+                migrationHelper.performMigration()
                     .collect {
-                        datastore.setFirstLaunchComplete()
                         proceed()
                     }
             }

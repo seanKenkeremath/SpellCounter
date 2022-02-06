@@ -4,6 +4,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -11,13 +15,22 @@ android {
         applicationId "com.kenkeremath.mtgcounter"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 14
+        versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -48,6 +61,7 @@ ext {
     archLifecycleVersion = '2.3.1'
     daggerVersion = '2.35'
     coroutinesVersion = '1.4.1'
+    moshi_version = '1.12.0'
 }
 
 dependencies {
@@ -70,9 +84,11 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     kapt "androidx.room:room-compiler:$roomVersion"
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
-    //Other libs
-    implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
-    implementation 'rongi.rotate-layout:rotate-layout:3.0.0'
+
+    //Moshi
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -89,6 +105,9 @@ dependencies {
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
+
+    //Misc
+    implementation 'rongi.rotate-layout:rotate-layout:3.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.6'

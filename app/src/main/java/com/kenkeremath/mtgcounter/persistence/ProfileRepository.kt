@@ -12,8 +12,8 @@ interface ProfileRepository {
     fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean>
     fun deletePlayerTemplate(profileName: String): Flow<Boolean>
     fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int>
+    fun addCounterTemplates(counterTemplates: List<CounterTemplateModel>): Flow<List<Int>>
     fun addCounterTemplateToProfile(counterTemplate: CounterTemplateModel, profileName: String): Flow<Int>
     fun deleteCounterTemplate(counterId: Int): Flow<Boolean>
-    fun createStockTemplates(): Flow<Boolean>
     fun preloadCache(): Flow<Boolean>
 }

@@ -2,7 +2,6 @@ package com.kenkeremath.mtgcounter.persistence
 
 import com.kenkeremath.mtgcounter.coroutines.DefaultDispatcherProvider
 import com.kenkeremath.mtgcounter.coroutines.DispatcherProvider
-import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
@@ -79,16 +78,15 @@ class ProfileRepositoryImpl @Inject constructor(
             )
         database.templateDao().deletePlayerCounterCrossRefsForPlayerTemplate(playerTemplate.name)
         database.templateDao().replacePlayerTemplate(playerEntity)
-        for (counterTemplate in playerTemplate.counters) {
-            val counterId =
-                addCounterTemplateInternal(counterTemplate)
-            database.templateDao().insert(
+        val counterIds = addCounterTemplatesInternal(playerTemplate.counters)
+        database.templateDao().insertPlayerCounterPairings(
+            counterIds.map {
                 PlayerCounterTemplateCrossRefEntity(
                     playerTemplateId = playerEntity.name,
-                    counterTemplateId = counterId
+                    counterTemplateId = it,
                 )
-            )
-        }
+            }
+        )
     }
 
     override fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int> {
@@ -99,6 +97,18 @@ class ProfileRepositoryImpl @Inject constructor(
         }
             .flatMapConcat { counterId ->
                 preloadCache().map { counterId }
+            }
+            .flowOn(dispatcherProvider.default())
+    }
+
+    override fun addCounterTemplates(counterTemplates: List<CounterTemplateModel>): Flow<List<Int>> {
+        invalidateCache()
+        return flow {
+            val results = addCounterTemplatesInternal(counterTemplates)
+            emit(results)
+        }
+            .flatMapConcat { counterIds ->
+                preloadCache().map { counterIds }
             }
             .flowOn(dispatcherProvider.default())
     }
@@ -153,28 +163,14 @@ class ProfileRepositoryImpl @Inject constructor(
         ).toInt()
     }
 
-    override fun createStockTemplates(): Flow<Boolean> {
-        val stockCounterTemplates = mutableListOf<CounterTemplateModel>()
-        for (counterSymbol in CounterSymbol.values().filter { it.resId != null }) {
-            stockCounterTemplates.add(
-                CounterTemplateModel(
-                    symbol = counterSymbol,
-                    deletable = false
-                )
-            )
-        }
-        //This one is deletable
-        stockCounterTemplates.add(CounterTemplateModel(name = "XP"))
-
-        val stockPlayerProfile = PlayerTemplateModel(
-            name = PlayerTemplateModel.NAME_DEFAULT,
-            counters = stockCounterTemplates,
-            deletable = false
-        )
-        return flow {
-            addPlayerTemplateInternal(stockPlayerProfile)
-            emit(true)
-        }.flowOn(dispatcherProvider.default())
+    private suspend fun addCounterTemplatesInternal(
+        counterTemplates: List<CounterTemplateModel>
+    ): List<Int> {
+        return database.templateDao().insertCounters(
+            counterTemplates.map {
+                CounterTemplateEntity(it)
+            }
+        ).map { it.toInt() }
     }
 
     override fun preloadCache(): Flow<Boolean> {

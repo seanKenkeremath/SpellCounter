@@ -16,6 +16,9 @@ abstract class TemplateDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insert(playerTemplateEntity: PlayerTemplateEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertPlayers(playerTemplateEntities: List<PlayerTemplateEntity>)
+
     @Query("Select * from ${CounterTemplateEntity.TABLE_COUNTER_TEMPLATES}")
     abstract fun getCounterTemplates() : List<CounterTemplateEntity>
 
@@ -29,6 +32,9 @@ abstract class TemplateDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(pairing: PlayerCounterTemplateCrossRefEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertPlayerCounterPairings(pairings: List<PlayerCounterTemplateCrossRefEntity>)
 
     @Query("DELETE FROM ${PlayerCounterTemplateCrossRefEntity.TABLE_PLAYER_COUNTER_CROSS_REFS} WHERE ${PlayerCounterTemplateCrossRefEntity.COLUMN_PLAYER_TEMPLATE_ID} = :playerTemplateName")
     abstract suspend fun deletePlayerCounterCrossRefsForPlayerTemplate(playerTemplateName: String)

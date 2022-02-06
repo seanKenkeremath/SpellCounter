@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter
 
 import android.content.Context
 import androidx.room.Room
+import com.kenkeremath.mtgcounter.legacy.MigrationHelper
 import com.kenkeremath.mtgcounter.persistence.*
 import com.kenkeremath.mtgcounter.persistence.images.ImageApi
 import com.kenkeremath.mtgcounter.persistence.images.ImageRepository
@@ -39,6 +40,12 @@ object MainModule {
             AppDatabase::class.java,
             "template_database"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesMigrationHelper(appDatabase: AppDatabase, datastore: Datastore): MigrationHelper {
+        return MigrationHelper(datastore, appDatabase)
     }
 
     @Provides

@@ -21,6 +21,7 @@ data class CounterTemplateModel(
     companion object {
         //Room treats 0 as not set for auto-generating primary keys
         const val ID_NOT_SET = 0
+        const val MAX_LABEL_SIZE = 4
     }
     constructor(entity: CounterTemplateEntity) : this(
         id = entity.id,
