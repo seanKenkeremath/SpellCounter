@@ -136,8 +136,7 @@ class SetupViewModel @Inject constructor(
     fun setTabletopType(tabletopType: TabletopType) {
         gameRepository.tabletopType = tabletopType
         selectedTabletopType = tabletopType
-        _showCustomizeLayoutButton.value =
-            tabletopType != TabletopType.LIST && tabletopType != TabletopType.NONE
+        _showCustomizeLayoutButton.value = tabletopType != TabletopType.NONE
         _tabletopTypes.value = availableTabletopTypes.map {
             TabletopLayoutSelectionUiModel(
                 it,

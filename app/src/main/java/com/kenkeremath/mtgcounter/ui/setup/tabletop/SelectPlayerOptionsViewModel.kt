@@ -15,14 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SelectPlayerOptionsViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
-    private var _setupModel: PlayerSetupModel? =
-        savedStateHandle.get<PlayerSetupModel>(SelectPlayerOptionsDialogFragment.ARGS_MODEL)
-            ?: throw IllegalArgumentException("Model must be passed to ${javaClass.simpleName}")
-    val setupModel: PlayerSetupModel
-        get() = _setupModel!!
 
     private var loading = false
 
@@ -32,8 +26,16 @@ class SelectPlayerOptionsViewModel @Inject constructor(
         MutableLiveData(emptyList())
     val profiles: LiveData<List<ProfileUiModel>> = _profiles
 
+    private val _setupModel: MutableLiveData<PlayerSetupModel> =
+        MutableLiveData()
+    val setupModel: LiveData<PlayerSetupModel> = _setupModel
+
 
     init {
+        val setupModel =
+            savedStateHandle.get<PlayerSetupModel>(SelectPlayerOptionsDialogFragment.ARGS_MODEL)
+                ?: throw IllegalArgumentException("Model must be passed to ${javaClass.simpleName}")
+        _setupModel.value = setupModel
         refresh()
     }
 
@@ -59,14 +61,14 @@ class SelectPlayerOptionsViewModel @Inject constructor(
     }
 
     fun updateColor(color: CounterColor) {
-        _setupModel = _setupModel?.copy(color = color)
+        _setupModel.value = _setupModel.value?.copy(color = color)
     }
 
     fun updateProfile(profileName: String) {
         allProfiles.find {
             it.name == profileName
         }?.let {
-            _setupModel = _setupModel?.copy(template = it)
+            _setupModel.value = _setupModel.value?.copy(template = it)
         }
     }
 

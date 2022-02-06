@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -39,6 +40,22 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
     private val viewModel: SelectPlayerOptionsViewModel by viewModels()
 
+    private var spinnerAdapter: SpinnerAdapter? = null
+
+    private val spinnerItemListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            viewModel.profiles.value?.get(position)?.name?.let {
+                viewModel.updateProfile(it)
+            }
+        }
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,9 +82,6 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
         }
 
         binding.colorPickerView.colors = allColors
-        binding.colorPickerView.setSelectedColor(
-            allColors[CounterColor.values().indexOf(viewModel.setupModel.color)]
-        )
 
         binding.colorPickerView.setOnColorChangedListener {
             colorMap[it]?.let { color ->
@@ -75,37 +89,45 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             }
         }
 
+        viewModel.setupModel.observe(viewLifecycleOwner, {
+            binding.colorPickerView.setSelectedColor(
+                allColors[CounterColor.values().indexOf(it.color)]
+            )
+            setSpinnerSelection()
+        })
+
         viewModel.profiles.observe(viewLifecycleOwner, { profiles ->
             val spinnerOptions = profiles.map {
                 it.name
             }
-            val spinnerAdapter = ArrayAdapter(
+            spinnerAdapter = ArrayAdapter(
                 requireContext(),
                 R.layout.item_spinner_text,
                 spinnerOptions
             )
             binding.profileSpinner.adapter = spinnerAdapter
-            binding.profileSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        viewModel.updateProfile(profiles[position].name)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
+            setSpinnerSelection()
         })
 
         binding.saveButton.setOnClickListener {
-            val b = Bundle()
-            b.putParcelable(RESULT_MODEL, viewModel.setupModel)
-            setFragmentResult(REQUEST_CUSTOMIZE, b)
-            dismiss()
+            viewModel.setupModel.value?.let {
+                val b = Bundle()
+                b.putParcelable(RESULT_MODEL, it)
+                setFragmentResult(REQUEST_CUSTOMIZE, b)
+                dismiss()
+            }
         }
+    }
+
+    private fun setSpinnerSelection() {
+        binding.profileSpinner.onItemSelectedListener = null
+        val index = viewModel.profiles.value?.let { profiles ->
+            profiles.indexOfFirst { viewModel.setupModel.value?.template?.name == it.name }
+        } ?: -1
+        if (index != -1) {
+            binding.profileSpinner.setSelection(index)
+        }
+        binding.profileSpinner.onItemSelectedListener = spinnerItemListener
     }
 
     override fun onDestroyView() {
