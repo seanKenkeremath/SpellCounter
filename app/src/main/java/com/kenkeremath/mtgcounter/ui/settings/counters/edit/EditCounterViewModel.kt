@@ -32,7 +32,7 @@ class EditCounterViewModel @Inject constructor(
         get() = _newCounterTemplate
 
     private val _selectedCounterType: MutableLiveData<CreateCounterType> =
-        MutableLiveData<CreateCounterType>(CreateCounterType.TEXT)
+        MutableLiveData<CreateCounterType>(CreateCounterType.IMAGE)
     val selectedCounterType: LiveData<CreateCounterType> = _selectedCounterType
 
     private val _counterLabel: MutableLiveData<String> = MutableLiveData<String>("")
@@ -58,17 +58,24 @@ class EditCounterViewModel @Inject constructor(
         MutableLiveData<CounterModel?>(null)
     val counterPreview: LiveData<CounterModel?> = _counterPreview
 
+    private val _saveEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    val saveEnabled: LiveData<Boolean> = _saveEnabled
+
     private val _saveStatus: SingleLiveEvent<SaveCounterResult> = SingleLiveEvent()
     val saveStatus: LiveData<SaveCounterResult> = _saveStatus
 
+    init {
+        updateUi()
+    }
+
     fun selectCounterType(type: CreateCounterType) {
         _selectedCounterType.value = type
-        updateTemplate()
+        updateUi()
     }
 
     fun updateLabel(label: String) {
         _counterLabel.value = label
-        updateTemplate()
+        updateUi()
     }
 
     fun updateUrl(url: String) {
@@ -82,18 +89,18 @@ class EditCounterViewModel @Inject constructor(
             }
         }
         _counterUrl.value = resolvedUrl
-        updateTemplate()
+        updateUi()
     }
 
     fun updateLocalUri(uri: String, fileName: String) {
         _counterImageUri.value = uri
         _counterImageFileName.value = fileName
-        updateTemplate()
+        updateUi()
     }
 
     fun setIsFullArtImage(fullArt: Boolean) {
         _isFullArtImage.value = fullArt
-        updateTemplate()
+        updateUi()
     }
 
     fun updateStartingValue(startingValue: String) {
@@ -103,12 +110,14 @@ class EditCounterViewModel @Inject constructor(
             0
         }
         _startingValue.value = parsedValue
-        updateTemplate()
+        updateUi()
     }
 
-    private fun updateTemplate() {
+    private fun updateUi() {
+        var saveEnabled = false
         when (_selectedCounterType.value) {
             CreateCounterType.TEXT -> {
+                saveEnabled = !_counterLabel.value.isNullOrBlank()
                 _newCounterTemplate = _newCounterTemplate.copy(
                     name = _counterLabel.value,
                     uri = null,
@@ -117,18 +126,22 @@ class EditCounterViewModel @Inject constructor(
                 )
             }
             CreateCounterType.IMAGE -> {
+                val uri = _counterImageUri.value.let { if (it.isNullOrBlank()) null else it }
+                saveEnabled = !uri.isNullOrBlank()
                 _newCounterTemplate =
                     _newCounterTemplate.copy(
                         name = null,
-                        uri = _counterImageUri.value.let { if (it.isNullOrBlank()) null else it },
+                        uri = uri,
                         startingValue = _startingValue.value ?: 0,
                         isFullArtImage = _isFullArtImage.value == true,
                     )
             }
             CreateCounterType.URL -> {
+                val uri = _counterUrl.value.let { if (it.isNullOrBlank()) null else it }
+                saveEnabled = !uri.isNullOrBlank()
                 _newCounterTemplate = _newCounterTemplate.copy(
                     name = null,
-                    uri = _counterUrl.value.let { if (it.isNullOrBlank()) null else it },
+                    uri = uri,
                     startingValue = _startingValue.value ?: 0,
                     isFullArtImage = _isFullArtImage.value == true,
                 )
@@ -136,6 +149,7 @@ class EditCounterViewModel @Inject constructor(
             null -> {}
         }
         generatePreview()
+        _saveEnabled.value = saveEnabled
     }
 
     private fun generatePreview() {
@@ -143,6 +157,9 @@ class EditCounterViewModel @Inject constructor(
     }
 
     fun save() {
+        if (_saveEnabled.value != true) {
+            return
+        }
         viewModelScope.launch {
             /**
              * Save image first to generate local file path. set that as URI before saving template

@@ -14,6 +14,7 @@
     <string name="customize_player">Customize Player</string>
     <string name="customize_player_profile">Profile:</string>
     <string name="customize_player_color">Select Color:</string>
+    <string name="customize_player_profiles_hint">Profiles can be created and edited in Settings</string>
 
     <!-- Game -->
     <string name="exit_game">Exit Game</string>
@@ -31,20 +32,28 @@
     <string name="create_counter">Create Counter</string>
     <string name="profile_edit_select_counters_header">Counters:</string>
     <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_save_changes_title">Unsaved Changes</string>
+    <string name="edit_profile_save_changes_message">There are unsaved changes to this profile. Discard Changes?</string>
+    <string name="edit_profile_save_changes_discard">Discard</string>
+    <string name="edit_profile_replace_existing_title">Profile Exists</string>
+    <string name="edit_profile_replace_existing_message">A profile with the name %s already exists. Would you like to replace it?</string>
+    <string name="edit_profile_replace_existing_replace">Replace</string>
+    <string name="edit_profile_replace_existing_fail_title">Profile Exists</string>
+    <string name="edit_profile_replace_existing_fail_message">The %s profile cannot be replaced. Please make edits to the existing profile instead.</string>
     <string name="create_counter_browse_button">Browse</string>
 
     <string name="create_counter_type_label">Counter Type</string>
     <string name="create_counter_preview">Preview</string>
     <string name="create_counter_type_text">Text</string>
-    <string name="create_counter_text_hint">Max 4 Characters</string>
+    <string name="create_counter_text_hint">ABCD</string>
     <string name="create_counter_type_image">Local Image</string>
-    <string name="create_counter_type_url">URL</string>
-    <string name="create_counter_name_label">Label:</string>
-    <string name="create_counter_url_label">Image URL:</string>
+    <string name="create_counter_type_url">Image URL</string>
+    <string name="create_counter_name_label">Label Text/Emoji:</string>
+    <string name="create_counter_url_label">Image/GIF URL:</string>
     <string name="create_counter_url_hint">https://</string>
-    <string name="create_counter_local_uri_label">Local Image:</string>
-    <string name="create_counter_local_uri_hint">Select Image/GIF</string>
-    <string name="create_counter_full_art_label">Full Art Background:</string>
+    <string name="create_counter_local_uri_label">Local Image/GIF:</string>
+    <string name="create_counter_local_uri_hint">Click To Browse</string>
+    <string name="create_counter_full_art_label">Full Art:</string>
 
     <!-- Legacy Strings -->
     <string name="cancel">Cancel</string>

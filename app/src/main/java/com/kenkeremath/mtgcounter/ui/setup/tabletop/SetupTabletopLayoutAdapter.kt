@@ -3,6 +3,7 @@ package com.kenkeremath.mtgcounter.ui.setup.tabletop
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -33,6 +34,7 @@ class SetupTabletopLayoutViewHolder(
         LayoutInflater.from(container.context).inflate(R.layout.item_setup_player, container, false)
 
     private val playerContainer: View = view.findViewById(R.id.player_container)
+    private val playerImage: ImageView = view.findViewById(R.id.player_background_image)
     private val templateName: TextView = view.findViewById(R.id.player_setup_template_name)
 
     private var playerId: Int = -1
@@ -53,7 +55,7 @@ class SetupTabletopLayoutViewHolder(
             color, view.resources.getInteger(R.integer.player_color_alpha)
         )
 
-        playerContainer.setBackgroundColor(alphaColor)
+        playerImage.setBackgroundColor(alphaColor)
         templateName.text = data.template?.name
     }
 }

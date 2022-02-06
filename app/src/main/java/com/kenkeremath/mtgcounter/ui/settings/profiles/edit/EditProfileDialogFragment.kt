@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -23,7 +24,7 @@ import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterCli
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedListener,
+internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedListener,
     OnManageCounterClickedListener {
 
     companion object {
@@ -88,6 +89,7 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
         nameEditText = view.findViewById(R.id.profile_name_edit_text)
         nameEditText.addTextChangedListener(textChangedListener)
         nameEditText.isEnabled = viewModel.isNameChangeEnabled
+        nameEditText.isFocusable = viewModel.isNameChangeEnabled
 
         viewModel.profileName.observe(viewLifecycleOwner, {
             //Prevent updates while user is typing
@@ -103,12 +105,36 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
             recyclerAdapter.setCounters(it)
         })
 
+        viewModel.saveButtonEnabled.observe(viewLifecycleOwner, {
+            save.isEnabled = it
+        })
+
         viewModel.saveStatus.observe(viewLifecycleOwner, {
             when (it) {
-                SaveProfileResult.SUCCESSFUL -> requireActivity().onBackPressed()
-                //TODO
-                SaveProfileResult.NAME_CONFLICT -> {}
-                SaveProfileResult.NAME_CONFLICT_CANNOT_REPLACE -> {}
+                SaveProfileResult.SUCCESSFUL -> requireActivity().finish()
+                SaveProfileResult.NAME_CONFLICT -> {
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.edit_profile_replace_existing_title)
+                        .setMessage(getString(R.string.edit_profile_replace_existing_message, viewModel.profileName.value))
+                        .setPositiveButton(R.string.edit_profile_replace_existing_replace) { d, _ ->
+                            viewModel.saveChanges(replaceExisting = true)
+                            d.dismiss()
+                        }
+                        .setNegativeButton(android.R.string.cancel) {d, _ ->
+                            d.dismiss()
+                        }
+                    dialog.show()
+                }
+                SaveProfileResult.NAME_CONFLICT_CANNOT_REPLACE -> {
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.edit_profile_replace_existing_fail_title)
+                        .setMessage(getString(R.string.edit_profile_replace_existing_fail_message, viewModel.profileName.value))
+                        .setPositiveButton(android.R.string.ok) { d, _ ->
+                            d.dismiss()
+                        }
+                    dialog.show()
+                }
+                //Should be caught be button disabled state
                 SaveProfileResult.INVALID_NAME -> {}
                 else -> {}
             }
@@ -118,6 +144,10 @@ class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounterClickedL
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
+    }
+
+    fun isBackEnabled(): Boolean {
+        return !viewModel.hasEdits
     }
 
     override fun onCounterSelected(id: Int, selected: Boolean) {

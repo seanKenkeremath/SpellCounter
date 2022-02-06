@@ -28,7 +28,8 @@ class EditProfileViewModel @Inject constructor(
         get() = originalProfile?.name
 
     val isNewProfile = originalProfile == null
-    val hasEdits = originalProfile != editedProfile
+    val hasEdits: Boolean
+        get() = originalProfile != editedProfile
 
     //Disable name change for all existing profiles
     //TODO: if we use a separate ID as a primary key for profile names, we can allow edits
@@ -46,6 +47,9 @@ class EditProfileViewModel @Inject constructor(
 
     private val _profileName: MutableLiveData<String> = MutableLiveData(editedProfile.name)
     val profileName: LiveData<String> = _profileName
+
+    private val _saveButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
+    val saveButtonEnabled: LiveData<Boolean> = _saveButtonEnabled
 
     private val _saveStatus: SingleLiveEvent<SaveProfileResult> = SingleLiveEvent()
     val saveStatus: LiveData<SaveProfileResult> = _saveStatus
@@ -92,6 +96,8 @@ class EditProfileViewModel @Inject constructor(
                 editedProfile.counters.find { it.id == template.id } != null
             )
         }
+        _saveButtonEnabled.value =
+            originalProfile != editedProfile && editedProfile.name.isNotBlank()
     }
 
     fun updateName(name: String) {
@@ -100,6 +106,7 @@ class EditProfileViewModel @Inject constructor(
         }
         editedProfile = editedProfile.copy(name = name.trim())
         _profileName.value = editedProfile.name
+        updateUi()
     }
 
     fun addNewCounter(counterTemplateModel: CounterTemplateModel) {

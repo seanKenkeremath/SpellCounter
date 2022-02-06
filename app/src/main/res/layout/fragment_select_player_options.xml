@@ -17,12 +17,36 @@
         app:navigationIcon="@drawable/ic_close"
         app:title="@string/customize_player" />
 
-    <Spinner
-        android:id="@+id/profile_spinner"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin" />
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/default_padding"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Header3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/customize_player_profile" />
+
+        <Spinner
+            android:id="@+id/profile_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spinner_start_margin" />
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/Label"
+        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/customize_player_profiles_hint" />
 
     <TextView
         style="@style/Header3"

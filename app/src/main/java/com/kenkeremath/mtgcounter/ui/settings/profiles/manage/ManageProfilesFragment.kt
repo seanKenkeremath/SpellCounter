@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.ui.settings.profiles.edit.EditProfileActivity
 import com.kenkeremath.mtgcounter.ui.settings.profiles.edit.EditProfileDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,11 +73,7 @@ class ManageProfilesFragment : Fragment(), OnProfileClickedListener {
 
     override fun onProfileClicked(name: String) {
         viewModel.getProfileByName(name)?.let {
-            val f = EditProfileDialogFragment.newInstance(it)
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.container, f)
-                .addToBackStack(EditProfileDialogFragment.TAG)
-                .commit()
+            startActivity(EditProfileActivity.getStartIntent(requireContext(), it))
         }
     }
 
@@ -85,10 +82,6 @@ class ManageProfilesFragment : Fragment(), OnProfileClickedListener {
     }
 
     override fun onProfileCreateClicked() {
-        val f = EditProfileDialogFragment.newInstance()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, f)
-            .addToBackStack(EditProfileDialogFragment.TAG)
-            .commit()
+        startActivity(EditProfileActivity.getStartIntent(requireContext()))
     }
 }

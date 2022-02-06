@@ -171,7 +171,7 @@ class EditCounterDialogFragment : DialogFragment() {
         binding.inputCounterText.addTextChangedListener(textChangedListener)
         binding.inputCounterStartingValue.addTextChangedListener(startingValueChangedListener)
 
-        binding.counterLocalImageBrowse.setOnClickListener {
+        binding.counterLocalImageName.setOnClickListener {
             getImageFileHandler.launch(arrayOf("image/*"))
         }
 
@@ -266,6 +266,9 @@ class EditCounterDialogFragment : DialogFragment() {
             }
         })
 
+        viewModel.saveEnabled.observe(viewLifecycleOwner, {
+            binding.saveButton.isEnabled = it
+        })
         viewModel.saveStatus.observe(viewLifecycleOwner, {
             when (it) {
                 SaveCounterResult.SUCCESSFUL -> {

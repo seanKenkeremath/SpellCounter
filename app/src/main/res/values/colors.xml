@@ -48,6 +48,5 @@
     </integer-array>
 
     <color name="default_icon_tint">@color/primary_text</color>
-    <color name="start_button_color">@color/primary_text</color>
 
 </resources>

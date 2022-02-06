@@ -4,6 +4,8 @@
     <dimen name="default_padding">16dp</dimen>
 
     <dimen name="start_button_margin">8dp</dimen>
+    <dimen name="spinner_start_margin">16dp</dimen>
+    <dimen name="edit_section_header_top_margin">8dp</dimen>
 
     <!-- Setup -->
     <dimen name="start_game_button_height">80dp</dimen>

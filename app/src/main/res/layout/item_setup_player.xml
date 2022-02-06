@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/player_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/player_container_bg"
     android:gravity="center"
     android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/player_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/player_divider_width" />
 
     <TextView
         android:id="@+id/player_setup_template_name"
         style="@style/NavMenuText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_gravity="center"
         app:drawableStartCompat="@drawable/ic_user"
         tools:text="Default" />
 
-</LinearLayout>
+</FrameLayout>
