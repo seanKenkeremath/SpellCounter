@@ -34,19 +34,6 @@
     <color name="indigo">#536DFE</color>
     <color name="green">#00C853</color>
 
-    <integer-array name="counter_palette">
-        <item>@color/light_grey</item>
-        <item>@color/light_pink</item>
-        <item>@color/light_red</item>
-        <item>@color/light_orange</item>
-        <item>@color/light_green</item>
-        <item>@color/green</item>
-        <item>@color/turkwise</item>
-        <item>@color/accent_blue</item>
-        <item>@color/indigo</item>
-        <item>@color/cool_purple</item>
-    </integer-array>
-
     <color name="default_icon_tint">@color/primary_text</color>
 
 </resources>

@@ -144,9 +144,12 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
             if (viewModel.selectedTabletopType != TabletopType.NONE) {
-                viewModel.setupPlayers.value?.let { players ->
-                    startActivity(GameActivity.startIntentFromSetup(requireContext(), players))
-                }
+                startActivity(
+                    GameActivity.startIntentFromSetup(
+                        requireContext(),
+                        viewModel.getSetupPlayersWithColorCounters()
+                    )
+                )
             }
         }
 

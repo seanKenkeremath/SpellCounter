@@ -65,9 +65,12 @@ class SetupTabletopFragment : Fragment(), OnSetupPlayerSelectedListener {
 
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
-            viewModel.setupPlayers.value?.let {
-                startActivity(GameActivity.startIntentFromSetup(requireContext(), it))
-            }
+            startActivity(
+                GameActivity.startIntentFromSetup(
+                    requireContext(),
+                    viewModel.getSetupPlayersWithColorCounters()
+                )
+            )
         }
 
         viewModel.setupPlayers.observe(viewLifecycleOwner, {

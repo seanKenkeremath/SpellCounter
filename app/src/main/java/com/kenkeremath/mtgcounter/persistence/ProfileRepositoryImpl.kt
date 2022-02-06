@@ -163,11 +163,9 @@ class ProfileRepositoryImpl @Inject constructor(
                 )
             )
         }
-        //        for (stockColor in CounterColor.allColors()) {
-//            stockCounterTemplates.add(CounterTemplateModel(color = stockColor))
-//        }
         //This one is deletable
         stockCounterTemplates.add(CounterTemplateModel(name = "XP"))
+
         val stockPlayerProfile = PlayerTemplateModel(
             name = PlayerTemplateModel.NAME_DEFAULT,
             counters = stockCounterTemplates,

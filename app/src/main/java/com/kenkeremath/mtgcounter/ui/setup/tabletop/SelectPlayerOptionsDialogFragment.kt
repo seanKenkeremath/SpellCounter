@@ -53,6 +53,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
                 viewModel.updateProfile(it)
             }
         }
+
         override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
 
@@ -73,15 +74,16 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             dismiss()
         }
 
-        val allColors = CounterColor.values().map {
-            ContextCompat.getColor(requireContext(), it.resId ?: R.color.white)
+        val allColors = CounterColor.allColors()
+        val allColorInts = allColors.map {
+            ContextCompat.getColor(requireContext(), it.resId!!)
         }.toIntArray()
         val colorMap = mutableMapOf<@ColorInt Int, CounterColor>()
-        allColors.forEachIndexed { index, color ->
-            colorMap[color] = CounterColor.values()[index]
+        allColorInts.forEachIndexed { index, color ->
+            colorMap[color] = allColors[index]
         }
 
-        binding.colorPickerView.colors = allColors
+        binding.colorPickerView.colors = allColorInts
 
         binding.colorPickerView.setOnColorChangedListener {
             colorMap[it]?.let { color ->
@@ -91,7 +93,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
 
         viewModel.setupModel.observe(viewLifecycleOwner, {
             binding.colorPickerView.setSelectedColor(
-                allColors[CounterColor.values().indexOf(it.color)]
+                allColorInts[allColors.indexOf(it.color)]
             )
             setSpinnerSelection()
         })

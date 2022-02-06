@@ -244,10 +244,8 @@ class GameViewModel @Inject constructor(
      * counters recyclerview
      */
     private fun generateSelectionUiModelsForPlayer(playerId: Int): List<CounterSelectionUiModel> {
-        return playerMap[playerId]?.let { player ->
-            availableCountersMap[playerId]?.filter {
-                !(it.color.resId != null && it.color.resId == player.model.colorResId)
-            }?.map {
+        return playerMap[playerId]?.let {
+            availableCountersMap[playerId]?.map {
                 CounterSelectionUiModel(
                     it,
                     pendingCounterSelectionMap[playerId]?.contains(it.id) == true

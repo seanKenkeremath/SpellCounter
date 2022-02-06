@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
@@ -166,5 +167,46 @@ class SetupViewModel @Inject constructor(
             }
 
         }
+    }
+
+    /**
+     * Generate a new list of player setup models that have additional color counters.
+     * Only add color counters that correspond to a player in that game OTHER than the current player.
+     *
+     * Counters will be given IDs starting at -1 and going backwards to avoid conflicts
+     * with database counters
+     *
+     * This method should be called only one setup is completely finalized since colors can
+     * change after the fact
+     */
+    fun getSetupPlayersWithColorCounters(): List<PlayerSetupModel> {
+        return _setupPlayers.value?.let { allPlayers ->
+            var currCounterId = -1
+            val allGameColors = allPlayers.map {
+                it.color
+            }.toSet()
+            val allGameColorCounters = allGameColors.map {
+                val counter = CounterTemplateModel(
+                    id = currCounterId,
+                    color = it,
+                    startingValue = 0,
+                )
+                currCounterId--
+                counter
+            }
+            allPlayers.map { player ->
+                player.template?.let { template ->
+                    player.copy(
+                        template = template.copy(
+                            counters = template.counters.plus(
+                                allGameColorCounters.filter {
+                                    player.color != it.color
+                                }
+                            )
+                        )
+                    )
+                } ?: player
+            }
+        } ?: emptyList()
     }
 }

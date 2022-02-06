@@ -10,6 +10,7 @@ import com.kenkeremath.mtgcounter.R
 //TODO: may remove this since the colors will just be based off of opponents and are not part of templates
 enum class CounterColor(@ColorRes val resId: Int? = null, val colorId: Long) {
     NONE(colorId = CounterSymbol.DEFAULT_ID),
+    WHITE(colorId = 14L, resId = R.color.white),
     PINK(colorId = 3L, resId = R.color.light_pink),
     RED(colorId = 4L, resId = R.color.light_red),
     ORANGE(colorId = 5L, resId = R.color.light_orange),
@@ -25,6 +26,7 @@ enum class CounterColor(@ColorRes val resId: Int? = null, val colorId: Long) {
         fun randomColors(amount: Int): List<CounterColor> {
             return allColors().shuffled().take(amount)
         }
+
         fun allColors(): List<CounterColor> {
             return values().filter { it != NONE }
         }
