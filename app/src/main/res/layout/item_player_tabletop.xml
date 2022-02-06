@@ -81,7 +81,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/edit_counter_confirm_button_height"
                     android:layout_weight="1"
-                    android:text="@string/cancel"
+                    android:text="@android:string/cancel"
                     android:textColor="@color/primary_text" />
 
                 <Button
@@ -208,7 +208,7 @@
 
         <LinearLayout
             android:id="@+id/options_container"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/player_options_panel_width"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent">

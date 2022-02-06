@@ -68,7 +68,7 @@
                     style="@style/NameEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/edit_section_header_top_margin"
+                    android:layout_marginTop="@dimen/header_section_header_top_margin"
                     android:ems="4"
                     android:hint="@string/create_counter_text_hint"
                     android:maxLength="@integer/counter_text_max_chars" />
@@ -95,7 +95,7 @@
                     style="@style/UrlEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/edit_section_header_top_margin"
+                    android:layout_marginTop="@dimen/header_section_header_top_margin"
                     android:hint="@string/create_counter_url_hint" />
 
             </LinearLayout>
@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
-                android:layout_marginTop="@dimen/edit_section_header_top_margin"
+                android:layout_marginTop="@dimen/header_section_header_top_margin"
                 android:imeOptions="actionDone"
                 android:maxEms="4" />
 

@@ -16,15 +16,11 @@
 
     <color name="selected_yellow">#ffff00</color>
 
-    <color name="optionButtonColor">#4e4ede</color>
-    <color name="optionButtonColorSelected">#349efe</color>
-    <color name="optionButtonColorDisabled">#8e8e8e</color>
-
     <!-- Legacy Colors -->
-    <color name="accent_blue">#00B0FF</color>
     <color name="light_grey">#CFD8DC</color>
     <color name="dark_grey">#9FA8AC</color>
 
+    <color name="accent_blue">#00B0FF</color>
     <color name="cool_purple">#B388FF</color>
     <color name="light_red">#EF5350</color>
     <color name="turkwise">#1DE9B6</color>
