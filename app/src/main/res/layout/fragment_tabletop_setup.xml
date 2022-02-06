@@ -14,28 +14,37 @@
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/customize_table_title" />
 
+    <TextView
+        android:id="@+id/customize_tabletop_section_title"
+        style="@style/Header3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/setup_tabletop_padding_horizontal"
+        android:layout_marginTop="@dimen/default_padding"
+        android:text="@string/setup_tabletop_section_title"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <com.kenkeremath.mtgcounter.view.TabletopLayout
         android:id="@+id/tabletop_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginHorizontal="@dimen/setup_tabletop_padding_horizontal"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginBottom="@dimen/setup_tabletop_padding_bottom"
         app:layout_constraintBottom_toTopOf="@id/start_button"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/customize_tabletop_section_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tabletop_layout_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginHorizontal="@dimen/setup_tabletop_padding_horizontal"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginBottom="@dimen/setup_tabletop_padding_bottom"
         android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@id/start_button"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/customize_tabletop_section_title" />
 
-    <!-- TODO: maybe show this? hiding for now -->
     <Button
         android:id="@+id/start_button"
         style="@style/StartGameButton.Round"
@@ -43,7 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/start_button_margin"
         android:text="@string/start_game"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
