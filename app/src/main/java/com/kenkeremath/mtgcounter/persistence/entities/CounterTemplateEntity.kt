@@ -3,7 +3,7 @@ package com.kenkeremath.mtgcounter.persistence.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity.Companion.TABLE_COUNTER_TEMPLATES
@@ -16,7 +16,7 @@ data class CounterTemplateEntity(
     @ColumnInfo(name = "name")
     val name: String? = null,
     @ColumnInfo(name = "colorId")
-    val colorId: Long = CounterColor.DEFAULT_ID,
+    val colorId: Long = PlayerColor.DEFAULT_ID,
     @ColumnInfo(name = "symbolId")
     val symbolId: Long = CounterSymbol.DEFAULT_ID,
     @ColumnInfo(name = "startingValue")

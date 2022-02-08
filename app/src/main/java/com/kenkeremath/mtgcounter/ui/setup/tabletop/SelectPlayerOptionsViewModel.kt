@@ -1,7 +1,7 @@
 package com.kenkeremath.mtgcounter.ui.setup.tabletop
 
 import androidx.lifecycle.*
-import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
@@ -60,7 +60,7 @@ class SelectPlayerOptionsViewModel @Inject constructor(
         }
     }
 
-    fun updateColor(color: CounterColor) {
+    fun updateColor(color: PlayerColor) {
         _setupModel.value = _setupModel.value?.copy(color = color)
     }
 

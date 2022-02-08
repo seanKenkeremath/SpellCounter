@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
@@ -49,7 +49,7 @@ class SetupViewModel @Inject constructor(
     val showCustomizeLayoutButton: LiveData<Boolean> get() = _showCustomizeLayoutButton
 
     //Generate 8 unique random colors from list to use for player creation
-    private val playerColors = CounterColor.randomColors(8)
+    private val playerColors = PlayerColor.allColors()
 
     private var playerTemplates: List<PlayerTemplateModel>? = null
 
@@ -111,7 +111,7 @@ class SetupViewModel @Inject constructor(
                     id = newList.size, //next index
                     //Find the first color that is not currently taken by a player
                     color = playerColors.find { color -> newList.find { it.color == color } == null }
-                        ?: CounterColor.NONE,
+                        ?: PlayerColor.NONE,
                     template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }
                 )
             )

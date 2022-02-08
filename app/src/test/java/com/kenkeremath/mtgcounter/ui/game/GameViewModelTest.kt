@@ -7,19 +7,17 @@ import androidx.test.core.app.ApplicationProvider
 import com.kenkeremath.mtgcounter.CoroutineTestRule
 import com.kenkeremath.mtgcounter.TestApplication
 import com.kenkeremath.mtgcounter.model.TabletopType
-import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
-import com.kenkeremath.mtgcounter.persistence.*
+import com.kenkeremath.mtgcounter.persistence.Datastore
+import com.kenkeremath.mtgcounter.persistence.DatastoreImpl
+import com.kenkeremath.mtgcounter.persistence.GameRepository
+import com.kenkeremath.mtgcounter.persistence.GameRepositoryImpl
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateWithCountersEntity
 import com.squareup.moshi.Moshi
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
@@ -41,19 +39,11 @@ class GameViewModelTest {
 
     private lateinit var gameRepository: GameRepository
 
-    private lateinit var profileRepository: ProfileRepository
-
     private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var viewModel: GameViewModel
 
     private lateinit var datastore: Datastore
-
-    @MockK
-    private lateinit var database: AppDatabase
-
-    @MockK
-    private lateinit var templateDao: TemplateDao
 
     private lateinit var testScope: TestCoroutineScope
 
@@ -64,11 +54,6 @@ class GameViewModelTest {
         datastore =
             DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
         gameRepository = GameRepositoryImpl(datastore)
-        profileRepository = ProfileRepositoryImpl(
-            database,
-            datastore,
-            dispatcherProvider = coroutinesTestRule.testDispatcherProvider
-        )
 
         val counterTemplate1 = CounterTemplateModel(
             id = 1,
@@ -93,17 +78,17 @@ class GameViewModelTest {
                     PlayerSetupModel(
                         id = 0,
                         template = playerTemplate,
-                        color = CounterColor.BLUE
+                        color = PlayerColor.BLUE
                     ),
                     PlayerSetupModel(
                         id = 1,
                         template = playerTemplate,
-                        color = CounterColor.RED
+                        color = PlayerColor.RED
                     ),
                     PlayerSetupModel(
                         id = 2,
                         template = playerTemplate,
-                        color = CounterColor.GREEN
+                        color = PlayerColor.GREEN
                     ),
                 )
             )
@@ -120,33 +105,11 @@ class GameViewModelTest {
             colorId = 7,
             linkToPlayer = true
         )
-        every {
-            database.templateDao()
-        } returns templateDao
-
-        coEvery {
-            templateDao.getCounterTemplates()
-        } returns listOf(
-            counter1,
-            counter2,
-        )
-
-        val playerTemplateEntity = PlayerTemplateWithCountersEntity()
-        playerTemplateEntity.counters = listOf(
-            counter1,
-            counter2,
-        )
-        playerTemplateEntity.template = PlayerTemplateEntity(name = "player_template")
-        coEvery {
-            templateDao.getPlayerTemplates()
-        } returns listOf(
-            playerTemplateEntity
-        )
         datastore.keepScreenOn = false
         datastore.startingLife = 15
         datastore.numberOfPlayers = 3
         datastore.tabletopType = TabletopType.THREE_CIRCLE
-        viewModel = GameViewModel(gameRepository, profileRepository, savedStateHandle)
+        viewModel = GameViewModel(gameRepository, savedStateHandle)
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.kenkeremath.mtgcounter.model.counter
 
 import android.os.Parcelable
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -9,7 +10,7 @@ import java.util.*
 data class CounterTemplateModel(
     val id: Int = ID_NOT_SET,
     val name: String? = null,
-    val color: CounterColor = CounterColor.NONE,
+    val color: PlayerColor = PlayerColor.NONE,
     val symbol: CounterSymbol = CounterSymbol.NONE,
     val uri: String? = null,
     val isFullArtImage: Boolean = false,
@@ -26,7 +27,7 @@ data class CounterTemplateModel(
     constructor(entity: CounterTemplateEntity) : this(
         id = entity.id,
         name = entity.name,
-        color = CounterColor.values().find { it.colorId == entity.colorId } ?: CounterColor.NONE,
+        color = PlayerColor.values().find { it.colorId == entity.colorId } ?: PlayerColor.NONE,
         symbol = CounterSymbol.values().find { it.symbolId == entity.symbolId } ?: CounterSymbol.NONE,
         uri = entity.uri,
         isFullArtImage= entity.isFullArtImage,

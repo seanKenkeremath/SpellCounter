@@ -14,7 +14,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.FragmentSelectPlayerOptionsBinding
-import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -74,11 +74,11 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             dismiss()
         }
 
-        val allColors = CounterColor.allColors()
+        val allColors = PlayerColor.allColors()
         val allColorInts = allColors.map {
             ContextCompat.getColor(requireContext(), it.resId!!)
         }.toIntArray()
-        val colorMap = mutableMapOf<@ColorInt Int, CounterColor>()
+        val colorMap = mutableMapOf<@ColorInt Int, PlayerColor>()
         allColorInts.forEachIndexed { index, color ->
             colorMap[color] = allColors[index]
         }
