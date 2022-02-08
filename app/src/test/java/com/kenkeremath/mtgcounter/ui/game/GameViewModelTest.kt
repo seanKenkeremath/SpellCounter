@@ -7,7 +7,10 @@ import androidx.test.core.app.ApplicationProvider
 import com.kenkeremath.mtgcounter.CoroutineTestRule
 import com.kenkeremath.mtgcounter.TestApplication
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.model.counter.CounterColor
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
+import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
 import com.kenkeremath.mtgcounter.persistence.*
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
@@ -38,6 +41,8 @@ class GameViewModelTest {
 
     private lateinit var gameRepository: GameRepository
 
+    private lateinit var profileRepository: ProfileRepository
+
     private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var viewModel: GameViewModel
@@ -58,14 +63,48 @@ class GameViewModelTest {
         testScope = TestCoroutineScope(coroutinesTestRule.testDispatcher)
         datastore =
             DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
-        gameRepository =
-            GameRepositoryImpl(database, datastore, coroutinesTestRule.testDispatcherProvider)
+        gameRepository = GameRepositoryImpl(datastore)
+        profileRepository = ProfileRepositoryImpl(
+            database,
+            datastore,
+            dispatcherProvider = coroutinesTestRule.testDispatcherProvider
+        )
+
+        val counterTemplate1 = CounterTemplateModel(
+            id = 1,
+            name = "Test1"
+        )
+        val counterTemplate2 = CounterTemplateModel(
+            id = 2,
+            name = "Test2"
+        )
+
+        val playerTemplate = PlayerTemplateModel(
+            name = "player_template",
+            counters = listOf(
+                counterTemplate1,
+                counterTemplate2
+            )
+        )
+
         savedStateHandle = SavedStateHandle(
             mapOf(
                 GameActivity.ARGS_SETUP_PLAYERS to listOf(
-                    PlayerSetupModel(),
-                    PlayerSetupModel(),
-                    PlayerSetupModel(),
+                    PlayerSetupModel(
+                        id = 0,
+                        template = playerTemplate,
+                        color = CounterColor.BLUE
+                    ),
+                    PlayerSetupModel(
+                        id = 1,
+                        template = playerTemplate,
+                        color = CounterColor.RED
+                    ),
+                    PlayerSetupModel(
+                        id = 2,
+                        template = playerTemplate,
+                        color = CounterColor.GREEN
+                    ),
                 )
             )
         )
@@ -92,21 +131,22 @@ class GameViewModelTest {
             counter2,
         )
 
-        val playerTemplate = PlayerTemplateWithCountersEntity()
-        playerTemplate.counters = listOf(
+        val playerTemplateEntity = PlayerTemplateWithCountersEntity()
+        playerTemplateEntity.counters = listOf(
+            counter1,
             counter2,
         )
-        playerTemplate.template = PlayerTemplateEntity(name = "player_template")
+        playerTemplateEntity.template = PlayerTemplateEntity(name = "player_template")
         coEvery {
             templateDao.getPlayerTemplates()
         } returns listOf(
-            playerTemplate
+            playerTemplateEntity
         )
         datastore.keepScreenOn = false
         datastore.startingLife = 15
         datastore.numberOfPlayers = 3
         datastore.tabletopType = TabletopType.THREE_CIRCLE
-        viewModel = GameViewModel(gameRepository, savedStateHandle)
+        viewModel = GameViewModel(gameRepository, profileRepository, savedStateHandle)
     }
 
     @Test
@@ -152,10 +192,12 @@ class GameViewModelTest {
     @Test
     fun increment_counter_updates_player() = coroutinesTestRule.testDispatcher.runBlockingTest {
         val playerId = viewModel.players.value!![0].model.id
+        viewModel.editCounters(playerId)
         viewModel.selectCounter(playerId, 1)
         viewModel.confirmCounterChanges(playerId)
         assertEquals(1, viewModel.players.value!![0].model.counters.size)
-        val counterId = viewModel.players.value!![0].model.counters[0].templateId
+        val counterId = viewModel.players.value!![0].model.counters[0].template.id
+
         assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
         viewModel.incrementCounter(playerId, counterId)
@@ -172,7 +214,7 @@ class GameViewModelTest {
         val playerId = viewModel.players.value!![0].model.id
         viewModel.selectCounter(playerId, 1)
         viewModel.confirmCounterChanges(playerId)
-        val counterId = viewModel.players.value!![0].model.counters[0].templateId
+        val counterId = viewModel.players.value!![0].model.counters[0].template.id
         assertEquals(0, viewModel.players.value!![0].model.counters[0].amount)
 
         viewModel.incrementCounter(playerId, counterId, -1)
@@ -199,7 +241,7 @@ class GameViewModelTest {
             val playerId = viewModel.players.value!![0].model.id
             viewModel.selectCounter(playerId, 1)
             viewModel.confirmCounterChanges(playerId)
-            val counterId = viewModel.players.value!![0].model.counters[0].templateId
+            val counterId = viewModel.players.value!![0].model.counters[0].template.id
 
             viewModel.incrementCounter(-9999, counterId, 1)
 

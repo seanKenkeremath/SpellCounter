@@ -30,6 +30,8 @@ class SetupViewModelTest {
 
     private lateinit var gameRepository: GameRepository
 
+    private lateinit var profilesRepository: ProfileRepository
+
     private lateinit var viewModel: SetupViewModel
 
     private lateinit var datastore: Datastore
@@ -50,12 +52,16 @@ class SetupViewModelTest {
         every {
             templateDao.getCounterTemplates()
         } returns emptyList()
-        gameRepository = GameRepositoryImpl(database, datastore)
+        every {
+            templateDao.getPlayerTemplates()
+        } returns emptyList()
+        gameRepository = GameRepositoryImpl(datastore)
+        profilesRepository = ProfileRepositoryImpl(database, datastore, dispatcherProvider = coroutinesTestRule.testDispatcherProvider)
         datastore.keepScreenOn = false
         datastore.startingLife = 15
         datastore.numberOfPlayers = 3
         datastore.tabletopType = TabletopType.THREE_CIRCLE
-        viewModel = SetupViewModel(gameRepository)
+        viewModel = SetupViewModel(gameRepository, profilesRepository)
     }
 
     @Test
