@@ -381,11 +381,11 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         oldPosition: Int,
         newPosition: Int
     ) {
-        viewModel.moveCounter(playerId, templateId, oldPosition, newPosition)
+        viewModel.moveCounter(playerId, oldPosition, newPosition)
     }
 
     override fun onCancelCounterChanges(playerId: Int) {
-        viewModel.cancelCounterChanges(playerId)
+        viewModel.closeSubMenu(playerId)
     }
 
     override fun onConfirmCounterChanges(playerId: Int) {

@@ -17,11 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val setupPlayers = savedStateHandle.get<List<PlayerSetupModel>>(GameActivity.ARGS_SETUP_PLAYERS)
-        ?: throw IllegalArgumentException("PlayerSetupModels must be passed in intent")
+    private val setupPlayers =
+        savedStateHandle.get<List<PlayerSetupModel>>(GameActivity.ARGS_SETUP_PLAYERS)
+            ?: throw IllegalArgumentException("PlayerSetupModels must be passed in intent")
 
     val startingLife = gameRepository.startingLife
     val tabletopType = gameRepository.tabletopType
@@ -62,7 +63,6 @@ class GameViewModel @Inject constructor(
                     life = startingLife,
                     colorResId = setupPlayers[i].color.resId ?: R.color.white,
                 ),
-                //TODO: option from repo
                 pullToReveal = tabletopType != TabletopType.LIST,
                 rearrangeButtonEnabled = false,
             )
@@ -86,10 +86,8 @@ class GameViewModel @Inject constructor(
 
     fun incrementPlayerLife(playerId: Int, lifeDifference: Int = 1) {
         playerMap[playerId]?.let {
-            playerMap[playerId] = it.copy(
-                model = it.model.copy(
-                    life = it.model.life + lifeDifference
-                )
+            it.model = it.model.copy(
+                life = it.model.life + lifeDifference
             )
             _players.value = playerMap.values.toList()
         }
@@ -104,8 +102,7 @@ class GameViewModel @Inject constructor(
                 val countersList = player.model.counters.toMutableList()
                 countersList[counterIndex] =
                     counter.copy(amount = counter.amount + amountDifference)
-                playerMap[playerId] =
-                    player.copy(model = player.model.copy(counters = countersList))
+                player.model = player.model.copy(counters = countersList)
                 _players.value = playerMap.values.toList()
             }
         }
@@ -113,31 +110,35 @@ class GameViewModel @Inject constructor(
 
     fun editCounters(playerId: Int) {
         playerMap[playerId]?.let { player ->
-            playerMap[playerId] = player.copy(currentMenu = GamePlayerUiModel.Menu.EDIT_COUNTERS)
+            player.currentMenu = GamePlayerUiModel.Menu.EDIT_COUNTERS
         }
         _players.value = playerMap.values.toList()
     }
 
     fun rearrangeCounters(playerId: Int) {
         playerMap[playerId]?.let { player ->
-            playerMap[playerId] =
-                player.copy(currentMenu = GamePlayerUiModel.Menu.REARRANGE_COUNTERS)
+            player.currentMenu = GamePlayerUiModel.Menu.REARRANGE_COUNTERS
         }
         _players.value = playerMap.values.toList()
     }
 
     fun closeSubMenu(playerId: Int) {
         playerMap[playerId]?.let { player ->
-            playerMap[playerId] = player.copy(currentMenu = GamePlayerUiModel.Menu.MAIN)
+            player.currentMenu = GamePlayerUiModel.Menu.MAIN
         }
+        cancelCounterChanges(playerId)
         _players.value = playerMap.values.toList()
     }
 
     fun selectCounter(playerId: Int, counterTemplateId: Int) {
-        if (!pendingCounterSelectionMap.containsKey(playerId)) {
-            pendingCounterSelectionMap[playerId] = mutableListOf()
-        }
         playerMap[playerId]?.let { player ->
+            if (player.currentMenu != GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+                //Wrong menu is open which is an undefined state
+                return
+            }
+            if (!pendingCounterSelectionMap.containsKey(playerId)) {
+                pendingCounterSelectionMap[playerId] = mutableListOf()
+            }
             val existingIndex =
                 player.model.counters.indexOfFirst { counter -> counter.template.id == counterTemplateId }
             if (existingIndex != -1) {
@@ -158,10 +159,14 @@ class GameViewModel @Inject constructor(
     }
 
     fun deselectCounter(playerId: Int, counterTemplateId: Int) {
-        if (!pendingCounterSelectionMap.containsKey(playerId)) {
-            pendingCounterSelectionMap[playerId] = mutableListOf()
-        }
         playerMap[playerId]?.let { player ->
+            if (player.currentMenu != GamePlayerUiModel.Menu.EDIT_COUNTERS) {
+                //Wrong menu is open which is an undefined state
+                return
+            }
+            if (!pendingCounterSelectionMap.containsKey(playerId)) {
+                pendingCounterSelectionMap[playerId] = mutableListOf()
+            }
             /**
              * Set value to null instead of removing. This allows us to preserve ordering if that
              * counter is added back in before saving
@@ -177,11 +182,19 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun moveCounter(playerId: Int, counterTemplateId: Int, oldPosition: Int, newPosition: Int) {
+    fun moveCounter(playerId: Int, oldPosition: Int, newPosition: Int) {
         playerMap[playerId]?.let { player ->
+            if (player.currentMenu != GamePlayerUiModel.Menu.REARRANGE_COUNTERS) {
+                //Wrong menu is open which is an undefined state
+                return
+            }
             if (!pendingCounterSelectionMap.containsKey(playerId)) {
                 pendingCounterSelectionMap[playerId] =
                     player.model.counters.map { it.template.id }.toMutableList()
+            }
+            val pendingCounterSize = pendingCounterSelectionMap[playerId]?.size ?: 0
+            if (oldPosition >= pendingCounterSize || newPosition >= pendingCounterSize) {
+                return
             }
             pendingCounterSelectionMap[playerId]?.get(oldPosition)?.let {
                 pendingCounterSelectionMap[playerId]?.removeAt(oldPosition)
@@ -216,6 +229,7 @@ class GameViewModel @Inject constructor(
                 uiModel.model = uiModel.model.copy(counters = newCounters)
                 uiModel.rearrangeButtonEnabled = uiModel.model.counters.size > 1
                 uiModel.newCounterAdded = newCounter
+                uiModel.currentMenu = GamePlayerUiModel.Menu.MAIN
                 _players.value = playerMap.values.toList()
             }
         }
@@ -223,9 +237,9 @@ class GameViewModel @Inject constructor(
 
     /**
      * Removes pending changes and resets selection state to the player's currently added
-     * counters
+     * counters. Private method -- closeSubMenu can be used publicly
      */
-    fun cancelCounterChanges(playerId: Int) {
+    private fun cancelCounterChanges(playerId: Int) {
         pendingCounterSelectionMap[playerId]?.clear()
         playerMap[playerId]?.model?.counters?.let {
             for (counterModel in it) {

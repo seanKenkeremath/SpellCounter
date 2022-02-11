@@ -104,9 +104,6 @@ class PlayerViewHolder(
         binding.pullToRevealContainer.listener = object : PullToRevealLayout.PullToRevealListener {
             override fun onReveal() {}
             override fun onHide() {
-                if (currentMenu == GamePlayerUiModel.Menu.EDIT_COUNTERS || currentMenu == GamePlayerUiModel.Menu.REARRANGE_COUNTERS) {
-                    playerMenuListener.onCancelCounterChanges(playerId)
-                }
                 playerMenuListener.onCloseSubMenu(playerId)
                 binding.countersRecycler.scrollingEnabled = true
             }

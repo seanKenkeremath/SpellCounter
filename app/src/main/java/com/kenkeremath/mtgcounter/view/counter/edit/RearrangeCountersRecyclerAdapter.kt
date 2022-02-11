@@ -34,7 +34,7 @@ class RearrangeCountersRecyclerAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return counters[position].templateModel.id.toLong()
+        return counters[position].template.id.toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RearrangeCounterViewHolder {
@@ -67,7 +67,7 @@ class RearrangeCountersRecyclerAdapter(
     override fun onItemDragFinished(oldPosition: Int, newPosition: Int) {
         playerMenuListener.onCounterRearranged(
             playerId,
-            counters[oldPosition].templateModel.id,
+            counters[oldPosition].template.id,
             oldPosition,
             newPosition
         )
@@ -93,7 +93,7 @@ class RearrangeCounterViewHolder(itemView: View, onStartDragListener: OnStartDra
     }
 
     fun bind(uiModel: RearrangeCounterUiModel) {
-        counterIconView.setContent(uiModel.templateModel, renderFullArt = true)
+        counterIconView.setContent(uiModel.template, renderFullArt = true)
     }
 
     override fun onItemSelected() {
