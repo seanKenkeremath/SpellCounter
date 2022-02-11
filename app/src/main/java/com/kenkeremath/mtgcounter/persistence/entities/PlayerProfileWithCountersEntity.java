@@ -8,24 +8,24 @@ import androidx.room.Relation;
 import java.util.List;
 
 @Entity
-public class PlayerTemplateWithCountersEntity {
+public class PlayerProfileWithCountersEntity {
     @Embedded
-    public PlayerTemplateEntity template;
+    public PlayerProfileEntity profile;
     @Relation(
-            parentColumn = PlayerTemplateEntity.COLUMN_PLAYER_TEMPLATE_NAME,
+            parentColumn = PlayerProfileEntity.COLUMN_PLAYER_PROFILE_NAME,
             entityColumn = CounterTemplateEntity.COLUMN_COUNTER_TEMPLATE_ID,
             associateBy = @Junction(
-                    value = PlayerCounterTemplateCrossRefEntity.class,
-                    parentColumn = PlayerCounterTemplateCrossRefEntity.COLUMN_PLAYER_TEMPLATE_ID,
-                    entityColumn = PlayerCounterTemplateCrossRefEntity.COLUMN_COUNTER_TEMPLATE_ID
+                    value = PlayerProfileCounterTemplateCrossRefEntity.class,
+                    parentColumn = PlayerProfileCounterTemplateCrossRefEntity.COLUMN_PLAYER_PROFILE_ID,
+                    entityColumn = PlayerProfileCounterTemplateCrossRefEntity.COLUMN_COUNTER_TEMPLATE_ID
             )
     )
     public List<CounterTemplateEntity> counters;
 
     @Override
     public String toString() {
-        return "PlayerTemplateWithCountersEntity{" +
-                "template=" + template +
+        return "PlayerProfileWithCountersEntity{" +
+                "profile=" + profile +
                 ", counters=" + counters +
                 '}';
     }

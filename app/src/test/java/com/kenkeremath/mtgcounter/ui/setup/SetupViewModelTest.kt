@@ -8,11 +8,12 @@ import com.kenkeremath.mtgcounter.TestApplication
 import com.kenkeremath.mtgcounter.data.MockDatabaseFactory
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.player.PlayerColor
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.*
 import com.squareup.moshi.Moshi
 import io.mockk.MockKAnnotations
 import junit.framework.Assert.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +34,8 @@ class SetupViewModelTest {
 
     private lateinit var profilesRepository: ProfileRepository
 
+    private lateinit var database: AppDatabase
+
     private lateinit var viewModel: SetupViewModel
 
     private lateinit var datastore: Datastore
@@ -42,10 +45,11 @@ class SetupViewModelTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         datastore =
             DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+        database = MockDatabaseFactory.createDefaultTemplateDatabase()
 
         gameRepository = GameRepositoryImpl(datastore)
         profilesRepository = ProfileRepositoryImpl(
-            MockDatabaseFactory.createDefaultTemplateDatabase(),
+            database,
             datastore,
             dispatcherProvider = coroutinesTestRule.testDispatcherProvider
         )
@@ -54,6 +58,11 @@ class SetupViewModelTest {
         datastore.numberOfPlayers = 3
         datastore.tabletopType = TabletopType.THREE_CIRCLE
         viewModel = SetupViewModel(gameRepository, profilesRepository)
+    }
+
+    @After
+    fun tearDown() {
+        database.close()
     }
 
     @Test
@@ -78,8 +87,8 @@ class SetupViewModelTest {
         assertEquals(1, viewModel.profiles.value!!.size)
         assertEquals("Default", viewModel.profiles.value?.get(0)?.name)
         assertEquals(3, viewModel.setupPlayers.value!!.size)
-        assertEquals("Default", viewModel.setupPlayers.value?.get(0)?.template?.name)
-        assertEquals(2, viewModel.setupPlayers.value?.get(0)?.template?.counters?.size)
+        assertEquals("Default", viewModel.setupPlayers.value?.get(0)?.profile?.name)
+        assertEquals(2, viewModel.setupPlayers.value?.get(0)?.profile?.counters?.size)
     }
 
     @Test
@@ -105,7 +114,7 @@ class SetupViewModelTest {
         viewModel.setNumberOfPlayers(4)
         assertEquals(4, viewModel.numberOfPlayers.value)
         assertEquals(4, viewModel.setupPlayers.value!!.size)
-        assertEquals("Default", viewModel.setupPlayers.value?.get(3)?.template?.name)
+        assertEquals("Default", viewModel.setupPlayers.value?.get(3)?.profile?.name)
         val newColors = viewModel.setupPlayers.value?.map {
             it.color
         }?.toSet()?.toList() ?: emptyList()
@@ -129,7 +138,7 @@ class SetupViewModelTest {
         viewModel.setNumberOfPlayers(7)
         assertEquals(7, viewModel.numberOfPlayers.value)
         assertEquals(7, viewModel.setupPlayers.value!!.size)
-        assertEquals("Default", viewModel.setupPlayers.value?.get(6)?.template?.name)
+        assertEquals("Default", viewModel.setupPlayers.value?.get(6)?.profile?.name)
         val newColors = viewModel.setupPlayers.value?.map {
             it.color
         }?.toSet()?.toList() ?: emptyList()
@@ -190,7 +199,7 @@ class SetupViewModelTest {
         assertEquals(3, newPlayers.size)
 
         assertEquals(oldPlayers[0], newPlayers[0])
-        assertEquals(oldPlayers[1].template, newPlayers[1].template)
+        assertEquals(oldPlayers[1].profile, newPlayers[1].profile)
         assertFalse(oldPlayers[1].color.equals(newPlayers[1]))
         assertEquals(oldPlayers[2], newPlayers[2])
     }
@@ -212,24 +221,24 @@ class SetupViewModelTest {
 
         assertEquals(oldPlayer2Color, newPlayers[0].color)
         assertEquals(oldPlayers[0].id, newPlayers[0].id)
-        assertEquals(oldPlayers[0].template, newPlayers[0].template)
+        assertEquals(oldPlayers[0].profile, newPlayers[0].profile)
         assertEquals(oldPlayers[1], newPlayers[1])
         assertEquals(oldPlayer0Color, newPlayers[2].color)
         assertEquals(oldPlayers[2].id, newPlayers[2].id)
-        assertEquals(oldPlayers[2].template, newPlayers[2].template)
+        assertEquals(oldPlayers[2].profile, newPlayers[2].profile)
     }
 
     @Test
     fun update_player_changes_template() {
         val oldPlayers = viewModel.setupPlayers.value!!
 
-        viewModel.updatePlayer(oldPlayers[1].copy(template = PlayerTemplateModel("New Template")))
+        viewModel.updatePlayer(oldPlayers[1].copy(profile = PlayerProfileModel("New Template")))
 
         val newPlayers = viewModel.setupPlayers.value!!
         assertEquals(3, newPlayers.size)
         assertEquals(oldPlayers[0], newPlayers[0])
         assertEquals(oldPlayers[1].color, newPlayers[1].color)
-        assertFalse(oldPlayers[1].template == newPlayers[1].template)
+        assertFalse(oldPlayers[1].profile == newPlayers[1].profile)
         assertEquals(oldPlayers[2], newPlayers[2])
     }
 
@@ -237,9 +246,9 @@ class SetupViewModelTest {
     fun get_setup_players_with_counters() {
         val generatedPlayers = viewModel.getSetupPlayersWithColorCounters()
         //1 counter for each other player was generated (plus 2 existing counters)
-        assertEquals(4, generatedPlayers[0].template?.counters?.size)
-        assertEquals(4, generatedPlayers[1].template?.counters?.size)
-        assertEquals(4, generatedPlayers[2].template?.counters?.size)
+        assertEquals(4, generatedPlayers[0].profile?.counters?.size)
+        assertEquals(4, generatedPlayers[1].profile?.counters?.size)
+        assertEquals(4, generatedPlayers[2].profile?.counters?.size)
 
         val c0 = PlayerColor.allColors()[0]
         val c1 = PlayerColor.allColors()[1]
@@ -254,7 +263,7 @@ class SetupViewModelTest {
                 c1,
                 c2
             ),
-            generatedPlayers[0].template?.counters?.map { it.color }
+            generatedPlayers[0].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
         assertEquals(
@@ -262,7 +271,7 @@ class SetupViewModelTest {
                 c0,
                 c2
             ),
-            generatedPlayers[1].template?.counters?.map { it.color }
+            generatedPlayers[1].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
         assertEquals(
@@ -270,7 +279,7 @@ class SetupViewModelTest {
                 c0,
                 c1
             ),
-            generatedPlayers[2].template?.counters?.map { it.color }
+            generatedPlayers[2].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
     }
@@ -286,9 +295,9 @@ class SetupViewModelTest {
 
 
         //1 counter for each other player was generated (plus 2 existing counters)
-        assertEquals(5, generatedPlayers[0].template?.counters?.size)
-        assertEquals(5, generatedPlayers[1].template?.counters?.size)
-        assertEquals(5, generatedPlayers[2].template?.counters?.size)
+        assertEquals(5, generatedPlayers[0].profile?.counters?.size)
+        assertEquals(5, generatedPlayers[1].profile?.counters?.size)
+        assertEquals(5, generatedPlayers[2].profile?.counters?.size)
 
         val c0 = PlayerColor.allColors()[0]
         val c1 = PlayerColor.allColors()[2] //manually set
@@ -306,7 +315,7 @@ class SetupViewModelTest {
                 c2,
                 c3,
             ),
-            generatedPlayers[0].template?.counters?.map { it.color }
+            generatedPlayers[0].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
         assertEquals(
@@ -315,7 +324,7 @@ class SetupViewModelTest {
                 c2,
                 c3,
             ),
-            generatedPlayers[1].template?.counters?.map { it.color }
+            generatedPlayers[1].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
         assertEquals(
@@ -324,7 +333,7 @@ class SetupViewModelTest {
                 c1,
                 c3
             ),
-            generatedPlayers[2].template?.counters?.map { it.color }
+            generatedPlayers[2].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
         assertEquals(
@@ -333,7 +342,7 @@ class SetupViewModelTest {
                 c1,
                 c2
             ),
-            generatedPlayers[3].template?.counters?.map { it.color }
+            generatedPlayers[3].profile?.counters?.map { it.color }
                 ?.filter { it != PlayerColor.NONE } ?: emptyList<PlayerColor>()
         )
     }

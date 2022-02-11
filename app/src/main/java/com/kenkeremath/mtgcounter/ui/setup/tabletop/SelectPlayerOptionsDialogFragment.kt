@@ -124,7 +124,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
     private fun setSpinnerSelection() {
         binding.profileSpinner.onItemSelectedListener = null
         val index = viewModel.profiles.value?.let { profiles ->
-            profiles.indexOfFirst { viewModel.setupModel.value?.template?.name == it.name }
+            profiles.indexOfFirst { viewModel.setupModel.value?.profile?.name == it.name }
         } ?: -1
         if (index != -1) {
             binding.profileSpinner.setSelection(index)

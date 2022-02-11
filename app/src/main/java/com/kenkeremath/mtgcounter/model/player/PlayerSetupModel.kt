@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PlayerSetupModel (
     val id: Int = 0,
-    val template: PlayerTemplateModel? = null,
+    val profile: PlayerProfileModel? = null,
     val color: PlayerColor = PlayerColor.NONE
 ) : Parcelable

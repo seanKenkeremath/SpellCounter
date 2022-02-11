@@ -5,11 +5,11 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.AppDatabase
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileCounterTemplateCrossRefEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileEntity
 import kotlinx.coroutines.runBlocking
 
 object MockDatabaseFactory {
@@ -24,7 +24,7 @@ object MockDatabaseFactory {
 
     fun createDefaultTemplateDatabase(): AppDatabase {
         val db = createDatabase()
-        val defaultProfile = PlayerTemplateEntity(PlayerTemplateModel.NAME_DEFAULT, false)
+        val defaultProfile = PlayerProfileEntity(PlayerProfileModel.NAME_DEFAULT, false)
         val counter1 = CounterTemplateModel(
             name = "XP",
         )
@@ -43,16 +43,16 @@ object MockDatabaseFactory {
                 )
             )
             val defaultProfileLinks = listOf(
-                PlayerCounterTemplateCrossRefEntity(
+                PlayerProfileCounterTemplateCrossRefEntity(
                     defaultProfile.name,
                     counters[0].toInt()
                 ),
-                PlayerCounterTemplateCrossRefEntity(
+                PlayerProfileCounterTemplateCrossRefEntity(
                     defaultProfile.name,
                     counters[1].toInt()
                 ),
             )
-            db.templateDao().insert(PlayerTemplateEntity(defaultProfile.name, false))
+            db.templateDao().insert(PlayerProfileEntity(defaultProfile.name, false))
             db.templateDao().insertPlayerCounterPairings(defaultProfileLinks)
         }
         return db

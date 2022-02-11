@@ -10,7 +10,7 @@ import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.persistence.DatastoreImpl
 import com.kenkeremath.mtgcounter.persistence.GameRepository
@@ -64,7 +64,7 @@ class GameViewModelTest {
             name = "Test2"
         )
 
-        val playerTemplate = PlayerTemplateModel(
+        val playerTemplate = PlayerProfileModel(
             name = "player_template",
             counters = listOf(
                 counterTemplate1,
@@ -77,17 +77,17 @@ class GameViewModelTest {
                 GameActivity.ARGS_SETUP_PLAYERS to listOf(
                     PlayerSetupModel(
                         id = 0,
-                        template = playerTemplate,
+                        profile = playerTemplate,
                         color = PlayerColor.BLUE
                     ),
                     PlayerSetupModel(
                         id = 1,
-                        template = playerTemplate,
+                        profile = playerTemplate,
                         color = PlayerColor.RED
                     ),
                     PlayerSetupModel(
                         id = 2,
-                        template = playerTemplate,
+                        profile = playerTemplate,
                         color = PlayerColor.GREEN
                     ),
                 )

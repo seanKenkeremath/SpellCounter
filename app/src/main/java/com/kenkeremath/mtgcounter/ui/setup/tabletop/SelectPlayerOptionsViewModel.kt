@@ -3,7 +3,7 @@ package com.kenkeremath.mtgcounter.ui.setup.tabletop
 import androidx.lifecycle.*
 import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.ui.settings.profiles.manage.ProfileUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class SelectPlayerOptionsViewModel @Inject constructor(
 
     private var loading = false
 
-    private var allProfiles: Set<PlayerTemplateModel> = setOf()
+    private var allProfiles: Set<PlayerProfileModel> = setOf()
 
     private val _profiles: MutableLiveData<List<ProfileUiModel>> =
         MutableLiveData(emptyList())
@@ -45,7 +45,7 @@ class SelectPlayerOptionsViewModel @Inject constructor(
         }
         loading = true
         viewModelScope.launch {
-            profileRepository.getAllPlayerTemplates()
+            profileRepository.getAllPlayerProfiles()
                 .catch {
                     loading = false
                     //TODO error handling?
@@ -68,7 +68,7 @@ class SelectPlayerOptionsViewModel @Inject constructor(
         allProfiles.find {
             it.name == profileName
         }?.let {
-            _setupModel.value = _setupModel.value?.copy(template = it)
+            _setupModel.value = _setupModel.value?.copy(profile = it)
         }
     }
 

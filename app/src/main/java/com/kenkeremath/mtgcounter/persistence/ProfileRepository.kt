@@ -1,16 +1,16 @@
 package com.kenkeremath.mtgcounter.persistence
 
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
-    fun getAllPlayerTemplates(): Flow<List<PlayerTemplateModel>>
-    fun getPlayerTemplateByName(profileName: String): Flow<PlayerTemplateModel?>
+    fun getAllPlayerProfiles(): Flow<List<PlayerProfileModel>>
+    fun getPlayerProfileByName(profileName: String): Flow<PlayerProfileModel?>
     fun getAllCounters(): Flow<List<CounterTemplateModel>>
     fun getAllCountersForProfile(profileName: String): Flow<List<CounterTemplateModel>>
-    fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean>
-    fun deletePlayerTemplate(profileName: String): Flow<Boolean>
+    fun addPlayerProfile(playerProfile: PlayerProfileModel): Flow<Boolean>
+    fun deletePlayerProfile(profileName: String): Flow<Boolean>
     fun addCounterTemplate(counterTemplate: CounterTemplateModel): Flow<Int>
     fun addCounterTemplates(counterTemplates: List<CounterTemplateModel>): Flow<List<Int>>
     fun addCounterTemplateToProfile(counterTemplate: CounterTemplateModel, profileName: String): Flow<Int>

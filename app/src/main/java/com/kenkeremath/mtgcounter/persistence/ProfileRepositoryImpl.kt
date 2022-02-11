@@ -3,10 +3,10 @@ package com.kenkeremath.mtgcounter.persistence
 import com.kenkeremath.mtgcounter.coroutines.DefaultDispatcherProvider
 import com.kenkeremath.mtgcounter.coroutines.DispatcherProvider
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileCounterTemplateCrossRefEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileEntity
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -17,24 +17,24 @@ class ProfileRepositoryImpl @Inject constructor(
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
 ) : ProfileRepository {
 
-    private var cachedPlayerTemplates: List<PlayerTemplateModel>? = null
+    private var cachedPlayerProfiles: List<PlayerProfileModel>? = null
     private var cachedCounterTemplates: List<CounterTemplateModel>? = null
 
-    override fun getAllPlayerTemplates(): Flow<List<PlayerTemplateModel>> {
-        return cachedPlayerTemplates?.let {
+    override fun getAllPlayerProfiles(): Flow<List<PlayerProfileModel>> {
+        return cachedPlayerProfiles?.let {
             flowOf(it)
         } ?: flow {
-            val entities = database.templateDao().getPlayerTemplates()
+            val entities = database.templateDao().getPlayerProfiles()
             val templates = entities.map {
-                PlayerTemplateModel(it)
+                PlayerProfileModel(it)
             }
-            cachedPlayerTemplates = templates
+            cachedPlayerProfiles = templates
             emit(templates)
         }.flowOn(dispatcherProvider.default())
     }
 
-    override fun getPlayerTemplateByName(profileName: String): Flow<PlayerTemplateModel?> {
-        return getAllPlayerTemplates().map { profiles ->
+    override fun getPlayerProfileByName(profileName: String): Flow<PlayerProfileModel?> {
+        return getAllPlayerProfiles().map { profiles ->
             profiles.find { it.name == profileName }
         }
     }
@@ -53,36 +53,36 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override fun getAllCountersForProfile(profileName: String): Flow<List<CounterTemplateModel>> {
-        return getPlayerTemplateByName(profileName).map {
+        return getPlayerProfileByName(profileName).map {
             it?.counters ?: emptyList()
         }
     }
 
-    override fun addPlayerTemplate(playerTemplate: PlayerTemplateModel): Flow<Boolean> {
+    override fun addPlayerProfile(playerProfile: PlayerProfileModel): Flow<Boolean> {
         invalidateCache()
         return flow {
-            addPlayerTemplateInternal(playerTemplate)
+            addPlayerProfileInternal(playerProfile)
             emit(true)
         }
             .flatMapConcat { preloadCache() }
             .flowOn(dispatcherProvider.default())
     }
 
-    private suspend fun addPlayerTemplateInternal(
-        playerTemplate: PlayerTemplateModel
+    private suspend fun addPlayerProfileInternal(
+        playerProfile: PlayerProfileModel
     ) {
         val playerEntity =
-            PlayerTemplateEntity(
-                name = playerTemplate.name,
-                deletable = playerTemplate.deletable
+            PlayerProfileEntity(
+                name = playerProfile.name,
+                deletable = playerProfile.deletable
             )
-        database.templateDao().deletePlayerCounterCrossRefsForPlayerTemplate(playerTemplate.name)
-        database.templateDao().replacePlayerTemplate(playerEntity)
-        val counterIds = addCounterTemplatesInternal(playerTemplate.counters)
+        database.templateDao().deletePlayerCounterCrossRefsForPlayerProfile(playerProfile.name)
+        database.templateDao().replacePlayerProfile(playerEntity)
+        val counterIds = addCounterTemplatesInternal(playerProfile.counters)
         database.templateDao().insertPlayerCounterPairings(
             counterIds.map {
-                PlayerCounterTemplateCrossRefEntity(
-                    playerTemplateId = playerEntity.name,
+                PlayerProfileCounterTemplateCrossRefEntity(
+                    playerProfileId = playerEntity.name,
                     counterTemplateId = it,
                 )
             }
@@ -121,8 +121,8 @@ class ProfileRepositoryImpl @Inject constructor(
         return flow {
             val id = addCounterTemplateInternal(counterTemplate)
             database.templateDao().insert(
-                PlayerCounterTemplateCrossRefEntity(
-                    playerTemplateId = profileName,
+                PlayerProfileCounterTemplateCrossRefEntity(
+                    playerProfileId = profileName,
                     counterTemplateId = id
                 )
             )
@@ -146,10 +146,10 @@ class ProfileRepositoryImpl @Inject constructor(
             .flowOn(dispatcherProvider.default())
     }
 
-    override fun deletePlayerTemplate(profileName: String): Flow<Boolean> {
+    override fun deletePlayerProfile(profileName: String): Flow<Boolean> {
         invalidateCache()
         return flow {
-            database.templateDao().deletePlayerTemplate(profileName)
+            database.templateDao().deletePlayerProfile(profileName)
             emit(true)
         }
             .flowOn(dispatcherProvider.default())
@@ -174,13 +174,13 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override fun preloadCache(): Flow<Boolean> {
-        return getAllPlayerTemplates().zip(getAllCounters()) { _, _ ->
+        return getAllPlayerProfiles().zip(getAllCounters()) { _, _ ->
             true
         }
     }
 
     private fun invalidateCache() {
-        cachedPlayerTemplates = null
+        cachedPlayerProfiles = null
         cachedCounterTemplates = null
     }
 }

@@ -11,5 +11,5 @@ data class PlayerModel(
     val life: Int = 0,
     @ColorRes val colorResId: Int = 0,
     val counters: List<CounterModel> = emptyList(),
-    val templateId: Int? = null,
+    val profileId: Int? = null,
 ): Parcelable

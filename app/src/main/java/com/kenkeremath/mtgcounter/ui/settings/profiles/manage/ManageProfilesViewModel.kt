@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -19,7 +19,7 @@ class ManageProfilesViewModel @Inject constructor(
 
     private var loading = false
 
-    private var allProfiles: MutableSet<PlayerTemplateModel>? = null
+    private var allProfiles: MutableSet<PlayerProfileModel>? = null
 
     private val _profiles: MutableLiveData<List<ProfileUiModel>> = MutableLiveData(emptyList())
     val profiles: LiveData<List<ProfileUiModel>> = _profiles
@@ -34,7 +34,7 @@ class ManageProfilesViewModel @Inject constructor(
         }
         loading = true
         viewModelScope.launch {
-            profileRepository.getAllPlayerTemplates()
+            profileRepository.getAllPlayerProfiles()
                 .catch {
                     loading = false
                     //TODO error handling?
@@ -55,7 +55,7 @@ class ManageProfilesViewModel @Inject constructor(
         } ?: emptyList()
     }
 
-    fun getProfileByName(name: String): PlayerTemplateModel? {
+    fun getProfileByName(name: String): PlayerProfileModel? {
         return allProfiles?.find { it.name == name }
     }
 
@@ -64,7 +64,7 @@ class ManageProfilesViewModel @Inject constructor(
             //optimistic removal from list for better responsiveness
             allProfiles?.removeAll { it.name == name && it.deletable }
             generateUiModels()
-            profileRepository.deletePlayerTemplate(name)
+            profileRepository.deletePlayerProfile(name)
                 .catch { }
                 .collect {
                     //No Op

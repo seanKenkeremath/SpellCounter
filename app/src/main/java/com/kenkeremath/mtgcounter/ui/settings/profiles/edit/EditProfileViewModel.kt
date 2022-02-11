@@ -3,7 +3,7 @@ package com.kenkeremath.mtgcounter.ui.settings.profiles.edit
 import androidx.lifecycle.*
 import com.kenkeremath.mtgcounter.livedata.SingleLiveEvent
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +20,9 @@ class EditProfileViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val originalProfile: PlayerTemplateModel? =
-        savedStateHandle.get<PlayerTemplateModel>(EditProfileDialogFragment.ARGS_PROFILE)
-    private var editedProfile = originalProfile ?: PlayerTemplateModel()
+    private val originalProfile: PlayerProfileModel? =
+        savedStateHandle.get<PlayerProfileModel>(EditProfileDialogFragment.ARGS_PROFILE)
+    private var editedProfile = originalProfile ?: PlayerProfileModel()
 
     val originalProfileName
         get() = originalProfile?.name
@@ -39,7 +39,7 @@ class EditProfileViewModel @Inject constructor(
     private var loading = false
 
     private var allCounters: MutableSet<CounterTemplateModel>? = null
-    private var allProfiles: Set<PlayerTemplateModel>? = null
+    private var allProfiles: Set<PlayerProfileModel>? = null
 
     private val _counterSelections: MutableLiveData<List<CounterSelectionUiModel>> =
         MutableLiveData(emptyList())
@@ -65,7 +65,7 @@ class EditProfileViewModel @Inject constructor(
         loading = true
         viewModelScope.launch {
             profileRepository.getAllCounters()
-                .zip(profileRepository.getAllPlayerTemplates()) { counters, players ->
+                .zip(profileRepository.getAllPlayerProfiles()) { counters, players ->
                     Pair(counters, players)
                 }
                 .catch {
@@ -79,7 +79,7 @@ class EditProfileViewModel @Inject constructor(
                     if (isNewProfile && !newProfileInitializedWithCounters) {
                         //Set new profile to match counters in default profile
                         editedProfile = editedProfile.copy(
-                            counters = allProfiles?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }?.counters
+                            counters = allProfiles?.find { it.name == PlayerProfileModel.NAME_DEFAULT }?.counters
                                 ?: emptyList()
                         )
                         newProfileInitializedWithCounters = true
@@ -160,9 +160,9 @@ class EditProfileViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val removeOld = if (!newProfile && differentName)
-                profileRepository.deletePlayerTemplate(originalProfile!!.name)
+                profileRepository.deletePlayerProfile(originalProfile!!.name)
             else flowOf(true)
-            removeOld.zip(profileRepository.addPlayerTemplate(editedProfile)) { _, _ -> }.collect {
+            removeOld.zip(profileRepository.addPlayerProfile(editedProfile)) { _, _ -> }.collect {
                 _saveStatus.value = SaveProfileResult.SUCCESSFUL
             }
         }

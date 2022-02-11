@@ -4,12 +4,12 @@ import com.kenkeremath.mtgcounter.coroutines.DefaultDispatcherProvider
 import com.kenkeremath.mtgcounter.coroutines.DispatcherProvider
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.AppDatabase
 import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerCounterTemplateCrossRefEntity
-import com.kenkeremath.mtgcounter.persistence.entities.PlayerTemplateEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileCounterTemplateCrossRefEntity
+import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileEntity
 import com.kenkeremath.mtgcounter.util.LogUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,7 +26,7 @@ class MigrationHelper(
         "Standard",
         "Modern",
         "EDH",
-        PlayerTemplateModel.NAME_DEFAULT,
+        PlayerProfileModel.NAME_DEFAULT,
     )
 
     private val legacyStockCounterTemplateNames: Set<String> = setOf(
@@ -81,8 +81,8 @@ class MigrationHelper(
 
         //insert player
         val playerEntity =
-            PlayerTemplateEntity(
-                name = PlayerTemplateModel.NAME_DEFAULT,
+            PlayerProfileEntity(
+                name = PlayerProfileModel.NAME_DEFAULT,
                 deletable = false
             )
         LogUtils.d(tag = LogUtils.TAG_MIGRATION, message = "Stock Profile to create: $playerEntity")
@@ -102,7 +102,7 @@ class MigrationHelper(
 
         //create links between default player and counters
         val links = counterIds.map {
-            PlayerCounterTemplateCrossRefEntity(
+            PlayerProfileCounterTemplateCrossRefEntity(
                 playerEntity.name,
                 it.toInt(),
             )
@@ -143,7 +143,7 @@ class MigrationHelper(
 
         val importedPlayers = legacyPlayerTemplatesToImport
             .map {
-                PlayerTemplateEntity(
+                PlayerProfileEntity(
                     name = it.templateName!!,
                     deletable = true
                 )
@@ -165,7 +165,7 @@ class MigrationHelper(
         }
 
         //Create counter links to profiles
-        val links: MutableList<PlayerCounterTemplateCrossRefEntity> = mutableListOf()
+        val links: MutableList<PlayerProfileCounterTemplateCrossRefEntity> = mutableListOf()
         for (legacyPlayerTemplateModel in legacyPlayerTemplatesToImport) {
             legacyPlayerTemplateModel.counters?.let { legacyCounters ->
                 for (legacyCounter in legacyCounters) {
@@ -173,7 +173,7 @@ class MigrationHelper(
                     if (counterIndex != -1) {
                         val counterId = counterIds[counterIndex]
                         links.add(
-                            PlayerCounterTemplateCrossRefEntity(
+                            PlayerProfileCounterTemplateCrossRefEntity(
                                 legacyPlayerTemplateModel.templateName!!,
                                 counterId.toInt()
                             )

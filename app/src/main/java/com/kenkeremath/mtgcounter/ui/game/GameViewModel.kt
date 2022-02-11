@@ -8,7 +8,6 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
-import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import com.kenkeremath.mtgcounter.view.counter.edit.RearrangeCounterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +67,7 @@ class GameViewModel @Inject constructor(
                 rearrangeButtonEnabled = false,
             )
             playerMap[i] = player
-            availableCountersMap[i] = setupPlayers[i].template?.counters ?: emptyList()
+            availableCountersMap[i] = setupPlayers[i].profile?.counters ?: emptyList()
 
             /**
              * Make sure pending map of selection changes is in sync with whatever

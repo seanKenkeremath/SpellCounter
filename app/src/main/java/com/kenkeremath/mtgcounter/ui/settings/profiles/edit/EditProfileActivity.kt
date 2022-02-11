@@ -6,14 +6,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EditProfileActivity : AppCompatActivity() {
 
     companion object {
-        fun getStartIntent(context: Context, profile: PlayerTemplateModel? = null): Intent {
+        fun getStartIntent(context: Context, profile: PlayerProfileModel? = null): Intent {
             return Intent(context, EditProfileActivity::class.java).putExtra(ARGS_PROFILE, profile)
         }
 

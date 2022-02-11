@@ -8,7 +8,7 @@ import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.GameRepository
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.ui.settings.profiles.manage.ProfileUiModel
@@ -51,7 +51,7 @@ class SetupViewModel @Inject constructor(
     //Generate 8 unique random colors from list to use for player creation
     private val playerColors = PlayerColor.allColors()
 
-    private var playerTemplates: List<PlayerTemplateModel>? = null
+    private var playerProfiles: List<PlayerProfileModel>? = null
 
     var selectedTabletopType: TabletopType = TabletopType.NONE
         private set
@@ -67,14 +67,14 @@ class SetupViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            profilesRepository.getAllPlayerTemplates()
+            profilesRepository.getAllPlayerProfiles()
                 .catch {
                     //TODO: error handling?
                 }
                 .collect {
-                    playerTemplates = it
-                    _profiles.value = it.map { template ->
-                        ProfileUiModel(template)
+                    playerProfiles = it
+                    _profiles.value = it.map { profile ->
+                        ProfileUiModel(profile)
                     }
                     _startingLife.value = gameRepository.startingLife
                     setTabletopType(gameRepository.tabletopType)
@@ -97,12 +97,12 @@ class SetupViewModel @Inject constructor(
          */
         val newList = (_setupPlayers.value?.take(number))?.map { player ->
             /**
-             * Templates may have been edited or deleted since these models were created.
-             * So we should update templates and reset them to default if they no longer
+             * Profiles may have been edited or deleted since these models were created.
+             * So we should update profiles and reset them to default if they no longer
              * exist
              */
-            player.copy(template = playerTemplates?.find { it.name == player.template?.name }
-                ?: playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }
+            player.copy(profile = playerProfiles?.find { it.name == player.profile?.name }
+                ?: playerProfiles?.find { it.name == PlayerProfileModel.NAME_DEFAULT }
             )
         }?.toMutableList() ?: mutableListOf()
         while (newList.size < number) {
@@ -112,7 +112,7 @@ class SetupViewModel @Inject constructor(
                     //Find the first color that is not currently taken by a player
                     color = playerColors.find { color -> newList.find { it.color == color } == null }
                         ?: PlayerColor.NONE,
-                    template = playerTemplates?.find { it.name == PlayerTemplateModel.NAME_DEFAULT }
+                    profile = playerProfiles?.find { it.name == PlayerProfileModel.NAME_DEFAULT }
                 )
             )
         }
@@ -195,10 +195,10 @@ class SetupViewModel @Inject constructor(
                 counter
             }
             allPlayers.map { player ->
-                player.template?.let { template ->
+                player.profile?.let { profile ->
                     player.copy(
-                        template = template.copy(
-                            counters = template.counters.plus(
+                        profile = profile.copy(
+                            counters = profile.counters.plus(
                                 allGameColorCounters.filter {
                                     player.color != it.color
                                 }

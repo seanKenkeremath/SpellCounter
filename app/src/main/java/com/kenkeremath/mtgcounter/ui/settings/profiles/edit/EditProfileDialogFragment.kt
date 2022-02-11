@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.model.player.PlayerTemplateModel
+import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +28,7 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
     OnManageCounterClickedListener {
 
     companion object {
-        fun newInstance(profile: PlayerTemplateModel? = null): EditProfileDialogFragment {
+        fun newInstance(profile: PlayerProfileModel? = null): EditProfileDialogFragment {
             val args = Bundle()
             args.putParcelable(ARGS_PROFILE, profile)
             val fragment = EditProfileDialogFragment()
