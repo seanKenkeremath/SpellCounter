@@ -26,6 +26,7 @@ class MigrationHelper(
         "Standard",
         "Modern",
         "EDH",
+        //Treat this as a legacy default so the new "Default" is not overwritten
         PlayerProfileModel.NAME_DEFAULT,
     )
 

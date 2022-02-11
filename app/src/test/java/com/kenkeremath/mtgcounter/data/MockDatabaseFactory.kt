@@ -22,6 +22,10 @@ object MockDatabaseFactory {
             .build()
     }
 
+    fun createEmptyDatabase(): AppDatabase {
+        return createDatabase()
+    }
+
     fun createDefaultTemplateDatabase(): AppDatabase {
         val db = createDatabase()
         val defaultProfile = PlayerProfileEntity(PlayerProfileModel.NAME_DEFAULT, false)

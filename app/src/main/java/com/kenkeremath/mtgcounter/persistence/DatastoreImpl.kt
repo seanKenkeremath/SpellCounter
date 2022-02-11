@@ -3,6 +3,7 @@ package com.kenkeremath.mtgcounter.persistence
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.VisibleForTesting
 import com.kenkeremath.mtgcounter.legacy.model.LegacyPlayerTemplateModel
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.squareup.moshi.Moshi
@@ -42,6 +43,17 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         PREFERENCES_NAME,
         Activity.MODE_PRIVATE
     )
+
+    @VisibleForTesting
+    fun setLegacyTemplates(templates: List<LegacyPlayerTemplateModel>) {
+        val type = Types.newParameterizedType(
+            List::class.java,
+            LegacyPlayerTemplateModel::class.java
+        )
+        val adapter = moshi.adapter<List<LegacyPlayerTemplateModel>>(type)
+        val json = adapter.toJson(templates)
+        prefs.edit().putString(KEY_LEGACY_PLAYER_TEMPLATES, json).apply()
+    }
 
     //Legacy
     override val legacyPlayerTemplates: List<LegacyPlayerTemplateModel>
