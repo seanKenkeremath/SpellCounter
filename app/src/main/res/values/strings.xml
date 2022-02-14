@@ -54,7 +54,7 @@
     <!-- Edit Counter -->
     <string name="create_counter_type_label">Counter Type</string>
     <string name="create_counter_preview">Preview</string>
-    <string name="create_counter_type_text">Text</string>
+    <string name="create_counter_type_text">Text/Emoji</string>
     <string name="create_counter_text_hint">ABCD</string>
     <string name="create_counter_type_image">Local Image</string>
     <string name="create_counter_type_url">Image URL</string>
