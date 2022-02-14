@@ -96,6 +96,7 @@ class GamePlayerRecyclerAdapter(
             lp.height = playerHeight
             it.itemView.layoutParams = lp
         }
+        measurementInvalidated = false
     }
 
     override fun getItemCount(): Int {
