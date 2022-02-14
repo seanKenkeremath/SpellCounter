@@ -286,9 +286,9 @@ class EditCounterDialogFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         debounceUrlInputRunnable?.let {
             binding.inputCounterUrl.removeCallbacks(it)
         }
+        _binding = null
     }
 }
