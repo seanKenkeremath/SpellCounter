@@ -52,7 +52,7 @@ class HoldableButton @JvmOverloads constructor(
             var interval = MAX_HOLD_INTERVAL
             for (i in 0 until holdIntervals.size()) {
                 if (i == holdIntervals.size() - 1) {
-                    interval = holdIntervals[holdIntervals.keyAt(i)]
+                    interval = holdIntervals.get(holdIntervals.keyAt(i))
                     break
                 } else if (holdIncrements >= holdIntervals.keyAt(i) && holdIncrements < holdIntervals.keyAt(
                         i + 1
