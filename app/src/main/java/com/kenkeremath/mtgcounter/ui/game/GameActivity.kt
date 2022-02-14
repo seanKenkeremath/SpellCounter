@@ -282,6 +282,11 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             hideSystemUI()
+            //Refresh layouts for new screen size
+            playersRecyclerAdapter.invalidateMeasurement()
+            viewModel.players.value?.let {
+                tabletopLayoutAdapter.updateAll(viewModel.tabletopType, it)
+            }
         }
     }
 

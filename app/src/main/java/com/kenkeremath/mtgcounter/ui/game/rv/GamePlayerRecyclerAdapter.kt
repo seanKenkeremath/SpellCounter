@@ -22,7 +22,15 @@ class GamePlayerRecyclerAdapter(
 
     private var recyclerView: RecyclerView? = null
 
+    private var measurementInvalidated = false
+
     private val players: MutableList<GamePlayerUiModel> = mutableListOf()
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun invalidateMeasurement() {
+        measurementInvalidated = true
+        notifyDataSetChanged()
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(players: List<GamePlayerUiModel>) {
@@ -53,7 +61,7 @@ class GamePlayerRecyclerAdapter(
 
     override fun onBindViewHolder(holder: GamePlayerRecyclerViewHolder, position: Int) {
         holder.bind(players[position])
-        if (recyclerView?.width ?: 0 > 0) {
+        if (recyclerView?.width ?: 0 > 0 && measurementInvalidated) {
             adjustCellHeight(holder)
         } else {
             recyclerView?.viewTreeObserver?.addOnPreDrawListener(object :
