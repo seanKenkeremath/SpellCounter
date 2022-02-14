@@ -73,7 +73,7 @@ class EditCounterDialogFragment : DialogFragment() {
                             ), null, null, null
                         )
                         if (cursor?.moveToFirst() == true) {
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME))
                         } else {
                             ""
                         }
