@@ -41,8 +41,11 @@ android {
         jvmTarget = '1.8'
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
     }
     testOptions {
         unitTests {
@@ -52,6 +55,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
     }
 }
 
@@ -60,11 +64,11 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
 }
 
 ext {
-    roomVersion = '2.3.0'
+    roomVersion = '2.4.1'
     archLifecycleVersion = '2.3.1'
     daggerVersion = '2.35'
     coroutinesVersion = '1.4.1'
-    moshi_version = '1.12.0'
+    moshi_version = '1.13.0'
 }
 
 dependencies {
@@ -111,6 +115,15 @@ dependencies {
 
     //Misc
     implementation 'rongi.rotate-layout:rotate-layout:3.0.0'
+
+    //Compose
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.compose.material:material:1.1.0'
+    implementation 'androidx.compose.animation:animation:1.1.0'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02'
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.6'
