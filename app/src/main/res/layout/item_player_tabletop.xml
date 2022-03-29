@@ -82,7 +82,7 @@
                     android:layout_height="@dimen/edit_counter_confirm_button_height"
                     android:layout_weight="1"
                     android:text="@android:string/cancel"
-                    android:textColor="@color/primary_text" />
+                    android:textColor="?attr/scTextColorPrimary" />
 
                 <Button
                     android:id="@+id/edit_confirm"
@@ -91,7 +91,7 @@
                     android:layout_height="@dimen/edit_counter_confirm_button_height"
                     android:layout_weight="1"
                     android:text="@string/save"
-                    android:textColor="@color/primary_text" />
+                    android:textColor="?attr/scTextColorPrimary" />
 
             </LinearLayout>
         </LinearLayout>
@@ -145,7 +145,7 @@
                 android:layout_width="@dimen/counter_divider_width"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/revealed_menu_divider_padding"
-                android:background="@color/player_divider_color" />
+                android:background="?attr/scDividerColor" />
 
             <FrameLayout
                 android:id="@+id/revealed_add_counter_container"

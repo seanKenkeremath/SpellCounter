@@ -159,7 +159,7 @@
                 android:paddingVertical="@dimen/setup_section_title_bottom_margin"
                 android:text="@string/customize_layout"
                 app:drawableEndCompat="@drawable/ic_chevron_right"
-                app:drawableTint="@color/accent_blue"
+                app:drawableTint="?attr/scAccentColor"
                 app:layout_constraintBottom_toBottomOf="@+id/tabletop_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tabletop_label" />

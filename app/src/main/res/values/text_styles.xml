@@ -4,7 +4,7 @@
     <style name="CounterText">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">none</item>
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">?attr/scTextColorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="autoSizeMinTextSize">11sp</item>
         <item name="autoSizeMaxTextSize">@dimen/counter_max_text_size</item>
@@ -19,7 +19,7 @@
     </style>
 
     <style name="CounterText.Outline">
-        <item name="android:shadowColor">@color/primary_text</item>
+        <item name="android:shadowColor">@color/light_mode_primary_text</item>
         <item name="android:shadowDx">0.0</item>
         <item name="android:shadowDy">0.0</item>
         <item name="android:shadowRadius">2.0</item>
@@ -27,16 +27,16 @@
     </style>
 
     <style name="ToolbarTitle">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">?attr/scTextColorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Header1">
-        <item name="android:drawableTint">@color/primary_text</item>
+        <item name="android:drawableTint">?attr/scTextColorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">?attr/scTextColorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">32sp</item>
     </style>
@@ -51,25 +51,25 @@
     </style>
 
     <style name="Subheader">
-        <item name="android:textColor">@color/darker_grey</item>
+        <item name="android:textColor">?attr/scTextColorCaption</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Label">
-        <item name="android:textColor">@color/darker_grey</item>
+        <item name="android:textColor">?attr/scTextColorCaption</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="NavMenuText">
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColor">?attr/scTextColorPrimary</item>
         <item name="android:textSize">16sp</item>
-        <item name="drawableTint">@color/primary_text</item>
+        <item name="drawableTint">?attr/scTextColorPrimary</item>
         <item name="android:drawablePadding">8dp</item>
     </style>
 
     <style name="SelectableText" parent="Label">
-        <item name="android:textColor">@color/accent_blue</item>
+        <item name="android:textColor">?attr/scAccentColor</item>
     </style>
 
     <style name="GameButtonLabel" parent="Header2">

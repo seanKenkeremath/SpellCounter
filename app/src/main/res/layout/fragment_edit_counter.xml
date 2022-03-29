@@ -6,6 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:minWidth="@dimen/dialog_width"
+    android:background="?attr/scBackgroundColor"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Light Mode -->
+    <color name="light_mode_game_button_color_enabled">@color/light_mode_primary_text</color>
+    <color name="light_mode_game_button_color_disabled">#40000000</color>
+    <color name="light_mode_game_button_pressed_state_color">#10000000</color>
+    <color name="light_mode_primary_text">@color/off_black</color>
+    <color name="light_mode_status_bar_color">#CFD8DC</color>
+    <color name="light_mode_ripple_color">#40000000</color>
+    <color name="light_mode_divider_color">@color/light_mode_primary_text</color>
+    <color name="light_mode_accent_color">@color/accent_blue</color>
+
     <color name="black">#000</color>
     <color name="white">#fff</color>
+    <color name="dark_grey">#9FA8AC</color>
     <color name="darker_grey">#868686</color>
-
-    <color name="primary_text">#242424</color>
-    <color name="nav_menu_divider_color">@color/primary_text</color>
-
-    <color name="player_divider_color">@color/primary_text</color>
-    <color name="game_button_color_enabled">@color/primary_text</color>
-    <color name="game_button_color_disabled">#40000000</color>
-    <color name="game_button_pressed_state_color">#10000000</color>
-    <color name="ripple_color">#40000000</color>
+    <color name="off_black">#242424</color>
 
     <color name="selected_yellow">#ffff00</color>
-
-    <!-- Legacy Colors -->
-    <color name="light_grey">#CFD8DC</color>
-    <color name="dark_grey">#9FA8AC</color>
 
     <color name="accent_blue">#00B0FF</color>
     <color name="cool_purple">#B388FF</color>
@@ -29,7 +28,5 @@
     <color name="light_pink">#FF80AB</color>
     <color name="indigo">#536DFE</color>
     <color name="green">#00C853</color>
-
-    <color name="default_icon_tint">@color/primary_text</color>
 
 </resources>

@@ -5,6 +5,7 @@
     style="@style/NavMenuText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/scBackgroundColor"
     android:ellipsize="end"
     android:maxLines="1"
     android:padding="8dp"

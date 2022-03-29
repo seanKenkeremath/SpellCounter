@@ -4,7 +4,7 @@
     android:id="@+id/game_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_text">
+    android:background="@color/light_mode_primary_text">
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
         android:id="@+id/tabletop_container"

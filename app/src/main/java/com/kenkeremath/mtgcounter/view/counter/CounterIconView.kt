@@ -16,6 +16,7 @@ import androidx.core.widget.TextViewCompat
 import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
+import com.kenkeremath.mtgcounter.theme.ThemeUtils
 
 class CounterIconView @JvmOverloads constructor(
     context: Context,
@@ -92,10 +93,9 @@ class CounterIconView @JvmOverloads constructor(
         image.visibility = View.VISIBLE
         image.setImageResource(drawableResId)
         image.imageTintList = ColorStateList.valueOf(
-            ContextCompat.getColor(
-                context,
-                tintResId ?: R.color.default_icon_tint
-            )
+            tintResId?.let {
+                ContextCompat.getColor(context, it)
+            } ?: ThemeUtils.resolveThemeColor(context, R.attr.scTextColorPrimary)
         )
     }
 }

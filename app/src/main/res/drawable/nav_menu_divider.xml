@@ -6,6 +6,6 @@
         android:width="@dimen/nav_menu_divider_width"
         android:height="@dimen/nav_menu_divider_width" />
 
-    <solid android:color="@color/nav_menu_divider_color" />
+    <solid android:color="?attr/scDividerColor" />
 
 </shape>
