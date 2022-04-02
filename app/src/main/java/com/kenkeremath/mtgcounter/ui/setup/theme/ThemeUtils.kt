@@ -1,4 +1,4 @@
-package com.kenkeremath.mtgcounter.theme
+package com.kenkeremath.mtgcounter.ui.setup.theme
 
 import android.content.Context
 import android.util.TypedValue

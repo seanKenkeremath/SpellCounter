@@ -16,7 +16,7 @@ import androidx.core.widget.TextViewCompat
 import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.theme.ThemeUtils
+import com.kenkeremath.mtgcounter.ui.setup.theme.ThemeUtils
 
 class CounterIconView @JvmOverloads constructor(
     context: Context,
