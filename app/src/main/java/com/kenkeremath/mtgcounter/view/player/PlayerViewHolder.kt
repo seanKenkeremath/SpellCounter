@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.view.player
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
@@ -9,6 +10,7 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ItemPlayerTabletopBinding
 import com.kenkeremath.mtgcounter.ui.game.GamePlayerUiModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.view.HoldableButton
 import com.kenkeremath.mtgcounter.view.PullToRevealLayout
 import com.kenkeremath.mtgcounter.view.counter.CountersRecyclerAdapter
@@ -126,15 +128,45 @@ class PlayerViewHolder(
         playerId = data.model.id
         countersAdapter.setData(data.model)
 
-        val alphaColor = ColorUtils.setAlphaComponent(
-            ContextCompat.getColor(
-                itemView.context,
-                data.model.colorResId
-            ), itemView.resources.getInteger(R.integer.player_color_alpha)
+        val color = ContextCompat.getColor(
+            itemView.context,
+            data.model.colorResId
         )
+        val alphaColor = ColorUtils.setAlphaComponent(
+            color, itemView.resources.getInteger(R.integer.player_color_alpha)
+        )
+        val isLightTheme = ScThemeUtils.isLightTheme(itemView.context)
+        val bgColor = ScThemeUtils.resolveThemeColor(itemView.context, R.attr.scBackgroundColor)
 
-        binding.optionsContainerBgImage.setBackgroundColor(alphaColor)
-        binding.playerContainerBgImage.setBackgroundColor(alphaColor)
+        if (isLightTheme) {
+            binding.optionsContainerBgImage.setBackgroundColor(alphaColor)
+            binding.playerContainerBgImage.setBackgroundColor(alphaColor)
+        } else {
+            val gameButtonColorStateList = ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_enabled),
+                    intArrayOf(-android.R.attr.state_enabled),
+                ),
+                intArrayOf(
+                    color,
+                    ScThemeUtils.resolveThemeColor(
+                        itemView.context,
+                        R.attr.scMenuDisabledButtonColor
+                    ),
+                )
+            )
+            binding.optionsContainerBgImage.setBackgroundColor(bgColor)
+            binding.optionsContainerBgImage.setBackgroundColor(bgColor)
+            binding.editCountersHeader.setTextColor(color)
+            binding.editCancel.setTextColor(color)
+            binding.editConfirm.setTextColor(color)
+            binding.revealedRearrangeCountersIcon.imageTintList = gameButtonColorStateList
+            binding.revealedRearrangeCountersLabel.setTextColor(gameButtonColorStateList)
+            binding.rearrangeCounters.imageTintList = gameButtonColorStateList
+            binding.revealedAddCountersIcon.imageTintList = gameButtonColorStateList
+            binding.revealedAddCountersLabel.setTextColor(gameButtonColorStateList)
+            binding.addCounter.imageTintList = gameButtonColorStateList
+        }
 
         // Make usability adjustments based on size (only once measured)
         if (!layoutResized) {
@@ -271,8 +303,8 @@ class PlayerViewHolder(
             binding.countersRecycler.scrollToPosition(countersAdapter.itemCount - 1)
             data.newCounterAdded = false
         }
-        editCountersRecyclerAdapter.setCounters(playerId, data.counterSelections)
-        rearrangeCountersRecyclerAdapter.setContent(playerId, data.rearrangeCounters)
+        editCountersRecyclerAdapter.setCounters(data.model, data.counterSelections)
+        rearrangeCountersRecyclerAdapter.setContent(data.model, data.rearrangeCounters)
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {

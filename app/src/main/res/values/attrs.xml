@@ -2,9 +2,16 @@
 <resources>
     <attr name="scIsLightTheme" format="boolean" />
     <attr name="scStatusBarColor" format="reference|color" />
+    <attr name="scToolbarColor" format="reference|color" />
     <attr name="scAccentColor" format="reference|color" />
+    <!-- Text to use on top of accent color -->
+    <attr name="scAccentContrastTextColor" format="reference|color"/>
     <attr name="scRippleColor" format="reference|color" />
     <attr name="scCounterSelectionColor" format="reference|color" />
+    <attr name="scOptionButtonColor" format="reference|color" />
+    <attr name="scGameButtonColor" format="reference|color" />
+    <attr name="scMenuButtonBackground" format="reference" />
+    <attr name="scMenuButtonRoundBackground" format="reference" />
     <attr name="scMenuEnabledButtonColor" format="reference|color" />
     <attr name="scMenuDisabledButtonColor" format="reference|color" />
     <attr name="scMenuPressedButtonColor" format="reference|color" />
@@ -12,6 +19,7 @@
     <attr name="scTextColorCaption" format="reference|color" />
     <attr name="scTextColorPrimary" format="reference|color" />
     <attr name="scDividerColor" format="reference|color" />
+    <attr name="scPlayerDividerColor" format="reference|color" />
     <attr name="scBackgroundColor" format="reference|color"/>
 
     <declare-styleable name="LineColorPickerView">

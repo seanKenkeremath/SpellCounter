@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.player.PlayerModel
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.view.counter.CounterIconView
 import com.kenkeremath.mtgcounter.view.drag.ItemTouchHelperAdapter
 import com.kenkeremath.mtgcounter.view.drag.ItemTouchHelperViewHolder
@@ -23,11 +26,11 @@ class RearrangeCountersRecyclerAdapter(
 
     private val counters = mutableListOf<RearrangeCounterUiModel>()
 
-    private var playerId = -1
+    private var player: PlayerModel? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setContent(playerId: Int, counters: List<RearrangeCounterUiModel>) {
-        this.playerId = playerId
+    fun setContent(player: PlayerModel, counters: List<RearrangeCounterUiModel>) {
+        this.player = player
         this.counters.clear()
         this.counters.addAll(counters)
         notifyDataSetChanged()
@@ -46,7 +49,7 @@ class RearrangeCountersRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: RearrangeCounterViewHolder, position: Int) {
-        holder.bind(counters[position])
+        holder.bind(counters[position], player!!)
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +69,7 @@ class RearrangeCountersRecyclerAdapter(
 
     override fun onItemDragFinished(oldPosition: Int, newPosition: Int) {
         playerMenuListener.onCounterRearranged(
-            playerId,
+            player!!.id,
             counters[oldPosition].template.id,
             oldPosition,
             newPosition
@@ -92,8 +95,16 @@ class RearrangeCounterViewHolder(itemView: View, onStartDragListener: OnStartDra
         }
     }
 
-    fun bind(uiModel: RearrangeCounterUiModel) {
-        counterIconView.setContent(uiModel.template, renderFullArt = true)
+    fun bind(uiModel: RearrangeCounterUiModel, player: PlayerModel) {
+        if (ScThemeUtils.isLightTheme(itemView.context)) {
+            counterIconView.setContent(uiModel.template, renderFullArt = true)
+        } else {
+            counterIconView.setContent(
+                uiModel.template,
+                renderFullArt = true,
+                iconTint = ContextCompat.getColor(itemView.context, player.colorResId)
+            )
+        }
     }
 
     override fun onItemSelected() {

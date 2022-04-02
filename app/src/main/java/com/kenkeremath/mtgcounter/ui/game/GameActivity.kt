@@ -162,7 +162,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         //Top left
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         containerLp.topMargin = containerPadding
                         containerLp.leftMargin = containerPadding
@@ -174,7 +174,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                             tabletopLayout.width - containerSize - containerPadding
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         container.rotation = 90f
                     }
@@ -186,7 +186,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         container.rotation = 90f
                     }
@@ -197,7 +197,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_side_bg
+                            R.drawable.game_button_container_side_bg
                         )
                         container.rotation = 90f
                     }
@@ -206,7 +206,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.topMargin = tabletopLayout.height / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_side_bg
+                            R.drawable.game_button_container_side_bg
                         )
                     }
                     TabletopType.FOUR_CIRCLE -> {
@@ -216,7 +216,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_side_bg
+                            R.drawable.game_button_container_side_bg
                         )
                         container.rotation = 90f
                     }
@@ -227,7 +227,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         container.rotation = 90f
                     }
@@ -238,7 +238,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         container.rotation = 90f
                     }
@@ -249,7 +249,7 @@ class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
                         containerLp.leftMargin = tabletopLayout.width / 2 - containerSize / 2
                         container.background = ContextCompat.getDrawable(
                             this@GameActivity,
-                            R.drawable.game_menu_button_container_bg
+                            R.drawable.game_button_container_bg
                         )
                         container.rotation = 90f
                     }

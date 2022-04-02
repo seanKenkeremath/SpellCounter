@@ -161,6 +161,7 @@
                     android:padding="@dimen/revealed_menu_item_padding">
 
                     <ImageView
+                        android:id="@+id/revealed_add_counters_icon"
                         style="@style/GameButton"
                         android:layout_width="@dimen/revealed_icon_size"
                         android:layout_height="@dimen/revealed_icon_size"

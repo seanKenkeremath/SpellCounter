@@ -9,9 +9,13 @@ class LifeCounterView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : CounterView(R.layout.view_counter, context, attrs, defStyleAttr) {
-
+    val counterIconView: CounterIconView = findViewById(R.id.counter_icon_view)
     init {
-        val counterIconView = findViewById<CounterIconView>(R.id.counter_icon_view)
         counterIconView.setIconDrawable(R.drawable.ic_heart)
+    }
+
+    override fun setTextColor(color: Int) {
+        super.setTextColor(color)
+        counterIconView.setIconDrawable(R.drawable.ic_heart, color)
     }
 }

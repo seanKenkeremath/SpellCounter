@@ -5,8 +5,11 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
+import com.kenkeremath.mtgcounter.model.player.PlayerModel
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.view.counter.CounterIconView
 
 class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuListener) :
@@ -16,14 +19,14 @@ class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuList
         setHasStableIds(true)
     }
 
-    private var playerId: Int = -1
+    private var player: PlayerModel? = null
 
     private val counters: MutableList<CounterSelectionUiModel> = mutableListOf()
 
-    fun setCounters(playerId: Int, counters: List<CounterSelectionUiModel>) {
+    fun setCounters(player: PlayerModel, counters: List<CounterSelectionUiModel>) {
         this.counters.clear()
         this.counters.addAll(counters)
-        this.playerId = playerId
+        this.player = player
         notifyDataSetChanged()
     }
 
@@ -36,7 +39,9 @@ class EditCountersRecyclerAdapter(private val playerMenuListener: PlayerMenuList
     }
 
     override fun onBindViewHolder(holder: CounterSelectionViewHolder, position: Int) {
-        holder.bind(playerId, counters[position])
+        player?.let {
+            holder.bind(it, counters[position])
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -73,12 +78,20 @@ class CounterSelectionViewHolder(
         }
     }
 
-    fun bind(playerId: Int, model: CounterSelectionUiModel) {
+    fun bind(player: PlayerModel, model: CounterSelectionUiModel) {
         this.selected = model.selected
         this.templateId = model.template.id
-        this.playerId = playerId
+        this.playerId = player.id
 
-        iconView.setContent(model.template, renderFullArt = true)
+        if (ScThemeUtils.isLightTheme(itemView.context)) {
+            iconView.setContent(model.template, renderFullArt = true)
+        } else {
+            iconView.setContent(
+                model.template,
+                renderFullArt = true,
+                iconTint = ContextCompat.getColor(itemView.context, player.colorResId)
+            )
+        }
 
         itemView.isSelected = selected
         if (selected) {

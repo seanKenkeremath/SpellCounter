@@ -11,11 +11,14 @@
     <color name="light_mode_divider_color">@color/light_mode_primary_text</color>
     <color name="light_mode_accent_color">@color/accent_blue</color>
 
+    <color name="dark_mode_ripple_color">#40ffffff</color>
+
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="dark_grey">#9FA8AC</color>
     <color name="darker_grey">#868686</color>
     <color name="off_black">#242424</color>
+    <color name="dark_mode_black">#121212</color>
 
     <color name="selected_yellow">#ffff00</color>
 

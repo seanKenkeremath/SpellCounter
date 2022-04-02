@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:background="?attr/scBackgroundColor"
     android:minWidth="@dimen/dialog_width"
     android:orientation="vertical">
 
@@ -33,7 +34,7 @@
 
     <Button
         android:id="@+id/save_button"
-        style="@style/StartGameButton"
+        style="@style/MenuButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/edit_counter_section_spacing"

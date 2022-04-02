@@ -1,8 +1,8 @@
 <resources>
 
     <!-- Common Components -->
-    <dimen name="start_button_margin">16dp</dimen>
-    <dimen name="start_game_button_height">120dp</dimen>
+    <dimen name="menu_button_margin">16dp</dimen>
+    <dimen name="menu_button_height">120dp</dimen>
 
     <!-- Setup -->
     <dimen name="setup_tabletop_layout_button_width">100dp</dimen>

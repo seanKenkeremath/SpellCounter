@@ -37,6 +37,15 @@
     <string name="create_profile">Create Profile</string>
     <string name="manage_counters">Custom Counters</string>
     <string name="create_counter">Create Counter</string>
+    <string name="themes">Themes</string>
+
+    <!-- Themes -->
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Urborg</string>
+    <string name="theme_llanowar">Llanowar</string>
+    <string name="theme_tolaria">Tolaria</string>
+    <string name="theme_lotus_petal">Lotus Petal</string>
+    <string name="theme_aetherhub">Aetherhub®</string>
 
     <!-- Edit Profile -->
     <string name="profile_name_label">Profile Name:</string>

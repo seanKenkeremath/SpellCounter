@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.core.widget.TextViewCompat
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.util.CounterUtils
@@ -117,6 +118,10 @@ abstract class CounterView(
     fun setAmount(amount: Int) {
         amountText.text = "$amount"
         this.amount = amount
+    }
+
+    open fun setTextColor(@ColorInt color: Int) {
+        amountText.setTextColor(color)
     }
 
     interface OnAmountUpdatedListener {

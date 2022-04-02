@@ -5,5 +5,5 @@
     <solid android:color="?attr/scBackgroundColor" />
     <stroke
         android:width="@dimen/player_divider_width"
-        android:color="?attr/scDividerColor" />
+        android:color="?attr/scPlayerDividerColor" />
 </shape>

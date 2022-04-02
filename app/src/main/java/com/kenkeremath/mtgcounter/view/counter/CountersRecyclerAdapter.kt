@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
 class CountersRecyclerAdapter(
     private val onPlayerUpdatedListener: OnPlayerUpdatedListener
@@ -72,7 +74,8 @@ class CountersRecyclerAdapter(
         } else {
             (holder as CounterViewHolder).bind(
                 player!!.id,
-                player!!.counters[position - 1]
+                player!!.counters[position - 1],
+                player!!
             )
         }
 
@@ -179,6 +182,9 @@ class LifeViewHolder(
     fun bind(playerModel: PlayerModel) {
         this.playerId = playerModel.id
         lifeView.setAmount(playerModel.life)
+        if (!ScThemeUtils.isLightTheme(itemView.context)) {
+            lifeView.setTextColor(ContextCompat.getColor(itemView.context, playerModel.colorResId))
+        }
     }
 }
 
@@ -211,9 +217,14 @@ class CounterViewHolder(
         })
     }
 
-    fun bind(playerId: Int, counterModel: CounterModel) {
+    fun bind(playerId: Int, counterModel: CounterModel, playerModel: PlayerModel) {
         this.playerId = playerId
         this.counterId = counterModel.template.id
-        this.counterView.setContent(counterModel)
+        if (!ScThemeUtils.isLightTheme(itemView.context)) {
+            counterView.setTextColor(ContextCompat.getColor(itemView.context, playerModel.colorResId))
+            counterView.setContent(counterModel, iconTint = ContextCompat.getColor(itemView.context, playerModel.colorResId))
+        } else {
+            counterView.setContent(counterModel)
+        }
     }
 }

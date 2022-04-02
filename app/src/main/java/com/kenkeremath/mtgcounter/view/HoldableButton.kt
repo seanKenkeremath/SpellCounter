@@ -11,7 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.kenkeremath.mtgcounter.R
-import com.kenkeremath.mtgcounter.ui.setup.theme.ThemeUtils
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.util.LogUtils
 import com.kenkeremath.mtgcounter.util.MathUtils
 
@@ -87,7 +87,7 @@ class HoldableButton @JvmOverloads constructor(
 
         foreground = RippleDrawable(
             ColorStateList.valueOf(
-                ThemeUtils.resolveThemeColor(context, R.attr.scRippleColor)
+                ScThemeUtils.resolveThemeColor(context, R.attr.scRippleColor)
             ),
             null,
             null

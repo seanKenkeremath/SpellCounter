@@ -9,14 +9,14 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
-import com.kenkeremath.mtgcounter.ui.setup.theme.ThemeUtils
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
 class CounterIconView @JvmOverloads constructor(
     context: Context,
@@ -53,9 +53,15 @@ class CounterIconView @JvmOverloads constructor(
 
     /**
      * drawFullArt specifices whether this view should handle rendering counters marked as full art.
-     * In most situations, they will be roundered as the background outside of this view
+     * In most situations, they will be roundered as the background outside of this view.
+     *
+     * iconTint is used in dark mode as a default tint color instead of the primary text color.
      */
-    fun setContent(templateModel: CounterTemplateModel, renderFullArt: Boolean = false) {
+    fun setContent(
+        templateModel: CounterTemplateModel,
+        renderFullArt: Boolean = false,
+        @ColorInt iconTint: Int? = null
+    ) {
         label.visibility = View.GONE
         image.visibility = View.GONE
         clearImage()
@@ -69,6 +75,9 @@ class CounterIconView @JvmOverloads constructor(
             } else if (templateModel.name != null) {
                 label.visibility = View.VISIBLE
                 label.text = templateModel.name
+                iconTint?.let {
+                    label.setTextColor(it)
+                }
             } else if (templateModel.isFullArtImage && !renderFullArt) {
                 //Image may be rendered outside of this view
             } else if (templateModel.uri != null) {
@@ -79,7 +88,9 @@ class CounterIconView @JvmOverloads constructor(
                     .into(image)
             }
         } else {
-            setIconDrawable(templateModel.symbol.resId, templateModel.color.resId)
+            setIconDrawable(
+                templateModel.symbol.resId,
+                iconTint ?: templateModel.color.resId?.let { ContextCompat.getColor(context, it) })
         }
     }
 
@@ -88,14 +99,12 @@ class CounterIconView @JvmOverloads constructor(
         image.setImageDrawable(null)
     }
 
-    fun setIconDrawable(@DrawableRes drawableResId: Int, @ColorRes tintResId: Int? = null) {
+    fun setIconDrawable(@DrawableRes drawableResId: Int, @ColorInt tint: Int? = null) {
         label.visibility = View.GONE
         image.visibility = View.VISIBLE
         image.setImageResource(drawableResId)
         image.imageTintList = ColorStateList.valueOf(
-            tintResId?.let {
-                ContextCompat.getColor(context, it)
-            } ?: ThemeUtils.resolveThemeColor(context, R.attr.scTextColorPrimary)
+            tint ?: ScThemeUtils.resolveThemeColor(context, R.attr.scTextColorPrimary)
         )
     }
 }

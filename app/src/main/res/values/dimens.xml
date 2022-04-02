@@ -4,11 +4,12 @@
     <dimen name="default_padding">16dp</dimen>
 
     <!-- Common Components -->
-    <dimen name="start_button_margin">8dp</dimen>
-    <dimen name="start_game_button_height">80dp</dimen>
+    <dimen name="menu_button_margin">8dp</dimen>
+    <dimen name="menu_button_height">80dp</dimen>
     <dimen name="spinner_start_margin">16dp</dimen>
     <dimen name="header_section_header_top_margin">8dp</dimen>
     <dimen name="dialog_width">300dp</dimen>
+    <dimen name="menu_button_stroke_width">3dp</dimen>
 
     <!-- Setup -->
     <dimen name="setup_section_top_margin">24dp</dimen>
