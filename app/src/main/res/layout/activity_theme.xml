@@ -24,20 +24,35 @@
 
             <com.kenkeremath.mtgcounter.view.ThemeItemView
                 android:id="@+id/light_theme"
-                app:label="@string/theme_light"
-                android:theme="@style/LightTheme"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:theme="@style/LightTheme"
+                app:label="@string/theme_light" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/nav_menu_divider_width"
                 android:background="?attr/scDividerColor" />
+
             <com.kenkeremath.mtgcounter.view.ThemeItemView
                 android:id="@+id/dark_theme"
-                app:label="@string/theme_dark"
-                android:theme="@style/DarkTheme"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:theme="@style/DarkTheme"
+                app:label="@string/theme_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_menu_divider_width"
+                android:background="?attr/scDividerColor" />
+
+            <com.kenkeremath.mtgcounter.view.ThemeItemView
+                android:id="@+id/llanowar_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/Llanowar"
+                app:label="@string/theme_llanowar" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/nav_menu_divider_width"

@@ -30,10 +30,12 @@ class ThemeActivity : BaseActivity() {
 
         binding.lightTheme.tag = SpellCounterTheme.LIGHT
         binding.darkTheme.tag = SpellCounterTheme.DARK
+        binding.llanowarTheme.tag = SpellCounterTheme.LLANOWAR
 
         val themeViews = listOf(
             binding.lightTheme,
-            binding.darkTheme
+            binding.darkTheme,
+            binding.llanowarTheme,
         )
 
         for (themeView in themeViews) {
