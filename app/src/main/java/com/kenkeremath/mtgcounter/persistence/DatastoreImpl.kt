@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import com.kenkeremath.mtgcounter.legacy.model.LegacyPlayerTemplateModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.ui.setup.theme.SpellCounterTheme
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import java.io.IOException
@@ -34,7 +35,7 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
         private const val KEY_KEEP_SCREEN_ON = "key_keep_screen_on"
         private const val KEY_HIDE_NAVIGATION = "key_hide_navigation"
         private const val KEY_TABLETOP_TYPE = "key_tabletop_type"
-
+        private const val KEY_THEME = "key_theme"
 
         private const val KEY_DATASTORE_VERSION = "key_datastore_version"
     }
@@ -96,6 +97,9 @@ class DatastoreImpl(context: Context, private val moshi: Moshi) : Datastore {
     override var tabletopType: TabletopType
         get() = TabletopType.values()[prefs.getInt(KEY_TABLETOP_TYPE, TabletopType.LIST.ordinal)]
         set(value) = getEditor().putInt(KEY_TABLETOP_TYPE, value.ordinal).apply()
+    override var theme: SpellCounterTheme
+        get() = SpellCounterTheme.fromId(prefs.getLong(KEY_THEME, SpellCounterTheme.NOT_SET.id))
+        set(value) = getEditor().putLong(KEY_THEME, value.id).apply()
 
     override val version: Int
         get() = prefs.getInt(KEY_DATASTORE_VERSION, 0)

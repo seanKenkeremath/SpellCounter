@@ -9,6 +9,11 @@ enum class SpellCounterTheme(
     @StyleRes val resId: Int,
     @StringRes val labelResId: Int,
 ) {
+    NOT_SET(
+        id = 0L,
+        resId = R.style.LightTheme,
+        labelResId = R.string.theme_light,
+    ),
     LIGHT(
         id = 1L,
         labelResId = R.string.theme_light,
@@ -18,7 +23,7 @@ enum class SpellCounterTheme(
         id = 2L,
         labelResId = R.string.theme_dark,
         resId = R.style.DarkTheme,
-        );
+    );
 //    LLANOWAR(
 //        id = 3L,
 //        labelResId = R.string.theme_llanowar,
@@ -40,7 +45,7 @@ enum class SpellCounterTheme(
         fun fromId(id: Long): SpellCounterTheme {
             return SpellCounterTheme.values().find {
                 it.id == id
-            } ?: LIGHT
+            } ?: NOT_SET
         }
     }
 }

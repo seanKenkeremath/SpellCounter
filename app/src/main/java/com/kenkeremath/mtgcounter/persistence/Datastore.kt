@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter.persistence
 
 import com.kenkeremath.mtgcounter.legacy.model.LegacyPlayerTemplateModel
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.ui.setup.theme.SpellCounterTheme
 
 interface Datastore {
 
@@ -28,6 +29,7 @@ interface Datastore {
     var keepScreenOn: Boolean
     var hideNavigation: Boolean
     var tabletopType: TabletopType
+    var theme: SpellCounterTheme
     val version: Int
 
     //Mark as having completed migration + setup for current app version

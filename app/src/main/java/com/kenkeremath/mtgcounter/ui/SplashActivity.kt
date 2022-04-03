@@ -2,7 +2,6 @@ package com.kenkeremath.mtgcounter.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kenkeremath.mtgcounter.legacy.MigrationHelper
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     @Inject
     lateinit var migrationHelper: MigrationHelper

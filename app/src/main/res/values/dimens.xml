@@ -91,4 +91,7 @@
     <dimen name="player_divider_width">1dp</dimen>
     <dimen name="nav_menu_divider_width">1px</dimen>
 
+    <!-- Themes -->
+    <dimen name="theme_icon_size">24dp</dimen>
+
 </resources>

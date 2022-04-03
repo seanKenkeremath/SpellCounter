@@ -33,7 +33,6 @@ class CounterIconView @JvmOverloads constructor(
         label = findViewById(R.id.label)
 
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CounterIconView, 0, 0)
-
         try {
             val labelMaxSize = a.getDimensionPixelSize(
                 R.styleable.CounterIconView_labelMaxTextSize,

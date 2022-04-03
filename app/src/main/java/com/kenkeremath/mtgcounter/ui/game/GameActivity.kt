@@ -5,15 +5,18 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,21 +24,18 @@ import com.github.rongi.rotate_layout.layout.RotateLayout
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.player.PlayerSetupModel
+import com.kenkeremath.mtgcounter.ui.BaseActivity
+import com.kenkeremath.mtgcounter.ui.game.options.GameOptionsDialogFragment
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
 import com.kenkeremath.mtgcounter.view.TableLayoutPosition
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
 import dagger.hilt.android.AndroidEntryPoint
-import android.util.TypedValue
-import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.DialogFragment
-import com.kenkeremath.mtgcounter.ui.game.options.GameOptionsDialogFragment
 
 
 @AndroidEntryPoint
-class GameActivity : AppCompatActivity(), OnPlayerUpdatedListener,
+class GameActivity : BaseActivity(), OnPlayerUpdatedListener,
     PlayerMenuListener, GameOptionsDialogFragment.Listener {
 
     companion object {

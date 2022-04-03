@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/dark_grey</item>
         <item name="colorPrimaryDark">@color/darker_grey</item>
         <item name="colorAccent">?attr/scAccentColor</item>
@@ -31,6 +31,8 @@
         <item name="android:textColorPrimary">?attr/scTextColorPrimary</item>
         <item name="colorAccent">?attr/scAccentColor</item>
     </style>
+
+    <style name="SplashTheme" parent="LightTheme"/>
 
     <style name="LightTheme" parent="BaseTheme">
         <item name="scIsLightTheme">true</item>

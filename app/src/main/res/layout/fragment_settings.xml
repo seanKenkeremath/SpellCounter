@@ -55,4 +55,25 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_menu_divider_width"
         android:background="?attr/scDividerColor" />
+
+    <FrameLayout
+        android:id="@+id/themes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/default_padding">
+
+        <TextView
+            style="@style/NavMenuText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/themes"
+            app:drawableStartCompat="@drawable/ic_custom_counter" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_menu_divider_width"
+        android:background="?attr/scDividerColor" />
 </LinearLayout>

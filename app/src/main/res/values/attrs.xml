@@ -36,4 +36,7 @@
     <declare-styleable name="CounterIconView">
         <attr name="labelMaxTextSize" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="ThemeItemView">
+        <attr name="label" format="string" />
+    </declare-styleable>
 </resources>

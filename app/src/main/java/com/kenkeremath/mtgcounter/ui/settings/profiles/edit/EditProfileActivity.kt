@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
+import com.kenkeremath.mtgcounter.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileActivity : AppCompatActivity() {
+class EditProfileActivity : BaseActivity() {
 
     companion object {
         fun getStartIntent(context: Context, profile: PlayerProfileModel? = null): Intent {
