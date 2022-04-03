@@ -34,6 +34,26 @@ class LegacyDatastore(context: Context, private val moshi: Moshi) {
         return prefs.edit()
     }
 
+    /**
+     * Returns the string enum name for old app versions theme enum
+     */
+    fun getTheme(): String? {
+        return try {
+            prefs.getString(KEY_LEGACY_THEME, null)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @VisibleForTesting
+    fun setTheme(theme: String) {
+        getEditor().putString(KEY_LEGACY_THEME, theme).apply()
+    }
+
+    fun clearTheme() {
+        getEditor().remove(KEY_LEGACY_THEME).apply()
+    }
+
     @VisibleForTesting
     fun setLegacyTemplates(templates: List<LegacyPlayerTemplateModel>) {
         val type = Types.newParameterizedType(

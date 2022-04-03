@@ -67,7 +67,18 @@ class MigrationHelper(
             }
 
             if (oldVersion < Datastore.VERSION_3_1) {
-                //TODO Migrate themes
+                /**
+                 * Try to parse old theme string. If there is an existing, known entry we
+                 * try to map to one of our current themes. otherwise, do nothing
+                 */
+                val oldTheme = legacyDatastore.getTheme()
+                legacyDatastore.clearTheme()
+                oldTheme?.let {
+                    val newThemeMatch = legacyThemeMapping[oldTheme]
+                    if (newThemeMatch != null) {
+                        datastore.theme = newThemeMatch
+                    }
+                }
             }
             datastore.updateVersion()
             emit(true)

@@ -11,6 +11,7 @@ import com.kenkeremath.mtgcounter.legacy.model.LegacyPlayerTemplateModel
 import com.kenkeremath.mtgcounter.model.counter.CounterSymbol
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.*
+import com.kenkeremath.mtgcounter.ui.setup.theme.SpellCounterTheme
 import com.squareup.moshi.Moshi
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
@@ -191,4 +192,41 @@ class MigrationHelperTest {
             assertTrue(allCounters.find { it.name == "MANA" } == null)
             assertTrue(allCounters.find { it.name == "C4" }?.deletable == true)
         }
+
+    @Test
+    fun migration_from_old_app_migrates_known_theme() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        legacyDatastore.setTheme("PURPLE")
+        assertEquals(0, datastore.version)
+
+        migrationHelper.performMigration().collect { }
+
+        assertEquals(Datastore.CURRENT_VERSION, datastore.version)
+        assertEquals(SpellCounterTheme.LOTUS_PETAL, datastore.theme)
+    }
+
+    @Test
+    fun migration_from_old_app_migrates_unknown_theme() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        legacyDatastore.setTheme("ASDF")
+        assertEquals(0, datastore.version)
+
+        migrationHelper.performMigration().collect { }
+
+        assertEquals(Datastore.CURRENT_VERSION, datastore.version)
+        assertEquals(SpellCounterTheme.NOT_SET, datastore.theme)
+    }
+
+    @Test
+    fun migration_from_old_app_migrates_invalid_theme() = coroutinesTestRule.testDispatcher.runBlockingTest {
+        /**
+         * If we are doing a migration we expect there to be a String value in the theme
+         * entry. Having an ID set prior to migration is an illegal state
+         */
+        datastore.theme = SpellCounterTheme.LOTUS_PETAL
+        assertEquals(0, datastore.version)
+
+        migrationHelper.performMigration().collect { }
+
+        assertEquals(Datastore.CURRENT_VERSION, datastore.version)
+        assertEquals(SpellCounterTheme.NOT_SET, datastore.theme)
+    }
 }
