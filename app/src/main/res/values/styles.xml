@@ -29,7 +29,12 @@
         <item name="android:background">?attr/scBackgroundColor</item>
         <item name="android:textColor">?attr/scTextColorPrimary</item>
         <item name="android:textColorPrimary">?attr/scTextColorPrimary</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="colorAccent">?attr/scAccentColor</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">?attr/scAccentColor</item>
     </style>
 
     <style name="SplashTheme" parent="LightTheme"/>
