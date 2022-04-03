@@ -7,8 +7,7 @@
 
     <!-- Setup -->
     <string name="setup_game_title">Set up Game</string>
-    <string name="customize_table_title">Customize Table</string>
-    <string name="setup_tabletop_section_title">Select Player Colors and Profiles</string>
+    <string name="customize_table_title">Select Player Colors &amp; Profiles</string>
     <string name="player_number_label">Players:</string>
     <string name="starting_life_label">Starting Life:</string>
     <string name="keep_screen_awake_label">Keep Screen Awake</string>
