@@ -17,6 +17,13 @@
     <color name="llanowar_green">#004d40</color>
     <color name="llanowar_dark_green">#00251a</color>
     <color name="llanowar_light_green">#c8e6c9</color>
+    <color name="llanowar_ripple">#40c8e6c9</color>
+
+    <color name="lotus_petal_primary">#554971</color>
+    <color name="lotus_petal_darkest">#36213E</color>
+    <color name="lotus_petal_lightest">@color/dark_grey</color>
+    <color name="lotus_petal_accent">#B8F3FF</color>
+    <color name="lotus_petal_ripple">#40B8F3FF</color>
 
     <color name="black">#000</color>
     <color name="white">#fff</color>

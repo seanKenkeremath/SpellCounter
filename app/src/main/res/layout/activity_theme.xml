@@ -57,6 +57,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/nav_menu_divider_width"
                 android:background="?attr/scDividerColor" />
+
+            <com.kenkeremath.mtgcounter.view.ThemeItemView
+                android:id="@+id/lotus_petal_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/LotusPetal"
+                app:label="@string/theme_lotus_petal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_menu_divider_width"
+                android:background="?attr/scDividerColor" />
         </LinearLayout>
     </ScrollView>
 

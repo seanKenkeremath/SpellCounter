@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.ui.setup.theme
 
-import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import com.kenkeremath.mtgcounter.R
 
@@ -23,6 +22,10 @@ enum class SpellCounterTheme(
     LLANOWAR(
         id = 3L,
         resId = R.style.Llanowar,
+    ),
+    LOTUS_PETAL(
+        id = 5L,
+        resId = R.style.LotusPetal,
     );
 //    TOLARIA(
 //        id = 4L,
@@ -39,7 +42,7 @@ enum class SpellCounterTheme(
 
     companion object {
         fun fromId(id: Long): SpellCounterTheme {
-            return SpellCounterTheme.values().find {
+            return values().find {
                 it.id == id
             } ?: NOT_SET
         }

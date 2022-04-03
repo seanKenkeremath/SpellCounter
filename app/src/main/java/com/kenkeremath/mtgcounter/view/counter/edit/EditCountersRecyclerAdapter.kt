@@ -95,7 +95,12 @@ class CounterSelectionViewHolder(
 
         itemView.isSelected = selected
         if (selected) {
-            itemView.background = ColorDrawable(Color.YELLOW)
+            itemView.background = ColorDrawable(
+                ScThemeUtils.resolveThemeColor(
+                    itemView.context,
+                    R.attr.scCounterSelectionColor
+                )
+            )
         } else {
             itemView.background = null
         }

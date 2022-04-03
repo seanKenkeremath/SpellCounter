@@ -31,11 +31,13 @@ class ThemeActivity : BaseActivity() {
         binding.lightTheme.tag = SpellCounterTheme.LIGHT
         binding.darkTheme.tag = SpellCounterTheme.DARK
         binding.llanowarTheme.tag = SpellCounterTheme.LLANOWAR
+        binding.lotusPetalTheme.tag = SpellCounterTheme.LOTUS_PETAL
 
         val themeViews = listOf(
             binding.lightTheme,
             binding.darkTheme,
             binding.llanowarTheme,
+            binding.lotusPetalTheme,
         )
 
         for (themeView in themeViews) {

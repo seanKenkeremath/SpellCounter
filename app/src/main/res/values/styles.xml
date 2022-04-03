@@ -1,8 +1,8 @@
 <resources>
 
     <style name="BaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/dark_grey</item>
-        <item name="colorPrimaryDark">@color/darker_grey</item>
+        <item name="colorPrimary">?attr/scToolbarColor</item>
+        <item name="colorPrimaryDark">?attr/scStatusBarColor</item>
         <item name="colorAccent">?attr/scAccentColor</item>
         <item name="colorControlNormal">?attr/scTextColorPrimary</item>
         <item name="colorControlHighlight">?attr/scRippleColor</item>
@@ -85,9 +85,23 @@
         <item name="scToolbarColor">@color/llanowar_green</item>
         <item name="scAccentColor">@color/llanowar_light_green</item>
         <item name="scAccentContrastTextColor">@color/dark_mode_black</item>
-        <item name="scRippleColor">@color/llanowar_light_green</item>
-        <item name="scCounterSelectionColor">@color/llanowar_green</item>
+        <item name="scRippleColor">@color/llanowar_ripple</item>
+        <item name="scCounterSelectionColor">@color/llanowar_light_green</item>
         <item name="scMenuEnabledButtonColor">@color/llanowar_green</item>
+        <item name="scMenuDisabledButtonColor">@color/dark_grey</item>
+        <item name="scMenuPressedButtonColor">@color/darker_grey</item>
+        <item name="scMenuButtonTextColor">@color/white</item>
+        <item name="scBackgroundColor">@color/dark_mode_black</item>
+    </style>
+
+    <style name="LotusPetal" parent="DarkTheme">
+        <item name="scStatusBarColor">@color/lotus_petal_darkest</item>
+        <item name="scToolbarColor">@color/lotus_petal_primary</item>
+        <item name="scAccentColor">@color/lotus_petal_accent</item>
+        <item name="scAccentContrastTextColor">@color/dark_mode_black</item>
+        <item name="scRippleColor">@color/lotus_petal_ripple</item>
+        <item name="scCounterSelectionColor">@color/lotus_petal_accent</item>
+        <item name="scMenuEnabledButtonColor">@color/lotus_petal_primary</item>
         <item name="scMenuDisabledButtonColor">@color/dark_grey</item>
         <item name="scMenuPressedButtonColor">@color/darker_grey</item>
         <item name="scMenuButtonTextColor">@color/white</item>
