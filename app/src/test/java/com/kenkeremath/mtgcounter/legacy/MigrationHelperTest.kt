@@ -35,15 +35,18 @@ class MigrationHelperTest {
 
     private lateinit var database: AppDatabase
     private lateinit var datastore: DatastoreImpl
+    private lateinit var legacyDatastore: LegacyDatastore
     private lateinit var migrationHelper: MigrationHelper
 
     @Before
     fun setup() {
         datastore =
-            DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+            DatastoreImpl(ApplicationProvider.getApplicationContext())
+        legacyDatastore =
+            LegacyDatastore(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
         database = MockDatabaseFactory.createEmptyDatabase()
         migrationHelper =
-            MigrationHelper(datastore, database, coroutinesTestRule.testDispatcherProvider)
+            MigrationHelper(datastore, legacyDatastore, database, coroutinesTestRule.testDispatcherProvider)
     }
 
     @After
@@ -106,7 +109,7 @@ class MigrationHelperTest {
                     )
                 )
             )
-            datastore.setLegacyTemplates(legacyTemplates)
+            legacyDatastore.setLegacyTemplates(legacyTemplates)
             assertEquals(0, datastore.version)
 
             migrationHelper.performMigration().collect {}
@@ -183,9 +186,9 @@ class MigrationHelperTest {
             val expectedCounterSize =
                 defaultProfile.counters.size + testProfile1.counters.size + testProfile2.counters.size + 1
             assertEquals(expectedCounterSize, allCounters.size)
-            assertTrue(allCounters.find {it.name == "C4"} != null)
-            assertTrue(allCounters.find {it.name == "CMD"} == null)
-            assertTrue(allCounters.find {it.name == "MANA"} == null)
-            assertTrue(allCounters.find {it.name == "C4"}?.deletable == true)
+            assertTrue(allCounters.find { it.name == "C4" } != null)
+            assertTrue(allCounters.find { it.name == "CMD" } == null)
+            assertTrue(allCounters.find { it.name == "MANA" } == null)
+            assertTrue(allCounters.find { it.name == "C4" }?.deletable == true)
         }
 }

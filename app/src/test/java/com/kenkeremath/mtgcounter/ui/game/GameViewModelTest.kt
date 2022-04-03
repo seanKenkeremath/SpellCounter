@@ -15,7 +15,6 @@ import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.persistence.DatastoreImpl
 import com.kenkeremath.mtgcounter.persistence.GameRepository
 import com.kenkeremath.mtgcounter.persistence.GameRepositoryImpl
-import com.squareup.moshi.Moshi
 import io.mockk.MockKAnnotations
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -46,7 +45,7 @@ class GameViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         datastore =
-            DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+            DatastoreImpl(ApplicationProvider.getApplicationContext())
         gameRepository = GameRepositoryImpl(datastore)
 
         val counterTemplate1 = CounterTemplateModel(

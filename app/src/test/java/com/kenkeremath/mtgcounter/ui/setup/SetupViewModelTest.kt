@@ -10,7 +10,6 @@ import com.kenkeremath.mtgcounter.model.TabletopType
 import com.kenkeremath.mtgcounter.model.player.PlayerColor
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.persistence.*
-import com.squareup.moshi.Moshi
 import io.mockk.MockKAnnotations
 import junit.framework.Assert.*
 import org.junit.After
@@ -44,7 +43,7 @@ class SetupViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         datastore =
-            DatastoreImpl(ApplicationProvider.getApplicationContext(), Moshi.Builder().build())
+            DatastoreImpl(ApplicationProvider.getApplicationContext())
         database = MockDatabaseFactory.createDefaultTemplateDatabase()
 
         gameRepository = GameRepositoryImpl(datastore)

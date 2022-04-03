@@ -2,6 +2,7 @@ package com.kenkeremath.mtgcounter
 
 import android.content.Context
 import androidx.room.Room
+import com.kenkeremath.mtgcounter.legacy.LegacyDatastore
 import com.kenkeremath.mtgcounter.legacy.MigrationHelper
 import com.kenkeremath.mtgcounter.persistence.*
 import com.kenkeremath.mtgcounter.persistence.images.ImageApi
@@ -28,8 +29,17 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesDatastore(@ApplicationContext appContext: Context, moshi: Moshi): Datastore {
-        return DatastoreImpl(appContext, moshi)
+    fun providesDatastore(@ApplicationContext appContext: Context): Datastore {
+        return DatastoreImpl(appContext)
+    }
+
+    /**
+     * For migrations from previous app
+     */
+    @Provides
+    @Singleton
+    fun providesLegacyDatastore(@ApplicationContext appContext: Context, moshi: Moshi): LegacyDatastore {
+        return LegacyDatastore(appContext, moshi)
     }
 
     @Provides
@@ -44,8 +54,8 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesMigrationHelper(appDatabase: AppDatabase, datastore: Datastore): MigrationHelper {
-        return MigrationHelper(datastore, appDatabase)
+    fun providesMigrationHelper(appDatabase: AppDatabase, datastore: Datastore, legacyDatastore: LegacyDatastore): MigrationHelper {
+        return MigrationHelper(datastore, legacyDatastore, appDatabase)
     }
 
     @Provides

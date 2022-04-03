@@ -10,14 +10,15 @@ import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.persistence.entities.CounterTemplateEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileCounterTemplateCrossRefEntity
 import com.kenkeremath.mtgcounter.persistence.entities.PlayerProfileEntity
+import com.kenkeremath.mtgcounter.ui.setup.theme.SpellCounterTheme
 import com.kenkeremath.mtgcounter.util.LogUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.lang.Exception
 
 class MigrationHelper(
     private val datastore: Datastore,
+    private val legacyDatastore: LegacyDatastore,
     private val database: AppDatabase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
 ) {
@@ -39,6 +40,14 @@ class MigrationHelper(
         "XP",
     )
 
+    //For converting old themes prior to v3.0 (saved as Strings) to v3 themes
+    private val legacyThemeMapping: Map<String, SpellCounterTheme> = mapOf(
+        "GREY" to SpellCounterTheme.DARK,
+        "PURPLE" to SpellCounterTheme.LOTUS_PETAL,
+        "DARK_BLUE" to SpellCounterTheme.DARK,
+        "DARK_GREEN" to SpellCounterTheme.LLANOWAR
+    )
+
     val needsMigration: Boolean
         get() = datastore.version < Datastore.CURRENT_VERSION
 
@@ -50,15 +59,17 @@ class MigrationHelper(
             if (oldVersion < Datastore.VERSION_3_0) {
                 //Stock template creation is mandatory, migration from older version can fail silently
                 createStockTemplates()
-                datastore.updateVersion()
-
                 try {
                     migrateTo3_0_0()
-                    datastore.updateVersion()
                 } catch (e: Exception) {
                     LogUtils.d(tag = LogUtils.TAG_MIGRATION, message = "Migration failed: $e")
                 }
             }
+
+            if (oldVersion < Datastore.VERSION_3_1) {
+                //TODO Migrate themes
+            }
+            datastore.updateVersion()
             emit(true)
         }.flowOn(dispatcherProvider.io())
     }
@@ -115,7 +126,7 @@ class MigrationHelper(
 
     private suspend fun migrateTo3_0_0() {
         LogUtils.d(tag = LogUtils.TAG_MIGRATION, message = "Migrating to 3.0.0")
-        val allLegacyPlayerTemplates = datastore.legacyPlayerTemplates
+        val allLegacyPlayerTemplates = legacyDatastore.legacyPlayerTemplates
 
         // Do not migrate stock templates. Only user created ones
         val legacyPlayerTemplatesToImport = allLegacyPlayerTemplates.filter {
