@@ -113,6 +113,21 @@
         <item name="scBackgroundColor">@color/dark_mode_black</item>
     </style>
 
+    <style name="Aetherhub" parent="DarkTheme">
+        <item name="scStatusBarColor">@color/dark_mode_black</item>
+        <item name="scToolbarColor">@color/off_black</item>
+        <item name="scAccentColor">@color/aether_hub_accent</item>
+        <item name="scAccentContrastTextColor">@color/dark_mode_black</item>
+        <item name="scRippleColor">@color/aether_hub_ripple</item>
+        <item name="scOptionButtonColor">@color/aether_hub_button_background</item>
+        <item name="scCounterSelectionColor">@color/aether_hub_accent</item>
+        <item name="scMenuEnabledButtonColor">@color/aether_hub_primary</item>
+        <item name="scMenuDisabledButtonColor">@color/dark_grey</item>
+        <item name="scMenuPressedButtonColor">@color/darker_grey</item>
+        <item name="scMenuButtonTextColor">@color/white</item>
+        <item name="scBackgroundColor">@color/dark_mode_black</item>
+    </style>
+
     <style name="OptionButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:backgroundTint">@color/option_button_bg_color</item>
         <item name="android:textColor">@color/option_button_text_color</item>

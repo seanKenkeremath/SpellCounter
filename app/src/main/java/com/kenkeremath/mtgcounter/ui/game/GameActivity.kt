@@ -74,6 +74,7 @@ class GameActivity : BaseActivity(), OnPlayerUpdatedListener,
         }
         //Remove default theme tinting for game button
         toolbar.navigationIcon?.setTintList(null)
+        toolbar.title = ScThemeUtils.resolveThemedTitle(this, datastore.theme)
 
         gameContainer = findViewById(R.id.game_container)
 

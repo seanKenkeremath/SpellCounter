@@ -15,12 +15,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.TabletopType
+import com.kenkeremath.mtgcounter.persistence.Datastore
 import com.kenkeremath.mtgcounter.ui.game.GameActivity
 import com.kenkeremath.mtgcounter.ui.settings.SettingsFragment
 import com.kenkeremath.mtgcounter.ui.setup.tabletop.SetupTabletopFragment
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.layoutbutton.TabletopLayoutButtonAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.min
 
 @AndroidEntryPoint
@@ -44,6 +47,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
     private lateinit var tabletopListLayoutButton: LinearLayout
     private lateinit var startButton: View
     private lateinit var toolbar: Toolbar
+
+    @Inject
+    lateinit var datastore: Datastore
 
     private val viewModel: SetupViewModel by activityViewModels()
 
@@ -75,6 +81,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 }
             }
         }
+        toolbar.title = ScThemeUtils.resolveThemedTitle(requireContext(), datastore.theme)
 
         playerNumberButtons = listOf(
             view.findViewById(R.id.one_player_button),

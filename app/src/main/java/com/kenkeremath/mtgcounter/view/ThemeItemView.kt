@@ -19,18 +19,18 @@ class ThemeItemView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val check: ImageView
-    private val label: TextView
+    private val labelTextView: TextView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.item_theme, this, true)
         check = findViewById(R.id.check)
-        label = findViewById(R.id.label)
+        labelTextView = findViewById(R.id.label)
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.ThemeItemView, 0, 0)
         try {
             val label = a.getString(
                 R.styleable.ThemeItemView_label
             )
-            this.label.text = label
+            this.labelTextView.text = label
         } finally {
             a.recycle()
         }
@@ -43,9 +43,11 @@ class ThemeItemView @JvmOverloads constructor(
         setPadding(resources.getDimensionPixelSize(R.dimen.default_padding))
     }
 
-    fun setLabel(label: String) {
-        this.label.text = label
-    }
+    var label: CharSequence
+        get() = this.labelTextView.text
+        set(value) {
+            this.labelTextView.text = value
+        }
 
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)

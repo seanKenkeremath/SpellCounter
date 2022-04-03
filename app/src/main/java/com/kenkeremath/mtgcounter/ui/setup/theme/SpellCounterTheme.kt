@@ -26,6 +26,10 @@ enum class SpellCounterTheme(
     LOTUS_PETAL(
         id = 5L,
         resId = R.style.LotusPetal,
+    ),
+    AETHERHUB(
+        id = 6L,
+        resId = R.style.Aetherhub
     );
 //    TOLARIA(
 //        id = 4L,
@@ -35,10 +39,7 @@ enum class SpellCounterTheme(
 //        id = 5L,
 //        labelResId = R.string.theme_lotus_petal,
 //    ),
-//    AETHERHUB(
-//        id = 6L,
-//        labelResId = R.string.theme_aetherhub,
-//    );
+
 
     companion object {
         fun fromId(id: Long): SpellCounterTheme {

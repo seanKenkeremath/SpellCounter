@@ -2,6 +2,12 @@ package com.kenkeremath.mtgcounter.ui.setup.theme
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
+import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.databinding.ActivityThemeBinding
 import com.kenkeremath.mtgcounter.ui.BaseActivity
 import com.kenkeremath.mtgcounter.ui.MainActivity
@@ -32,17 +38,49 @@ class ThemeActivity : BaseActivity() {
         binding.darkTheme.tag = SpellCounterTheme.DARK
         binding.llanowarTheme.tag = SpellCounterTheme.LLANOWAR
         binding.lotusPetalTheme.tag = SpellCounterTheme.LOTUS_PETAL
+        binding.aetherHubTheme.tag = SpellCounterTheme.AETHERHUB
 
         val themeViews = listOf(
             binding.lightTheme,
             binding.darkTheme,
             binding.llanowarTheme,
             binding.lotusPetalTheme,
+            binding.aetherHubTheme,
         )
 
         for (themeView in themeViews) {
             val theme = themeView.tag
             if (theme is SpellCounterTheme) {
+                if (theme == SpellCounterTheme.AETHERHUB) {
+                    val spannable = SpannableString(themeView.label)
+                    val spanSection = "hub"
+                    val startIndex = spannable.indexOf(spanSection)
+                    if (startIndex != -1) {
+                        spannable.setSpan(
+                            BackgroundColorSpan(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.aether_hub_primary
+                                )
+                            ),
+                            startIndex,
+                            startIndex + spanSection.length,
+                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+                        )
+                        spannable.setSpan(
+                            ForegroundColorSpan(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.dark_mode_black
+                                )
+                            ),
+                            startIndex,
+                            startIndex + spanSection.length,
+                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+                        )
+                        themeView.label = spannable
+                    }
+                }
                 val resolvedTheme = ScThemeUtils.resolveTheme(this, datastore.theme)
                 themeView.isSelected = theme == resolvedTheme
                 themeView.setOnClickListener {
