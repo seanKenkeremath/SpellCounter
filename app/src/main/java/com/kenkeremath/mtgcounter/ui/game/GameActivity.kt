@@ -3,6 +3,7 @@ package com.kenkeremath.mtgcounter.ui.game
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.util.TypedValue
@@ -28,6 +29,7 @@ import com.kenkeremath.mtgcounter.ui.BaseActivity
 import com.kenkeremath.mtgcounter.ui.game.options.GameOptionsDialogFragment
 import com.kenkeremath.mtgcounter.ui.game.rv.GamePlayerRecyclerAdapter
 import com.kenkeremath.mtgcounter.ui.game.tabletop.GameTabletopLayoutAdapter
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 import com.kenkeremath.mtgcounter.view.TableLayoutPosition
 import com.kenkeremath.mtgcounter.view.TabletopLayout
 import com.kenkeremath.mtgcounter.view.counter.edit.PlayerMenuListener
@@ -70,6 +72,8 @@ class GameActivity : BaseActivity(), OnPlayerUpdatedListener,
         toolbar.setNavigationOnClickListener {
             openGameMenu()
         }
+        //Remove default theme tinting for game button
+        toolbar.navigationIcon?.setTintList(null)
 
         gameContainer = findViewById(R.id.game_container)
 
@@ -259,10 +263,7 @@ class GameActivity : BaseActivity(), OnPlayerUpdatedListener,
                 theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
                 container.foreground = RippleDrawable(
                     ColorStateList.valueOf(
-                        ContextCompat.getColor(
-                            this@GameActivity,
-                            R.color.accent_blue
-                        )
+                        ScThemeUtils.resolveThemeColor(this@GameActivity, R.attr.scAccentColor)
                     ), null, container.background
                 )
                 container.setOnClickListener {
