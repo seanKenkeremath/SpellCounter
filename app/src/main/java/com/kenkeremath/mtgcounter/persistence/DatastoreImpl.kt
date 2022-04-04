@@ -17,7 +17,8 @@ class DatastoreImpl(context: Context) : Datastore {
         private const val KEY_KEEP_SCREEN_ON = "key_keep_screen_on"
         private const val KEY_HIDE_NAVIGATION = "key_hide_navigation"
         private const val KEY_TABLETOP_TYPE = "key_tabletop_type"
-        private const val KEY_THEME = "key_theme"
+        //NOTE: this needs to be different than the legacy theme which was "key_theme"
+        private const val KEY_THEME = "key_v3_theme"
 
         private const val KEY_DATASTORE_VERSION = "key_datastore_version"
     }
