@@ -15,10 +15,10 @@
     <color name="dark_mode_ripple_color">#40ffffff</color>
     <color name="dark_mode_black">#121212</color>
 
-    <color name="llanowar_green">#004d40</color>
-    <color name="llanowar_dark_green">#00251a</color>
-    <color name="llanowar_light_green">#c8e6c9</color>
-    <color name="llanowar_ripple">#40c8e6c9</color>
+    <color name="mox_emerald_green">#004d40</color>
+    <color name="mox_emerald_dark_green">#00251a</color>
+    <color name="mox_emerald_light_green">#c8e6c9</color>
+    <color name="mox_emerald_ripple">#40c8e6c9</color>
 
     <color name="lotus_petal_primary">#554971</color>
     <color name="lotus_petal_darkest">#36213E</color>

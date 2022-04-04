@@ -81,14 +81,14 @@
         <item name="scBackgroundColor">@color/dark_mode_black</item>
     </style>
 
-    <style name="Llanowar" parent="DarkTheme">
-        <item name="scStatusBarColor">@color/llanowar_dark_green</item>
-        <item name="scToolbarColor">@color/llanowar_green</item>
-        <item name="scAccentColor">@color/llanowar_light_green</item>
+    <style name="MoxEmerald" parent="DarkTheme">
+        <item name="scStatusBarColor">@color/mox_emerald_dark_green</item>
+        <item name="scToolbarColor">@color/mox_emerald_green</item>
+        <item name="scAccentColor">@color/mox_emerald_light_green</item>
         <item name="scAccentContrastTextColor">@color/dark_mode_black</item>
-        <item name="scRippleColor">@color/llanowar_ripple</item>
-        <item name="scCounterSelectionColor">@color/llanowar_light_green</item>
-        <item name="scMenuEnabledButtonColor">@color/llanowar_green</item>
+        <item name="scRippleColor">@color/mox_emerald_ripple</item>
+        <item name="scCounterSelectionColor">@color/mox_emerald_light_green</item>
+        <item name="scMenuEnabledButtonColor">@color/mox_emerald_green</item>
         <item name="scMenuDisabledButtonColor">@color/dark_grey</item>
         <item name="scMenuPressedButtonColor">@color/darker_grey</item>
         <item name="scMenuButtonTextColor">@color/white</item>

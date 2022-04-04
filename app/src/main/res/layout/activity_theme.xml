@@ -82,11 +82,11 @@
                 android:background="?attr/scDividerColor" />
 
             <com.kenkeremath.mtgcounter.view.ThemeItemView
-                android:id="@+id/llanowar_theme"
+                android:id="@+id/mox_emerald_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/Llanowar"
-                app:label="@string/theme_llanowar" />
+                app:scTheme="@style/MoxEmerald"
+                app:label="@string/theme_mox_emerald" />
 
             <View
                 android:layout_width="match_parent"

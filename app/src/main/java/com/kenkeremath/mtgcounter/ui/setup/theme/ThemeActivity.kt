@@ -36,7 +36,7 @@ class ThemeActivity : BaseActivity() {
 
         binding.lightTheme.tag = SpellCounterTheme.LIGHT
         binding.darkTheme.tag = SpellCounterTheme.DARK
-        binding.llanowarTheme.tag = SpellCounterTheme.LLANOWAR
+        binding.moxEmeraldTheme.tag = SpellCounterTheme.MOX_EMERALD
         binding.lotusPetalTheme.tag = SpellCounterTheme.LOTUS_PETAL
         binding.aetherHubTheme.tag = SpellCounterTheme.AETHERHUB
         binding.pinkTheme.tag = SpellCounterTheme.PINK
@@ -44,7 +44,7 @@ class ThemeActivity : BaseActivity() {
         val themeViews = listOf(
             binding.lightTheme,
             binding.darkTheme,
-            binding.llanowarTheme,
+            binding.moxEmeraldTheme,
             binding.lotusPetalTheme,
             binding.aetherHubTheme,
             binding.pinkTheme,

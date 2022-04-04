@@ -19,9 +19,9 @@ enum class SpellCounterTheme(
         id = 2L,
         resId = R.style.DarkTheme,
     ),
-    LLANOWAR(
+    MOX_EMERALD(
         id = 3L,
-        resId = R.style.Llanowar,
+        resId = R.style.MoxEmerald,
     ),
     LOTUS_PETAL(
         id = 5L,

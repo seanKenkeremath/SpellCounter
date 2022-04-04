@@ -45,7 +45,7 @@ class MigrationHelper(
         "GREY" to SpellCounterTheme.DARK,
         "PURPLE" to SpellCounterTheme.LOTUS_PETAL,
         "DARK_BLUE" to SpellCounterTheme.DARK,
-        "DARK_GREEN" to SpellCounterTheme.LLANOWAR
+        "DARK_GREEN" to SpellCounterTheme.MOX_EMERALD
     )
 
     val needsMigration: Boolean
