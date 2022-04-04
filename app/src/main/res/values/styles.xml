@@ -67,7 +67,7 @@
         <item name="scAccentColor">@color/accent_blue</item>
         <item name="scAccentContrastTextColor">@color/white</item>
         <item name="scRippleColor">@color/dark_mode_ripple_color</item>
-        <item name="scCounterSelectionColor">@color/accent_blue</item>
+        <item name="scCounterSelectionColor">@color/dark_grey</item>
         <item name="scOptionButtonColor">@color/off_black</item>
         <item name="scGameButtonColor">@color/off_black</item>
         <item name="scMenuEnabledButtonColor">@color/accent_blue</item>
