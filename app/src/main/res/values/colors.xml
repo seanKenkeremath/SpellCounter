@@ -33,6 +33,11 @@
     <color name="aether_hub_ripple">#40808080</color>
     <color name="aether_hub_button_background">#292929</color>
 
+    <color name="pink_primary">#F900BF</color>
+    <color name="pink_accent">#FF85B3</color>
+    <color name="pink_ripple">#40FFC5F3</color>
+    <color name="pink_bg">#FFF5FC</color>
+
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="dark_grey">#9FA8AC</color>

@@ -39,6 +39,7 @@ class ThemeActivity : BaseActivity() {
         binding.llanowarTheme.tag = SpellCounterTheme.LLANOWAR
         binding.lotusPetalTheme.tag = SpellCounterTheme.LOTUS_PETAL
         binding.aetherHubTheme.tag = SpellCounterTheme.AETHERHUB
+        binding.pinkTheme.tag = SpellCounterTheme.PINK
 
         val themeViews = listOf(
             binding.lightTheme,
@@ -46,11 +47,14 @@ class ThemeActivity : BaseActivity() {
             binding.llanowarTheme,
             binding.lotusPetalTheme,
             binding.aetherHubTheme,
+            binding.pinkTheme,
         )
 
         for (themeView in themeViews) {
             val theme = themeView.tag
             if (theme is SpellCounterTheme) {
+
+                //Special case
                 if (theme == SpellCounterTheme.AETHERHUB) {
                     val spannable = SpannableString(themeView.label)
                     val spanSection = "hub"
@@ -81,6 +85,8 @@ class ThemeActivity : BaseActivity() {
                         themeView.label = spannable
                     }
                 }
+                //End special case
+
                 val resolvedTheme = ScThemeUtils.resolveTheme(this, datastore.theme)
                 themeView.isSelected = theme == resolvedTheme
                 themeView.setOnClickListener {

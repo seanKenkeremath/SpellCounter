@@ -10,8 +10,6 @@
     <attr name="scCounterSelectionColor" format="reference|color" />
     <attr name="scOptionButtonColor" format="reference|color" />
     <attr name="scGameButtonColor" format="reference|color" />
-    <attr name="scMenuButtonBackground" format="reference" />
-    <attr name="scMenuButtonRoundBackground" format="reference" />
     <attr name="scMenuEnabledButtonColor" format="reference|color" />
     <attr name="scMenuDisabledButtonColor" format="reference|color" />
     <attr name="scMenuPressedButtonColor" format="reference|color" />
@@ -37,6 +35,8 @@
         <attr name="labelMaxTextSize" format="dimension" />
     </declare-styleable>
     <declare-styleable name="ThemeItemView">
+        <!-- This must be prefixed to not clash with android/app:theme attributes -->
+        <attr name="scTheme" format="reference"/>
         <attr name="label" format="string" />
     </declare-styleable>
 </resources>

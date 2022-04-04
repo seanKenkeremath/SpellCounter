@@ -4,39 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/scBackgroundColor"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
+    <ImageView
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/default_padding"
+        android:src="@drawable/ic_check"
+        android:visibility="invisible"
+        app:tint="?attr/scAccentColor"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/label"
         style="@style/NavMenuText"
-        android:textColor="?attr/scTextColorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:text="@string/theme_light" />
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="@dimen/theme_icon_size"
-        android:layout_height="@dimen/theme_icon_size"
-        android:layout_marginStart="@dimen/default_padding"
-        android:src="@drawable/ic_circle"
-        app:tint="?attr/scToolbarColor" />
-
-    <ImageView
-        android:id="@+id/check"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="end"
-        android:scaleType="fitEnd"
-        android:src="@drawable/ic_check"
-        android:visibility="gone"
-        app:tint="?scAccentColor"
-        tools:visibility="visible" />
+        android:layout_weight="1">
+
+        <!-- outline with primary text color for visibility.
+        In all themes, primary textcolor should have contrast
+        against background -->
+
+        <LinearLayout
+            android:id="@+id/swatches_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?attr/scTextColorPrimary"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <View
+                android:id="@+id/toolbar_swatch"
+                android:layout_width="@dimen/theme_icon_size"
+                android:layout_height="@dimen/theme_icon_size"
+                android:background="?attr/scToolbarColor" />
+
+            <View
+                android:id="@+id/accent_swatch"
+                android:layout_width="@dimen/theme_icon_size"
+                android:layout_height="@dimen/theme_icon_size"
+                android:background="?attr/scAccentColor" />
+
+            <View
+                android:id="@+id/menu_button_swatch"
+                android:layout_width="@dimen/theme_icon_size"
+                android:layout_height="@dimen/theme_icon_size"
+                android:background="?attr/scMenuEnabledButtonColor" />
+
+            <View
+                android:id="@+id/background_swatch"
+                android:layout_width="@dimen/theme_icon_size"
+                android:layout_height="@dimen/theme_icon_size"
+                android:background="?attr/scBackgroundColor" />
+        </LinearLayout>
+
+    </FrameLayout>
 
 </merge>
 

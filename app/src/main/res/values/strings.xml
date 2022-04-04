@@ -39,12 +39,15 @@
     <string name="themes">Themes</string>
 
     <!-- Themes -->
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Urborg</string>
+    <string name="themes_light">Light Themes</string>
+    <string name="themes_dark">Dark Themes</string>
+    <string name="theme_light">Esper</string>
+    <string name="theme_dark">Dimir</string>
     <string name="theme_llanowar">Llanowar</string>
     <string name="theme_tolaria">Tolaria</string>
     <string name="theme_lotus_petal">Lotus Petal</string>
     <string name="theme_aetherhub">Aetherhub®</string>
+    <string name="theme_pink">Pink</string>
 
     <!-- Edit Profile -->
     <string name="profile_name_label">Profile Name:</string>

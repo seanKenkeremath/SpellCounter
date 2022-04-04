@@ -22,11 +22,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                style="@style/Header3"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/themes_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_menu_divider_width"
+                android:background="?attr/scDividerColor" />
+
             <com.kenkeremath.mtgcounter.view.ThemeItemView
                 android:id="@+id/light_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/LightTheme"
+                app:scTheme="@style/LightTheme"
                 app:label="@string/theme_light" />
 
             <View
@@ -35,10 +49,31 @@
                 android:background="?attr/scDividerColor" />
 
             <com.kenkeremath.mtgcounter.view.ThemeItemView
+                android:id="@+id/pink_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:scTheme="@style/PinkTheme"
+                app:label="@string/theme_pink" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_menu_divider_width"
+                android:background="?attr/scDividerColor" />
+
+            <TextView
+                style="@style/Header3"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/themes_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.kenkeremath.mtgcounter.view.ThemeItemView
                 android:id="@+id/dark_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/DarkTheme"
+                app:scTheme="@style/DarkTheme"
                 app:label="@string/theme_dark" />
 
             <View
@@ -50,7 +85,7 @@
                 android:id="@+id/llanowar_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/Llanowar"
+                app:scTheme="@style/Llanowar"
                 app:label="@string/theme_llanowar" />
 
             <View
@@ -62,7 +97,7 @@
                 android:id="@+id/lotus_petal_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/LotusPetal"
+                app:scTheme="@style/LotusPetal"
                 app:label="@string/theme_lotus_petal" />
 
             <View
@@ -74,13 +109,14 @@
                 android:id="@+id/aether_hub_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/Aetherhub"
+                app:scTheme="@style/Aetherhub"
                 app:label="@string/theme_aetherhub" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/nav_menu_divider_width"
                 android:background="?attr/scDividerColor" />
+
         </LinearLayout>
     </ScrollView>
 
