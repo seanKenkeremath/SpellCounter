@@ -23,5 +23,5 @@
         android:layout_gravity="center_vertical|end"
         android:padding="@dimen/default_padding"
         android:src="@drawable/ic_close"
-        app:tint="@color/light_mode_primary_text" />
+        app:tint="?attr/scTextColorPrimary" />
 </FrameLayout>

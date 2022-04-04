@@ -174,7 +174,7 @@
 
 
     <style name="ColorPicker">
-        <item name="highlightColor">@color/light_mode_primary_text</item>
+        <item name="highlightColor">?attr/scTextColorPrimary</item>
         <item name="highlightStrokeWidth">4dp</item>
     </style>
 
