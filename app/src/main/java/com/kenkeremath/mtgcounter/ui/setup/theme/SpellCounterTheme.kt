@@ -34,6 +34,10 @@ enum class SpellCounterTheme(
     PINK(
         id = 7L,
         resId = R.style.PinkTheme
+    ),
+    KARN(
+        id = 8L,
+        resId = R.style.Karn
     );
 
     companion object {

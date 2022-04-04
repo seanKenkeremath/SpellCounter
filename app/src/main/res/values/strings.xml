@@ -48,6 +48,7 @@
     <string name="theme_lotus_petal">Lotus Petal</string>
     <string name="theme_aetherhub">Aetherhub®</string>
     <string name="theme_pink">Carpet of Flowers</string>
+    <string name="theme_karn">Karn</string>
 
     <!-- Edit Profile -->
     <string name="profile_name_label">Profile Name:</string>

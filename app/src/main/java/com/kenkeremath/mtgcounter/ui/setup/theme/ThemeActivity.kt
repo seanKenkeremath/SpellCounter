@@ -40,6 +40,7 @@ class ThemeActivity : BaseActivity() {
         binding.lotusPetalTheme.tag = SpellCounterTheme.LOTUS_PETAL
         binding.aetherHubTheme.tag = SpellCounterTheme.AETHERHUB
         binding.pinkTheme.tag = SpellCounterTheme.PINK
+        binding.karnTheme.tag = SpellCounterTheme.KARN
 
         val themeViews = listOf(
             binding.lightTheme,
@@ -48,6 +49,7 @@ class ThemeActivity : BaseActivity() {
             binding.lotusPetalTheme,
             binding.aetherHubTheme,
             binding.pinkTheme,
+            binding.karnTheme,
         )
 
         for (themeView in themeViews) {

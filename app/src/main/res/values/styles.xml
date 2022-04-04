@@ -137,6 +137,24 @@
         <item name="scBackgroundColor">@color/pink_bg</item>
     </style>
 
+    <style name="Karn" parent="LightTheme">
+        <item name="scAccentColor">@color/darker_grey</item>
+        <item name="scAccentContrastTextColor">@color/black</item>
+        <item name="scRippleColor">@color/light_mode_ripple_color</item>
+        <item name="scCounterSelectionColor">@color/dark_grey</item>
+        <item name="scOptionButtonColor">@android:color/transparent</item>
+        <item name="scGameButtonColor">@color/light_mode_divider_color</item>
+        <item name="scMenuEnabledButtonColor">@color/light_mode_game_button_color_enabled</item>
+        <item name="scMenuDisabledButtonColor">@color/light_mode_game_button_color_disabled</item>
+        <item name="scMenuPressedButtonColor">@color/light_mode_game_button_pressed_state_color</item>
+        <item name="scMenuButtonTextColor">@color/white</item>
+        <item name="scTextColorCaption">@color/darker_grey</item>
+        <item name="scTextColorPrimary">@color/light_mode_primary_text</item>
+        <item name="scDividerColor">@color/light_mode_divider_color</item>
+        <item name="scPlayerDividerColor">@color/light_mode_divider_color</item>
+        <item name="scBackgroundColor">@color/white</item>
+    </style>
+
     <style name="OptionButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:backgroundTint">@color/option_button_bg_color</item>
         <item name="android:textColor">@color/option_button_text_color</item>

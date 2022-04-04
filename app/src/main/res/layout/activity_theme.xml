@@ -24,12 +24,12 @@
 
             <TextView
                 style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/themes_light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:text="@string/themes_light" />
 
             <View
                 android:layout_width="match_parent"
@@ -40,8 +40,8 @@
                 android:id="@+id/light_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/LightTheme"
-                app:label="@string/theme_light" />
+                app:label="@string/theme_light"
+                app:scTheme="@style/LightTheme" />
 
             <View
                 android:layout_width="match_parent"
@@ -52,8 +52,20 @@
                 android:id="@+id/pink_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/PinkTheme"
-                app:label="@string/theme_pink" />
+                app:label="@string/theme_pink"
+                app:scTheme="@style/PinkTheme" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_menu_divider_width"
+                android:background="?attr/scDividerColor" />
+
+            <com.kenkeremath.mtgcounter.view.ThemeItemView
+                android:id="@+id/karn_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:label="@string/theme_karn"
+                app:scTheme="@style/Karn" />
 
             <View
                 android:layout_width="match_parent"
@@ -62,19 +74,19 @@
 
             <TextView
                 style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/themes_dark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:text="@string/themes_dark" />
 
             <com.kenkeremath.mtgcounter.view.ThemeItemView
                 android:id="@+id/dark_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/DarkTheme"
-                app:label="@string/theme_dark" />
+                app:label="@string/theme_dark"
+                app:scTheme="@style/DarkTheme" />
 
             <View
                 android:layout_width="match_parent"
@@ -85,8 +97,8 @@
                 android:id="@+id/mox_emerald_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/MoxEmerald"
-                app:label="@string/theme_mox_emerald" />
+                app:label="@string/theme_mox_emerald"
+                app:scTheme="@style/MoxEmerald" />
 
             <View
                 android:layout_width="match_parent"
@@ -97,8 +109,8 @@
                 android:id="@+id/lotus_petal_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/LotusPetal"
-                app:label="@string/theme_lotus_petal" />
+                app:label="@string/theme_lotus_petal"
+                app:scTheme="@style/LotusPetal" />
 
             <View
                 android:layout_width="match_parent"
@@ -109,8 +121,8 @@
                 android:id="@+id/aether_hub_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:scTheme="@style/Aetherhub"
-                app:label="@string/theme_aetherhub" />
+                app:label="@string/theme_aetherhub"
+                app:scTheme="@style/Aetherhub" />
 
             <View
                 android:layout_width="match_parent"
