@@ -113,8 +113,6 @@ class HoldableButton @JvmOverloads constructor(
             return true
         }
         event?.let {
-            background?.setHotspot(it.x, it.y)
-            foreground?.setHotspot(it.x, it.y)
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
                     LogUtils.d("Hold gesture started", LogUtils.TAG_INCREMENTER)
