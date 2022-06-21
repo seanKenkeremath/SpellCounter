@@ -122,6 +122,13 @@ class GameViewModel @Inject constructor(
         _players.value = playerMap.values.toList()
     }
 
+    fun roll(playerId: Int) {
+        playerMap[playerId]?.let { player ->
+            player.currentMenu = GamePlayerUiModel.Menu.ROLL
+        }
+        _players.value = playerMap.values.toList()
+    }
+
     fun closeSubMenu(playerId: Int) {
         playerMap[playerId]?.let { player ->
             player.currentMenu = GamePlayerUiModel.Menu.MAIN

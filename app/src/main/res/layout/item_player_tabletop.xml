@@ -21,6 +21,40 @@
             android:padding="@dimen/player_divider_width" />
 
         <LinearLayout
+            android:id="@+id/roll_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/roll_header"
+                style="@style/Header3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/default_padding_quarter"
+                android:text="@string/roll_title" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/roll_compose_view"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp" />
+
+            <Button
+                android:id="@+id/roll_done"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_counter_confirm_button_height"
+                android:text="@string/done"
+                android:textColor="?attr/scTextColorPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/edit_counters_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -96,18 +130,33 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/reveal_options_menu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_half_vertical"
+                app:layout_constraintGuide_percent="0.50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_half_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.50" />
 
             <FrameLayout
                 android:id="@+id/revealed_rearrange_counters_container"
+                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,6 +191,61 @@
             </FrameLayout>
 
             <View
+                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_half_horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/counter_divider_width"
+                android:layout_marginHorizontal="@dimen/revealed_menu_divider_padding"
+                android:background="?attr/scDividerColor" />
+
+            <FrameLayout
+                android:id="@+id/revealed_roll_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/revealed_menu_item_padding">
+
+                    <ImageView
+                        android:id="@+id/revealed_roll_icon"
+                        style="@style/GameButton"
+                        android:layout_width="@dimen/revealed_icon_size"
+                        android:layout_height="@dimen/revealed_icon_size"
+                        android:src="@drawable/ic_dice" />
+
+                    <TextView
+                        android:id="@+id/revealed_roll_label"
+                        style="@style/GameButtonLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/revealed_menu_icon_margin"
+                        android:gravity="center"
+                        android:text="@string/roll_title" />
+                </LinearLayout>
+
+                <com.kenkeremath.mtgcounter.view.HoldableButton
+                    android:id="@+id/revealed_roll_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground" />
+
+            </FrameLayout>
+
+            <View
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="@dimen/counter_divider_width"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/revealed_menu_divider_padding"
@@ -149,9 +253,12 @@
 
             <FrameLayout
                 android:id="@+id/revealed_add_counter_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline_half_vertical"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -184,7 +291,7 @@
                     android:background="?attr/selectableItemBackground" />
             </FrameLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 
@@ -233,6 +340,16 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="8dp"
                 android:src="@drawable/ic_rearrange_counters" />
+
+            <ImageView
+                android:id="@+id/roll"
+                style="@style/GameButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:src="@drawable/ic_dice" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@ package com.kenkeremath.mtgcounter.ui.game
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.util.TypedValue
@@ -368,6 +367,10 @@ class GameActivity : BaseActivity(), OnPlayerUpdatedListener,
 
     override fun onRearrangeCountersOpened(playerId: Int) {
         viewModel.rearrangeCounters(playerId)
+    }
+
+    override fun onRollOpened(playerId: Int) {
+        viewModel.roll(playerId)
     }
 
     override fun onCloseSubMenu(playerId: Int) {

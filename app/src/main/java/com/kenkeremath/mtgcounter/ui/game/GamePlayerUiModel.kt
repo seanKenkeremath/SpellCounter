@@ -17,5 +17,6 @@ data class GamePlayerUiModel(
         MAIN,
         EDIT_COUNTERS,
         REARRANGE_COUNTERS,
+        ROLL,
     }
 }

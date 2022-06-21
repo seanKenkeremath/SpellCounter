@@ -38,7 +38,7 @@ class SplashActivity : BaseActivity() {
         lifecycleScope.launch {
             profilesRepository.preloadCache()
                 .onCompletion {
-                    startActivity(Intent(this@SplashActivity, ComposeActivity::class.java))
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     finish()
                 }
                 .collect { }

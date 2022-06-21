@@ -38,7 +38,6 @@
             android:name=".ui.setup.theme.ThemeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.ComposeActivity" />
     </application>
 
 </manifest>

@@ -10,7 +10,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.kenkeremath.mtgcounter"
         minSdkVersion 23

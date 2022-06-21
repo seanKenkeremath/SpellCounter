@@ -1,6 +1,5 @@
 package com.kenkeremath.mtgcounter.view.counter.edit
 
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
