@@ -132,6 +132,7 @@ class PlayerViewHolder(
             override fun onReveal() {}
             override fun onHide() {
                 playerMenuListener.onCloseSubMenu(playerId)
+                binding.rollComposeView.disposeComposition()
                 binding.countersRecycler.scrollingEnabled = true
             }
 
@@ -144,6 +145,7 @@ class PlayerViewHolder(
 
     private fun closeCountersSubmenu() {
         playerMenuListener.onCloseSubMenu(playerId)
+        binding.rollComposeView.disposeComposition()
         if (pullToReveal) {
             binding.pullToRevealContainer.hide(true)
         }
