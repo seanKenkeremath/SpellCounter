@@ -235,6 +235,8 @@ class PlayerViewHolder(
                         res.getDimensionPixelSize(R.dimen.edit_counter_header_large_padding)
                     binding.editCountersHeader.visibility =
                         if (height < minHeightToShowEditCountersHeader) View.GONE else View.VISIBLE
+                    binding.rollHeader.visibility =
+                        if (height < minHeightToShowEditCountersHeader) View.GONE else View.VISIBLE
                     if (height < minHeightForLargeEditCountersHeader) {
                         binding.editCountersHeader.apply {
                             textSize = smallHeaderTextSize

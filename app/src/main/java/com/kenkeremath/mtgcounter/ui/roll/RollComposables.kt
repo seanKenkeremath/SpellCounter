@@ -63,7 +63,7 @@ fun RollPanel(
 @Composable
 private fun previewRollPanel() {
     Surface(
-        modifier = Modifier.height(60.dp)
+        modifier = Modifier.height(600.dp)
     ) {
         RollPanel(playerColor = Color.Red)
     }
@@ -79,7 +79,9 @@ private fun Dice(
     Row(
         modifier
             .padding(start = dimensionResource(id = R.dimen.default_padding))
-            .wrapContentWidth()
+            .wrapContentSize()
+            .aspectRatio(4f, matchHeightConstraintsFirst = false),
+        horizontalArrangement = Arrangement.Center
     ) {
         Coin(
             modifier = modifier
