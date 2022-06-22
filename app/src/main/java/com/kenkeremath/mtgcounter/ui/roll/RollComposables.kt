@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.kenkeremath.mtgcounter.ui.roll
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,8 +29,12 @@ fun RollPanel(
     modifier: Modifier = Modifier,
     playerColor: Color? = null
 ) {
-    var rollResult by remember { mutableStateOf("") }
-
+    var rollCount by remember { mutableStateOf(0) }
+    /**
+     * We need to use a pair here since repeating rolls should not be treated as the same content
+     * for the sake of animation transitions
+     */
+    var rollResult by remember { mutableStateOf(rollCount to "") }
     val lightMode = LocalScColors.current.isLight
 //    val surfaceColor = if (lightMode) playerColor
 //        ?: LocalScColors.current.scBackgroundColor else LocalScColors.current.scBackgroundColor
@@ -49,13 +57,24 @@ fun RollPanel(
             diceColor = diceColor,
             diceTextColor = diceTextColor,
             onDiceRoll = {
-                rollResult = it
+                rollCount++
+                rollResult = rollCount to it
             })
-        Text(
-            modifier = modifier.padding(top = dimensionResource(id = R.dimen.default_padding_half)),
-            text = rollResult,
-            style = TextStyles.label.copy(color = panelTextColor)
-        )
+        AnimatedContent(
+            targetState = rollResult,
+            //Only fade out if there is an existing roll
+            transitionSpec = {
+                slideInVertically { height ->
+                    -2 * height
+                }.plus(fadeIn()) with fadeOut(animationSpec = tween(durationMillis = 0))
+            }
+        ) { result ->
+            Text(
+                modifier = modifier.padding(top = dimensionResource(id = R.dimen.default_padding_half)),
+                text = result.second,
+                style = TextStyles.label.copy(color = panelTextColor)
+            )
+        }
     }
 }
 
