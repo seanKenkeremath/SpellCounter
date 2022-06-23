@@ -77,7 +77,7 @@
         <item name="scTextColorCaption">@color/dark_grey</item>
         <item name="scTextColorPrimary">@color/white</item>
         <item name="scDividerColor">@color/white</item>
-        <item name="scPlayerDividerColor">@color/dark_mode_black</item>
+        <item name="scPlayerDividerColor">@color/white</item>
         <item name="scBackgroundColor">@color/dark_mode_black</item>
     </style>
 

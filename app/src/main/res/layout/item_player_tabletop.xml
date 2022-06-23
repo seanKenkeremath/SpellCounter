@@ -18,7 +18,9 @@
             android:id="@+id/options_container_bg_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/player_divider_width" />
+            android:layout_marginStart="@dimen/player_divider_width"
+            android:layout_marginTop="@dimen/player_divider_width"
+            android:layout_marginEnd="@dimen/player_divider_width" />
 
         <LinearLayout
             android:id="@+id/roll_container"
@@ -41,8 +43,8 @@
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/roll_compose_view"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="0dp" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/roll_done"
@@ -137,10 +139,10 @@
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_half_vertical"
-                app:layout_constraintGuide_percent="0.50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_half_horizontal"
@@ -151,12 +153,12 @@
 
             <FrameLayout
                 android:id="@+id/revealed_rearrange_counters_container"
-                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
                 android:layout_width="0dp"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -191,23 +193,23 @@
             </FrameLayout>
 
             <View
-                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
-                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/guideline_half_horizontal"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/counter_divider_width"
                 android:layout_marginHorizontal="@dimen/revealed_menu_divider_padding"
-                android:background="?attr/scDividerColor" />
+                android:background="?attr/scDividerColor"
+                app:layout_constraintBottom_toTopOf="@id/guideline_half_horizontal"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_half_horizontal" />
 
             <FrameLayout
                 android:id="@+id/revealed_roll_container"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
-                app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal"
                 android:layout_width="0dp"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline_half_horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,23 +244,23 @@
             </FrameLayout>
 
             <View
-                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/guideline_half_vertical"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="@dimen/counter_divider_width"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/revealed_menu_divider_padding"
-                android:background="?attr/scDividerColor" />
+                android:background="?attr/scDividerColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintStart_toStartOf="@id/guideline_half_vertical"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/revealed_add_counter_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline_half_vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="0dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -301,11 +303,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/player_container_bg">
 
+        <!-- No Margin on the bottom since background border does not apply to bottom -->
         <ImageView
             android:id="@+id/player_container_bg_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/player_divider_width" />
+            android:layout_marginStart="@dimen/player_divider_width"
+            android:layout_marginTop="@dimen/player_divider_width"
+            android:layout_marginEnd="@dimen/player_divider_width" />
 
         <com.kenkeremath.mtgcounter.view.LockableRecyclerView
             android:id="@+id/counters_recycler"

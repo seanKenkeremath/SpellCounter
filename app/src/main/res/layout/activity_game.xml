@@ -4,17 +4,48 @@
     android:id="@+id/game_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/scBackgroundColor">
+    android:background="?attr/scPlayerDividerColor">
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
         android:id="@+id/tabletop_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kenkeremath.mtgcounter.view.TabletopLayout
-            android:id="@+id/tabletop_layout"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <com.kenkeremath.mtgcounter.view.TabletopLayout
+                android:id="@+id/tabletop_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Bandaid for extra pixel caused by rounding error in TabletopLayout. TODO: Investigate -->
+            <View
+                android:layout_width="@dimen/player_divider_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="@dimen/player_divider_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_divider_width"
+                android:layout_gravity="top"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_divider_width"
+                android:layout_gravity="bottom"
+                android:background="?scBackgroundColor" />
+
+        </FrameLayout>
 
     </com.github.rongi.rotate_layout.layout.RotateLayout>
 
@@ -32,11 +63,42 @@
             app:navigationIcon="@mipmap/ic_launcher"
             app:title="@string/app_name" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/players_recycler_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/players_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+
+            <!-- Bandaid for extra pixel caused by rounding error in TabletopLayout. TODO: Investigate -->
+            <View
+                android:layout_width="@dimen/player_divider_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="@dimen/player_divider_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_divider_width"
+                android:layout_gravity="top"
+                android:background="?scBackgroundColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_divider_width"
+                android:layout_gravity="bottom"
+                android:background="?scBackgroundColor" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
