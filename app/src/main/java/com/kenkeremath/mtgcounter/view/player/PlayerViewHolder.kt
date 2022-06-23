@@ -290,9 +290,11 @@ class PlayerViewHolder(
                         width > minWidthToShowMenuText && height > minHeightToShowMenuText
                     binding.revealedAddCountersLabel.visibility =
                         if (showMenuText) View.VISIBLE else View.GONE
+                    //Rearrange and Roll split the space vertically, do we should split the total height for each calculation
                     binding.revealedRearrangeCountersLabel.visibility =
-                        if (showMenuText) View.VISIBLE else View.GONE
-
+                        if (showMenuText && height / 2 > minHeightToShowMenuText) View.VISIBLE else View.GONE
+                    binding.revealedRollLabel.visibility =
+                        if (showMenuText && height / 2 > minHeightToShowMenuText) View.VISIBLE else View.GONE
                     return false
                 }
             })
