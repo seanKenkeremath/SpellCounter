@@ -280,6 +280,16 @@ class PlayerViewHolder(
                     }
 
                     /**
+                     * Hide roll confirm button to save vertical space in small cells
+                     */
+                    val minHeightToShowRollConfirm = res.getDimensionPixelSize(R.dimen.roll_confirm_visibility_threshold)
+                    if (height < minHeightToShowRollConfirm) {
+                        binding.rollDone.visibility = View.GONE
+                    } else {
+                        binding.rollDone.visibility = View.VISIBLE
+                    }
+
+                    /**
                      * Reveal menu text
                      */
                     val minHeightToShowMenuText =

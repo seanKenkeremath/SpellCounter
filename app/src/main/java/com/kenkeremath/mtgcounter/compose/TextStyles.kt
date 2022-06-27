@@ -39,6 +39,9 @@ object TextStyles {
         fontSize = 16.sp,
     )
 
+    val diceLabel = header2.copy(fontSize = 18.sp)
+    val diceRoll = label
+
     //TODO: color + drawable padding/tint
     val navMenuText = TextStyle(
         fontSize = 16.sp,

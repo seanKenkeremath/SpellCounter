@@ -72,7 +72,7 @@ fun RollPanel(
             Text(
                 modifier = modifier.padding(top = dimensionResource(id = R.dimen.default_padding_half)),
                 text = result.second,
-                style = TextStyles.label.copy(color = panelTextColor)
+                style = TextStyles.diceRoll.copy(color = panelTextColor)
             )
         }
     }
@@ -165,7 +165,7 @@ private fun Die(
         Box(contentAlignment = Alignment.Center) {
             Text(
                 text = text,
-                style = MaterialTheme.typography.button,
+                style = TextStyles.diceLabel,
                 modifier = Modifier
                     .wrapContentSize(),
                 color = diceTextColor

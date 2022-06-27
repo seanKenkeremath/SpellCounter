@@ -26,7 +26,7 @@
 
     <!-- Edit Player Game Counters -->
     <dimen name="edit_counters_row_min_height">120dp</dimen>
-    <dimen name="edit_counter_confirm_button_height">120dp</dimen>
+    <dimen name="edit_counter_confirm_button_height">72dp</dimen>
     <dimen name="edit_counter_header_large_text_size">24sp</dimen>
     <dimen name="edit_counter_header_small_text_size">14sp</dimen>
     <dimen name="edit_counter_header_small_padding">8sp</dimen>
@@ -38,10 +38,7 @@
     <!-- Player -->
     <dimen name="player_options_panel_width">80dp</dimen>
     <dimen name="player_life_width">150dp</dimen>
-    <dimen name="player_list_item_height">230dp</dimen>
-    <!-- If the player list would not exceed this value in height beyond the view,
-    then cells are sized to fit without scrolling. This may cause player cells to be
-    a few pixels smaller than they normally would -->
+    <dimen name="player_list_item_height">240dp</dimen>
 
     <!-- Counters -->
     <dimen name="min_counter_width">100dp</dimen>

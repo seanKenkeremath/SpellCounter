@@ -52,6 +52,11 @@
     <dimen name="edit_counter_header_small_padding">4sp</dimen>
     <dimen name="edit_counter_header_large_padding">8sp</dimen>
 
+    <!-- Roll -->
+    <!-- On small cells there's not enough vertical space for the dice, results, and confirm button.
+     User must use the swipe gesture -->
+    <dimen name="roll_confirm_visibility_threshold">180dp</dimen>
+
     <!-- Rearrange Player Game Counters -->
     <dimen name="rearrange_counter_item_width">80dp</dimen>
 
