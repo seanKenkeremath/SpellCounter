@@ -10,6 +10,7 @@ SpellCounter is a free, open source Magic: The Gathering life and counter tracki
 * Use images, text, emoji, and animated gifs to customize counters
 * Create custom profiles for players or decks
 * Dark Mode support and a number of custom themes
+* Dice rolling from within a game
 
 # Play Store Listing
 
@@ -33,3 +34,6 @@ Feel free to use this code however you'd like.
 If you are interested in contributing, feel free to fork the code and open a pull request. 
 Any features added or bugs fixed will be included in the next update to Google Play.
 If you make a contribution to the code I will be sure to include you in an Acknowledgments section in the app
+
+Please also report any issues you encounter while using the app in the Issues tab. 
+That is also a good place to look if you'd like to contribute to features or bug fixes
