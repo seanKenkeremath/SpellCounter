@@ -81,9 +81,9 @@
     <string name="counter_starting_value">Starting Value:</string>
 
     <!-- Player Menu -->
-    <string name="add_counter_title">Add Counter</string>
+    <string name="add_counter_title">Counters</string>
     <string name="edit_counters_title">Edit Counters</string>
-    <string name="rearrange_counters">Rearrange Counters</string>
+    <string name="rearrange_counters">Rearrange</string>
     <string name="rearrange_counters_title">Rearrange Counters</string>
     <string name="select_counters">Select Counters</string>
     <string name="roll_title">Roll</string>
