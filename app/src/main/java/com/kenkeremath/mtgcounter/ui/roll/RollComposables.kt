@@ -16,7 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kenkeremath.mtgcounter.R
@@ -36,8 +38,6 @@ fun RollPanel(
      */
     var rollResult by remember { mutableStateOf(rollCount to "") }
     val lightMode = LocalScColors.current.isLight
-//    val surfaceColor = if (lightMode) playerColor
-//        ?: LocalScColors.current.scBackgroundColor else LocalScColors.current.scBackgroundColor
     val panelTextColor = LocalScColors.current.scTextColorPrimary
     val diceColor =
         if (lightMode) LocalScColors.current.scBackgroundColor else LocalScColors.current.scOptionButtonColor
@@ -180,23 +180,26 @@ private fun Coin(
     diceColor: Color = LocalScColors.current.scOptionButtonColor,
     diceTextColor: Color = LocalScColors.current.scTextColorPrimary,
     handleRollResult: (String) -> Unit = {}
-) =
+) {
+    val context = LocalContext.current
     Die(
         modifier = modifier,
         shape = CircleShape,
-        text = "Coin",
+        text = context.getString(R.string.roll_coin),
         sides = 2,
         diceColor = diceColor,
         diceTextColor = diceTextColor,
         onRollResult = {
             if (it == 2) {
-                "You flipped Tails"
+                context.getString(R.string.roll_coin_tails_result)
             } else {
-                "You flipped Heads"
+                context.getString(R.string.roll_coin_heads_result)
             }
         },
         handleRollResult = handleRollResult
     )
+}
+
 
 @Composable
 private fun SixSidedDie(
@@ -204,19 +207,21 @@ private fun SixSidedDie(
     diceColor: Color = LocalScColors.current.scOptionButtonColor,
     diceTextColor: Color = LocalScColors.current.scTextColorPrimary,
     handleRollResult: (String) -> Unit = {}
-) =
+) {
+    val context = LocalContext.current
     Die(
         modifier,
         RoundedCornerShape(12.dp),
-        text = "D6",
+        text = context.getString(R.string.roll_d6),
         sides = 6,
         diceColor = diceColor,
         diceTextColor = diceTextColor,
         onRollResult = {
-            "You rolled a $it on a D6"
+            context.getString(R.string.roll_d6_result, it)
         },
         handleRollResult = handleRollResult
     )
+}
 
 @Composable
 private fun TwentySidedDie(
@@ -224,19 +229,22 @@ private fun TwentySidedDie(
     diceColor: Color = LocalScColors.current.scOptionButtonColor,
     diceTextColor: Color = LocalScColors.current.scTextColorPrimary,
     handleRollResult: (String) -> Unit = {}
-) =
+) {
+    val context = LocalContext.current
     Die(
         modifier,
         PolyShape(8),
-        text = "D20",
+        text = context.getString(R.string.roll_d20),
         sides = 20,
         diceColor = diceColor,
         diceTextColor = diceTextColor,
         onRollResult = {
-            "You rolled a $it on a D20"
+            context.getString(R.string.roll_d20_result, it)
         },
         handleRollResult = handleRollResult
     )
+}
+
 
 @Composable
 @Preview

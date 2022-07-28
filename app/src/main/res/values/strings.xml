@@ -87,4 +87,13 @@
     <string name="rearrange_counters_title">Rearrange Counters</string>
     <string name="select_counters">Select Counters</string>
     <string name="roll_title">Roll</string>
+
+    <!-- Roll -->
+    <string name="roll_d20">D20</string>
+    <string name="roll_d6">D6</string>
+    <string name="roll_coin">Coin</string>
+    <string name="roll_d20_result">You rolled %d on a D20</string>
+    <string name="roll_d6_result">You rolled %d on a D6</string>
+    <string name="roll_coin_tails_result">You flipped Tails</string>
+    <string name="roll_coin_heads_result">You flipped Heads</string>
 </resources>
