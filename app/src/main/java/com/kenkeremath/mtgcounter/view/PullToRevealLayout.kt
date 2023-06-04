@@ -23,7 +23,16 @@ class PullToRevealLayout @JvmOverloads constructor(
     private var pullEnabled = true
 
     private var revealing = false
-    private var revealed = false
+    private var revealState = RevealState.HIDDEN
+    private val revealed: Boolean
+        get() = revealState != RevealState.HIDDEN
+
+    enum class RevealState {
+        HIDDEN,
+        REVEALED_DOWN,
+        REVEALED_UP
+    }
+
     private var startTime = 0L
     private var startY = 0f
     private var startTranslationY = 0f
@@ -62,16 +71,16 @@ class PullToRevealLayout @JvmOverloads constructor(
                     val rawTranslation = it.y - startY
                     val translation = clamp(
                         rawTranslation,
-                        -startTranslationY,
+                        -height.toFloat() - startTranslationY,
                         height.toFloat() - startTranslationY
                     )
                     LogUtils.d(
                         tag = LogUtils.TAG_PULL_TO_REVEAL,
-                        message = "Movement: y: ${it.y}, startTranslation: $startTranslationY delta: $rawTranslation, height: $height"
+                        message = "Movement: y: ${it.y}, startTranslation: $startTranslationY delta: $rawTranslation, clamped Delta: $translation height: $height"
                     )
                     if (it.action == MotionEvent.ACTION_MOVE) {
                         if (revealed) {
-                            if (revealing || rawTranslation < -triggerDistance) {
+                            if (revealing || abs(rawTranslation) > triggerDistance) {
                                 revealing = true
                                 listener?.onDragging()
                                 LogUtils.d(
@@ -79,10 +88,10 @@ class PullToRevealLayout @JvmOverloads constructor(
                                     message = "Hide Translation Triggered: $translation"
                                 )
                                 revealChild.translationY = startTranslationY + translation
-                                revealChild.translationZ = (revealChild.translationY / revealChild.height) * translationZMax
+                                revealChild.translationZ = (abs(revealChild.translationY) / revealChild.height) * translationZMax
                             }
                         } else {
-                            if (revealing || rawTranslation > triggerDistance) {
+                            if (revealing || abs(rawTranslation) > triggerDistance) {
                                 revealing = true
                                 listener?.onDragging()
                                 LogUtils.d(
@@ -90,7 +99,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                                     message = "Reveal Translation Triggered: $translation"
                                 )
                                 revealChild.translationY = startTranslationY + translation
-                                revealChild.translationZ = (revealChild.translationY / revealChild.height) * translationZMax
+                                revealChild.translationZ = (abs(revealChild.translationY) / revealChild.height) * translationZMax
                             }
                         }
                     } else if (it.action == MotionEvent.ACTION_UP) {
@@ -103,21 +112,18 @@ class PullToRevealLayout @JvmOverloads constructor(
                                     && System.currentTimeMillis() - startTime < flingMaxTime
 
                         if (fling) {
-                            val reveal = rawTranslation > 0f
-                            if (!revealed && reveal) {
+                            if (!revealed) {
                                 LogUtils.d(
                                     tag = LogUtils.TAG_PULL_TO_REVEAL,
                                     message = "Reveal fling detected"
                                 )
-                                animateReveal()
-                            } else if (revealed && !reveal) {
+                                animateReveal(revealUp = rawTranslation < 0f)
+                            } else {
                                 LogUtils.d(
                                     tag = LogUtils.TAG_PULL_TO_REVEAL,
                                     message = "Hide fling detected"
                                 )
                                 animateHide()
-                            } else {
-                                animateBasedOnTranslation()
                             }
                         } else {
                             animateBasedOnTranslation()
@@ -149,15 +155,23 @@ class PullToRevealLayout @JvmOverloads constructor(
             if (revealing) {
                 if (!revealed) {
                     if (it.translationY > height / 2) {
-                        animateReveal()
+                        animateReveal(revealUp = false)
+                    } else if (it.translationY < -height / 2) {
+                        animateReveal(revealUp = true)
                     } else {
                         animateHide()
                     }
-                } else {
+                } else if (revealState == RevealState.REVEALED_DOWN) {
                     if (it.translationY < height * 5 / 6) {
                         animateHide()
                     } else {
-                        animateReveal()
+                        animateReveal(revealUp = false)
+                    }
+                } else if (revealState == RevealState.REVEALED_UP) {
+                    if (it.translationY > -height * 5 / 6) {
+                        animateHide()
+                    } else {
+                        animateReveal(revealUp = true)
                     }
                 }
             }
@@ -167,12 +181,12 @@ class PullToRevealLayout @JvmOverloads constructor(
     //Must be called after measure
     fun reveal(animate: Boolean) {
         if (animate) {
-            animateReveal()
+            animateReveal(revealUp = false)
         } else {
             cancelAnimation()
             revealChild?.translationY = height.toFloat()
             revealChild?.translationZ = translationZMax
-            revealed = true
+            revealState = RevealState.REVEALED_UP
             revealing = false
             listener?.onReveal()
         }
@@ -185,7 +199,7 @@ class PullToRevealLayout @JvmOverloads constructor(
             cancelAnimation()
             revealChild?.translationY = 0f
             revealChild?.translationZ = 0f
-            revealed = false
+            revealState = RevealState.HIDDEN
             revealing = false
             listener?.onHide()
         }
@@ -213,7 +227,7 @@ class PullToRevealLayout @JvmOverloads constructor(
                         message = "Animation Ended"
                     )
                     revealing = false
-                    revealed = false
+                    revealState = RevealState.HIDDEN
                     listener?.onHide()
                 }
             })
@@ -221,7 +235,7 @@ class PullToRevealLayout @JvmOverloads constructor(
         }
     }
 
-    private fun animateReveal() {
+    private fun animateReveal(revealUp: Boolean) {
         revealChild?.let {
             cancelAnimation()
             LogUtils.d(
@@ -229,7 +243,10 @@ class PullToRevealLayout @JvmOverloads constructor(
                 message = "Revealing"
             )
             val translationAnimation =
-                ObjectAnimator.ofFloat(it, "translationY", it.translationY, height.toFloat())
+                ObjectAnimator.ofFloat(
+                    it, "translationY", it.translationY,
+                    height.toFloat() * if (revealUp) -1 else 1
+                )
             val elevationAnimation =
                 ObjectAnimator.ofFloat(it, View.TRANSLATION_Z, it.translationZ, translationZMax)
             val set = AnimatorSet()
@@ -243,7 +260,8 @@ class PullToRevealLayout @JvmOverloads constructor(
                         message = "Animation Ended"
                     )
                     revealing = false
-                    revealed = true
+                    revealState =
+                        if (revealUp) RevealState.REVEALED_UP else RevealState.REVEALED_DOWN
                     listener?.onReveal()
                 }
             })

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Negative margin hides the bottom line -->
+    <!-- add negative margins to hide the lines on edge -->
     <item
-        android:bottom="-6dp"
+        android:bottom="0dp"
         android:left="0dp"
         android:right="0dp"
         android:top="0dp">
