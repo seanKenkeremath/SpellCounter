@@ -63,9 +63,9 @@ class ManageCountersFragment : Fragment(), OnManageCounterClickedListener {
         }
         recyclerView.addItemDecoration(dividers)
 
-        viewModel.counters.observe(viewLifecycleOwner, {
+        viewModel.counters.observe(viewLifecycleOwner) {
             recyclerAdapter.setCounters(it)
-        })
+        }
     }
 
     override fun onResume() {

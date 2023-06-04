@@ -61,9 +61,9 @@ class ManageProfilesFragment : Fragment(), OnProfileClickedListener {
         }
         recyclerView.addItemDecoration(dividers)
 
-        viewModel.profiles.observe(viewLifecycleOwner, {
+        viewModel.profiles.observe(viewLifecycleOwner) {
             recyclerAdapter.setProfiles(it)
-        })
+        }
     }
 
     override fun onResume() {

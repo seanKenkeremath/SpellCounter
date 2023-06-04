@@ -187,7 +187,7 @@ class EditCounterDialogFragment : DialogFragment() {
             viewModel.save()
         }
 
-        viewModel.selectedCounterType.observe(viewLifecycleOwner, {
+        viewModel.selectedCounterType.observe(viewLifecycleOwner) {
             binding.counterLocalImageContainer.visibility = View.GONE
             binding.counterTextContainer.visibility = View.GONE
             binding.counterUrlContainer.visibility = View.GONE
@@ -206,9 +206,9 @@ class EditCounterDialogFragment : DialogFragment() {
                 }
                 else -> {}
             }
-        })
+        }
 
-        viewModel.counterLabel.observe(viewLifecycleOwner, {
+        viewModel.counterLabel.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
             if (!binding.inputCounterText.isFocused) {
                 //Remove listener while manually setting to avoid loop
@@ -216,9 +216,9 @@ class EditCounterDialogFragment : DialogFragment() {
                 binding.inputCounterText.setText(it)
                 binding.inputCounterText.addTextChangedListener(textChangedListener)
             }
-        })
+        }
 
-        viewModel.counterUrl.observe(viewLifecycleOwner, {
+        viewModel.counterUrl.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
             if (!binding.inputCounterUrl.isFocused) {
                 //Remove listener while manually setting to avoid loop
@@ -226,9 +226,9 @@ class EditCounterDialogFragment : DialogFragment() {
                 binding.inputCounterUrl.setText(it)
                 binding.inputCounterUrl.addTextChangedListener(urlChangedListener)
             }
-        })
+        }
 
-        viewModel.startingValue.observe(viewLifecycleOwner, {
+        viewModel.startingValue.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
             if (!binding.inputCounterStartingValue.isFocused) {
                 //Remove listener while manually setting to avoid loop
@@ -240,36 +240,36 @@ class EditCounterDialogFragment : DialogFragment() {
                     startingValueChangedListener
                 )
             }
-        })
+        }
 
-        viewModel.counterImageFileName.observe(viewLifecycleOwner, {
+        viewModel.counterImageFileName.observe(viewLifecycleOwner) {
             binding.counterLocalImageName.text = if (!it.isNullOrBlank()) {
                 it
             } else {
                 getString(R.string.create_counter_local_uri_hint)
             }
-        })
+        }
 
-        viewModel.isFullArtImage.observe(viewLifecycleOwner, {
+        viewModel.isFullArtImage.observe(viewLifecycleOwner) {
             //Remove listener to prevent loop
             binding.fullArtCheckbox.setOnCheckedChangeListener(null)
             binding.fullArtCheckbox.isChecked = it
             binding.fullArtCheckbox.setOnCheckedChangeListener(fullArtCheckChangedListener)
-        })
+        }
 
-        viewModel.counterPreview.observe(viewLifecycleOwner, {
+        viewModel.counterPreview.observe(viewLifecycleOwner) {
             if (it == null) {
                 binding.counterPreviewView.visibility = View.INVISIBLE
             } else {
                 binding.counterPreviewView.visibility = View.VISIBLE
                 binding.counterPreviewView.setContent(it)
             }
-        })
+        }
 
-        viewModel.saveEnabled.observe(viewLifecycleOwner, {
+        viewModel.saveEnabled.observe(viewLifecycleOwner) {
             binding.saveButton.isEnabled = it
-        })
-        viewModel.saveStatus.observe(viewLifecycleOwner, {
+        }
+        viewModel.saveStatus.observe(viewLifecycleOwner) {
             when (it) {
                 SaveCounterResult.SUCCESSFUL -> {
                     val b = Bundle()
@@ -281,7 +281,7 @@ class EditCounterDialogFragment : DialogFragment() {
                 SaveCounterResult.IMAGE_SAVE_FAILED -> {}
                 else -> {}
             }
-        })
+        }
     }
 
     override fun onDestroyView() {

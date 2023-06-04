@@ -150,9 +150,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 .addToBackStack("Setup_Tabletop")
                 .commit()
         }
-        viewModel.showCustomizeLayoutButton.observe(viewLifecycleOwner, {
+        viewModel.showCustomizeLayoutButton.observe(viewLifecycleOwner) {
             customizeLayoutButton.visibility = if (it) View.VISIBLE else View.GONE
-        })
+        }
 
         startButton = view.findViewById(R.id.start_button)
         startButton.setOnClickListener {
@@ -166,15 +166,15 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
             }
         }
 
-        viewModel.numberOfPlayers.observe(viewLifecycleOwner, { numberOfPlayers ->
+        viewModel.numberOfPlayers.observe(viewLifecycleOwner) { numberOfPlayers ->
             numberOfPlayers?.let {
                 for (playerNumberButton in playerNumberButtons) {
                     playerNumberButton.isSelected = playerNumberButton.tag == it
                 }
             }
-        })
+        }
 
-        viewModel.startingLife.observe(viewLifecycleOwner, {
+        viewModel.startingLife.observe(viewLifecycleOwner) {
             it?.let {
                 var match = false
                 for (lifeButton in lifeButtons) {
@@ -193,9 +193,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     customLifeButton.text = getString(R.string.custom_life_button_label)
                 }
             }
-        })
+        }
 
-        viewModel.keepScreenOn.observe(viewLifecycleOwner, {
+        viewModel.keepScreenOn.observe(viewLifecycleOwner) {
             it?.let {
 
                 //Remove listener to avoid infinite loop
@@ -205,9 +205,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 }
                 keepScreenAwakeCheckbox.setOnCheckedChangeListener(this)
             }
-        })
+        }
 
-        viewModel.hideNavigation.observe(viewLifecycleOwner, {
+        viewModel.hideNavigation.observe(viewLifecycleOwner) {
             it?.let {
 
                 //Remove listener to avoid infinite loop
@@ -217,9 +217,9 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                 }
                 hideNavigationCheckbox.setOnCheckedChangeListener(this)
             }
-        })
+        }
 
-        viewModel.tabletopTypes.observe(viewLifecycleOwner, {
+        viewModel.tabletopTypes.observe(viewLifecycleOwner) {
             it?.let {
                 tabletopLayoutButtonA.visibility = View.GONE
                 tabletopLayoutButtonB.visibility = View.GONE
@@ -260,7 +260,7 @@ class SetupFragment : Fragment(), CompoundButton.OnCheckedChangeListener {
                     }
                 }
             }
-        })
+        }
     }
 
     override fun onResume() {

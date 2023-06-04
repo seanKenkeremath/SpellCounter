@@ -207,7 +207,7 @@ class PullToRevealLayout @JvmOverloads constructor(
             animation = set
             animation?.duration = animationDuration
             animation?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     LogUtils.d(
                         tag = LogUtils.TAG_PULL_TO_REVEAL,
                         message = "Animation Ended"
@@ -237,7 +237,7 @@ class PullToRevealLayout @JvmOverloads constructor(
             animation = set
             animation?.duration = animationDuration
             animation?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     LogUtils.d(
                         tag = LogUtils.TAG_PULL_TO_REVEAL,
                         message = "Animation Ended"

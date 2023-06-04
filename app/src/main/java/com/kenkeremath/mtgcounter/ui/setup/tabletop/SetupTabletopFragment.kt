@@ -73,12 +73,12 @@ class SetupTabletopFragment : Fragment(), OnSetupPlayerSelectedListener {
             )
         }
 
-        viewModel.setupPlayers.observe(viewLifecycleOwner, {
+        viewModel.setupPlayers.observe(viewLifecycleOwner) {
             tabletopAdapter.setPositions(viewModel.selectedTabletopType)
             tabletopAdapter.updateAll(viewModel.selectedTabletopType, it)
 
             tabletopRecyclerAdapter.setPlayers(it)
-        })
+        }
     }
 
     override fun onSetupPlayerSelected(playerId: Int) {

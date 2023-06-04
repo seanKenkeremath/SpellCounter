@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SpinnerAdapter
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -78,7 +77,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
         val allColorInts = allColors.map {
             ContextCompat.getColor(requireContext(), it.resId!!)
         }.toIntArray()
-        val colorMap = mutableMapOf<@ColorInt Int, PlayerColor>()
+        val colorMap = mutableMapOf<Int, PlayerColor>()
         allColorInts.forEachIndexed { index, color ->
             colorMap[color] = allColors[index]
         }
@@ -91,14 +90,14 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             }
         }
 
-        viewModel.setupModel.observe(viewLifecycleOwner, {
+        viewModel.setupModel.observe(viewLifecycleOwner) {
             binding.colorPickerView.setSelectedColor(
                 allColorInts[allColors.indexOf(it.color)]
             )
             setSpinnerSelection()
-        })
+        }
 
-        viewModel.profiles.observe(viewLifecycleOwner, { profiles ->
+        viewModel.profiles.observe(viewLifecycleOwner) { profiles ->
             val spinnerOptions = profiles.map {
                 it.name
             }
@@ -109,7 +108,7 @@ class SelectPlayerOptionsDialogFragment : DialogFragment() {
             )
             binding.profileSpinner.adapter = spinnerAdapter
             setSpinnerSelection()
-        })
+        }
 
         binding.saveButton.setOnClickListener {
             viewModel.setupModel.value?.let {
