@@ -91,7 +91,7 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         nameEditText.isEnabled = viewModel.isNameChangeEnabled
         nameEditText.isFocusable = viewModel.isNameChangeEnabled
 
-        viewModel.profileName.observe(viewLifecycleOwner, {
+        viewModel.profileName.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
             if (!nameEditText.isFocused) {
                 //Remove listener while manually setting to avoid loop
@@ -99,28 +99,33 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
                 nameEditText.setText(it)
                 nameEditText.addTextChangedListener(textChangedListener)
             }
-        })
+        }
 
-        viewModel.counterSelections.observe(viewLifecycleOwner, {
+        viewModel.counterSelections.observe(viewLifecycleOwner) {
             recyclerAdapter.setCounters(it)
-        })
+        }
 
-        viewModel.saveButtonEnabled.observe(viewLifecycleOwner, {
+        viewModel.saveButtonEnabled.observe(viewLifecycleOwner) {
             save.isEnabled = it
-        })
+        }
 
-        viewModel.saveStatus.observe(viewLifecycleOwner, {
+        viewModel.saveStatus.observe(viewLifecycleOwner) {
             when (it) {
                 SaveProfileResult.SUCCESSFUL -> requireActivity().finish()
                 SaveProfileResult.NAME_CONFLICT -> {
                     val dialog = AlertDialog.Builder(requireContext())
                         .setTitle(R.string.edit_profile_replace_existing_title)
-                        .setMessage(getString(R.string.edit_profile_replace_existing_message, viewModel.profileName.value))
+                        .setMessage(
+                            getString(
+                                R.string.edit_profile_replace_existing_message,
+                                viewModel.profileName.value
+                            )
+                        )
                         .setPositiveButton(R.string.edit_profile_replace_existing_replace) { d, _ ->
                             viewModel.saveChanges(replaceExisting = true)
                             d.dismiss()
                         }
-                        .setNegativeButton(android.R.string.cancel) {d, _ ->
+                        .setNegativeButton(android.R.string.cancel) { d, _ ->
                             d.dismiss()
                         }
                     dialog.show()
@@ -128,7 +133,12 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
                 SaveProfileResult.NAME_CONFLICT_CANNOT_REPLACE -> {
                     val dialog = AlertDialog.Builder(requireContext())
                         .setTitle(R.string.edit_profile_replace_existing_fail_title)
-                        .setMessage(getString(R.string.edit_profile_replace_existing_fail_message, viewModel.profileName.value))
+                        .setMessage(
+                            getString(
+                                R.string.edit_profile_replace_existing_fail_message,
+                                viewModel.profileName.value
+                            )
+                        )
                         .setPositiveButton(android.R.string.ok) { d, _ ->
                             d.dismiss()
                         }
@@ -138,7 +148,7 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
                 SaveProfileResult.INVALID_NAME -> {}
                 else -> {}
             }
-        })
+        }
     }
 
     override fun onResume() {
