@@ -18,39 +18,52 @@ import javax.inject.Inject
 class EditCounterViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val imageRepository: ImageRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val profileToLink: String? =
-        savedStateHandle.get(EditCounterDialogFragment.ARGS_PROFILE_NAME)
+        savedStateHandle[EditCounterDialogFragment.ARGS_PROFILE_NAME]
 
-    //TODO: edit existing?
+    private var _editedCounterTemplate =
+        savedStateHandle[EditCounterDialogFragment.ARGS_COUNTER_TEMPLATE]
+        //TODO: time abstraction
+            ?: CounterTemplateModel(dateAdded = Date(), isFullArtImage = true)
 
-    //TODO: time abstraction
-    private var _newCounterTemplate = CounterTemplateModel(dateAdded = Date())
+    // Use to diff for changes
+    val startingCounterTemplate = _editedCounterTemplate.copy()
+
     val counterTemplate: CounterTemplateModel
-        get() = _newCounterTemplate
+        get() = _editedCounterTemplate
 
+    // URL images are saved locally. so if we are editing something it will never have URL type
     private val _selectedCounterType: MutableLiveData<CreateCounterType> =
-        MutableLiveData<CreateCounterType>(CreateCounterType.IMAGE)
+        MutableLiveData<CreateCounterType>(
+            if (!_editedCounterTemplate.name.isNullOrBlank())
+                CreateCounterType.TEXT
+            else
+                CreateCounterType.IMAGE
+        )
     val selectedCounterType: LiveData<CreateCounterType> = _selectedCounterType
 
-    private val _counterLabel: MutableLiveData<String> = MutableLiveData<String>("")
+    private val _counterLabel: MutableLiveData<String> =
+        MutableLiveData<String>(_editedCounterTemplate.name ?: "")
     val counterLabel: LiveData<String> = _counterLabel
 
     private val _counterUrl: MutableLiveData<String> = MutableLiveData<String>("")
     val counterUrl: LiveData<String> = _counterUrl
 
-    private val _counterImageUri: MutableLiveData<String> = MutableLiveData<String>("")
-    val counterImageUri: LiveData<String> = _counterImageUri
-
+    // May be a local image or URI
+    val resolvedImageLocation = MediatorLiveData<String?>()
+    private val _counterImageUri: MutableLiveData<String> =
+        MutableLiveData<String>(_editedCounterTemplate.uri)
     private val _counterImageFileName: MutableLiveData<String> = MutableLiveData<String>("")
-    val counterImageFileName: LiveData<String> = _counterImageFileName
 
-    private val _isFullArtImage: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
+    private val _isFullArtImage: MutableLiveData<Boolean> =
+        MutableLiveData<Boolean>(_editedCounterTemplate.isFullArtImage)
     val isFullArtImage: LiveData<Boolean> = _isFullArtImage
 
-    private val _startingValue: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    private val _startingValue: MutableLiveData<Int> =
+        MutableLiveData<Int>(_editedCounterTemplate.startingValue)
     val startingValue: LiveData<Int> = _startingValue
 
     //Hide in view if null
@@ -65,6 +78,22 @@ class EditCounterViewModel @Inject constructor(
     val saveStatus: LiveData<SaveCounterResult> = _saveStatus
 
     init {
+        resolvedImageLocation.addSource(_counterImageUri) { uri ->
+            val fileNameValue = _counterImageFileName.value
+            if (!uri.isNullOrBlank()) {
+                resolvedImageLocation.value = uri
+            } else  {
+                resolvedImageLocation.value =  fileNameValue
+            }
+        }
+        resolvedImageLocation.addSource(_counterImageFileName) { fileName ->
+            val uriValue = _counterImageUri.value
+            if (!fileName.isNullOrBlank()) {
+                resolvedImageLocation.value = fileName
+            } else  {
+                resolvedImageLocation.value =  uriValue
+            }
+        }
         updateUi()
     }
 
@@ -118,7 +147,7 @@ class EditCounterViewModel @Inject constructor(
         when (_selectedCounterType.value) {
             CreateCounterType.TEXT -> {
                 saveEnabled = !_counterLabel.value.isNullOrBlank()
-                _newCounterTemplate = _newCounterTemplate.copy(
+                _editedCounterTemplate = _editedCounterTemplate.copy(
                     name = _counterLabel.value,
                     uri = null,
                     startingValue = _startingValue.value ?: 0,
@@ -128,8 +157,8 @@ class EditCounterViewModel @Inject constructor(
             CreateCounterType.IMAGE -> {
                 val uri = _counterImageUri.value.let { if (it.isNullOrBlank()) null else it }
                 saveEnabled = !uri.isNullOrBlank()
-                _newCounterTemplate =
-                    _newCounterTemplate.copy(
+                _editedCounterTemplate =
+                    _editedCounterTemplate.copy(
                         name = null,
                         uri = uri,
                         startingValue = _startingValue.value ?: 0,
@@ -139,7 +168,7 @@ class EditCounterViewModel @Inject constructor(
             CreateCounterType.URL -> {
                 val uri = _counterUrl.value.let { if (it.isNullOrBlank()) null else it }
                 saveEnabled = !uri.isNullOrBlank()
-                _newCounterTemplate = _newCounterTemplate.copy(
+                _editedCounterTemplate = _editedCounterTemplate.copy(
                     name = null,
                     uri = uri,
                     startingValue = _startingValue.value ?: 0,
@@ -153,7 +182,8 @@ class EditCounterViewModel @Inject constructor(
     }
 
     private fun generatePreview() {
-        _counterPreview.value = CounterModel(_newCounterTemplate.startingValue, _newCounterTemplate)
+        _counterPreview.value =
+            CounterModel(_editedCounterTemplate.startingValue, _editedCounterTemplate)
     }
 
     fun save() {
@@ -169,35 +199,36 @@ class EditCounterViewModel @Inject constructor(
              *
              * If the image fails to save, the service will automatically clean up temporary files
              */
-            val uri = _newCounterTemplate.uri
-            val saveImageFlow = if (uri == null) {
-                flowOf(true)
-            } else if (uri.startsWith("http")) {
-                imageRepository.saveUrlImageToDisk(uri)
-                    .map {
-                        if (it.source == ImageSource.LOCAL_FILE) {
-                            _newCounterTemplate =
-                                _newCounterTemplate.copy(uri = it.file?.absolutePath)
+            val uri = _editedCounterTemplate.uri
+            val saveImageFlow =
+                if (uri == null || _editedCounterTemplate.uri == startingCounterTemplate.uri) {
+                    flowOf(true)
+                } else if (uri.startsWith("http")) {
+                    imageRepository.saveUrlImageToDisk(uri)
+                        .map {
+                            if (it.source == ImageSource.LOCAL_FILE) {
+                                _editedCounterTemplate =
+                                    _editedCounterTemplate.copy(uri = it.file?.absolutePath)
+                            }
                         }
-                    }
-            } else {
-                imageRepository.saveLocalImageToDisk(uri)
-                    .map {
-                        if (it.source == ImageSource.LOCAL_FILE) {
-                            _newCounterTemplate =
-                                _newCounterTemplate.copy(uri = it.file?.absolutePath)
+                } else {
+                    imageRepository.saveLocalImageToDisk(uri)
+                        .map {
+                            if (it.source == ImageSource.LOCAL_FILE) {
+                                _editedCounterTemplate =
+                                    _editedCounterTemplate.copy(uri = it.file?.absolutePath)
+                            }
                         }
-                    }
-            }
+                }
 
             saveImageFlow.flatMapConcat {
                 if (profileToLink != null) {
                     profileRepository.addCounterTemplateToProfile(
-                        _newCounterTemplate,
+                        _editedCounterTemplate,
                         profileToLink
                     )
                 } else {
-                    profileRepository.addCounterTemplate(_newCounterTemplate)
+                    profileRepository.addCounterTemplate(_editedCounterTemplate)
                 }
             }
                 .catch {
@@ -205,8 +236,8 @@ class EditCounterViewModel @Inject constructor(
                     _saveStatus.value = SaveCounterResult.IMAGE_SAVE_FAILED
                 }
                 .collect { generatedId ->
-                    _newCounterTemplate = _newCounterTemplate.copy(id = generatedId)
-                    LogUtils.d("Counter successfully saved: ${_newCounterTemplate.id}")
+                    _editedCounterTemplate = _editedCounterTemplate.copy(id = generatedId)
+                    LogUtils.d("Counter successfully saved: ${_editedCounterTemplate.id}")
                     _saveStatus.value = SaveCounterResult.SUCCESSFUL
                 }
         }

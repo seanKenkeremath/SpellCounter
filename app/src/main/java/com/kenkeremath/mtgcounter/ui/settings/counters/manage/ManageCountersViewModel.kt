@@ -86,4 +86,8 @@ class ManageCountersViewModel @Inject constructor(
             }
         }
     }
+
+    fun getCounter(counterId: Int): CounterTemplateModel? {
+        return customCounters?.find { it.id == counterId }
+    }
 }

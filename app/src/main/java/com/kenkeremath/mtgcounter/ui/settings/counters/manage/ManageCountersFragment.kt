@@ -73,6 +73,24 @@ class ManageCountersFragment : Fragment(), OnManageCounterClickedListener {
         viewModel.refreshCounters()
     }
 
+    override fun onCounterClicked(id: Int) {
+        val f = EditCounterDialogFragment.newInstance(
+            profileName = PlayerProfileModel.NAME_DEFAULT,
+            template = viewModel.getCounter(id)
+        )
+        f.show(childFragmentManager, EditCounterDialogFragment.TAG)
+        f.setFragmentResultListener(
+            EditCounterDialogFragment.REQUEST_KEY_COUNTER
+        ) { _, bundle ->
+            // This result will only be passed back if something changed and was saved
+            val updatedCounter =
+                bundle.getParcelable<CounterTemplateModel>(EditCounterDialogFragment.RESULT_COUNTER)
+            updatedCounter?.let {
+                viewModel.refreshCounters()
+            }
+        }
+    }
+
     override fun onCounterRemoveClicked(id: Int) {
         viewModel.removeCounter(id)
     }

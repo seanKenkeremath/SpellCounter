@@ -95,6 +95,9 @@ class ManageCounterViewHolder(
     private var counterId: Int = -1
 
     init {
+        itemView.setOnClickListener {
+            clickListener.onCounterClicked(counterId)
+        }
         counterRemoveButton.setOnClickListener {
             clickListener.onCounterRemoveClicked(counterId)
         }

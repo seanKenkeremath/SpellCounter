@@ -24,16 +24,17 @@ import com.kenkeremath.mtgcounter.databinding.FragmentEditCounterBinding
 import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 import android.provider.MediaStore
+import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 
 
 @AndroidEntryPoint
 class EditCounterDialogFragment : DialogFragment() {
 
     companion object {
-        //TODO: pass existing template to edit?
-        fun newInstance(profileName: String? = null): EditCounterDialogFragment {
+        fun newInstance(profileName: String? = null, template: CounterTemplateModel? = null): EditCounterDialogFragment {
             val args = Bundle()
             args.putString(ARGS_PROFILE_NAME, profileName)
+            args.putParcelable(ARGS_COUNTER_TEMPLATE, template)
             val fragment = EditCounterDialogFragment()
             fragment.arguments = args
             return fragment
@@ -41,6 +42,8 @@ class EditCounterDialogFragment : DialogFragment() {
 
         //Which profile this counter should be added to. If null, no link is made
         const val ARGS_PROFILE_NAME = "args_profile_name"
+        //Which existing counter is being edited. Null means new counter
+        const val ARGS_COUNTER_TEMPLATE = "args_counter_template"
         const val TAG = "fragment_edit_counter"
         const val REQUEST_KEY_COUNTER = "request_key_counter"
         const val RESULT_COUNTER = "result_counter"
@@ -192,6 +195,14 @@ class EditCounterDialogFragment : DialogFragment() {
             binding.counterTextContainer.visibility = View.GONE
             binding.counterUrlContainer.visibility = View.GONE
             binding.counterFullArtContainer.visibility = View.GONE
+
+
+            //Remove listener while manually setting to avoid loop
+            val spinnerListener = binding.counterTypeSpinner.onItemSelectedListener
+            binding.counterTypeSpinner.onItemSelectedListener = null
+            binding.counterTypeSpinner.setSelection(it.ordinal)
+            binding.counterTypeSpinner.onItemSelectedListener = spinnerListener
+
             when (it) {
                 CreateCounterType.TEXT -> {
                     binding.counterTextContainer.visibility = View.VISIBLE
@@ -242,7 +253,7 @@ class EditCounterDialogFragment : DialogFragment() {
             }
         }
 
-        viewModel.counterImageFileName.observe(viewLifecycleOwner) {
+        viewModel.resolvedImageLocation.observe(viewLifecycleOwner) {
             binding.counterLocalImageName.text = if (!it.isNullOrBlank()) {
                 it
             } else {

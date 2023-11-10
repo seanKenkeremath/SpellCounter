@@ -154,6 +154,10 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         viewModel.selectCounter(id, selected)
     }
 
+    override fun onCounterClicked(id: Int) {
+        //Not used
+    }
+
     override fun onCounterRemoveClicked(id: Int) {
         //Not used
     }
