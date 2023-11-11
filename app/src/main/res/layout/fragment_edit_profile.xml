@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@+id/life_counter_label" />
 
 
-    <com.kenkeremath.mtgcounter.view.counter.SecondaryCounterView
+    <com.kenkeremath.mtgcounter.view.counter.LifeCounterView
         android:id="@+id/life_counter_preview_view"
         android:layout_width="100dp"
         android:layout_height="120dp"

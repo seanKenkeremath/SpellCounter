@@ -74,6 +74,7 @@ class ProfileRepositoryImpl @Inject constructor(
         val playerEntity =
             PlayerProfileEntity(
                 name = playerProfile.name,
+                lifeCounterId = playerProfile.lifeCounter?.id,
                 deletable = playerProfile.deletable
             )
         database.templateDao().deletePlayerCounterCrossRefsForPlayerProfile(playerProfile.name)

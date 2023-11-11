@@ -38,7 +38,10 @@ object MainModule {
      */
     @Provides
     @Singleton
-    fun providesLegacyDatastore(@ApplicationContext appContext: Context, moshi: Moshi): LegacyDatastore {
+    fun providesLegacyDatastore(
+        @ApplicationContext appContext: Context,
+        moshi: Moshi
+    ): LegacyDatastore {
         return LegacyDatastore(appContext, moshi)
     }
 
@@ -49,12 +52,18 @@ object MainModule {
             appContext.applicationContext,
             AppDatabase::class.java,
             "template_database"
-        ).build()
+        )
+            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .build()
     }
 
     @Provides
     @Singleton
-    fun providesMigrationHelper(appDatabase: AppDatabase, datastore: Datastore, legacyDatastore: LegacyDatastore): MigrationHelper {
+    fun providesMigrationHelper(
+        appDatabase: AppDatabase,
+        datastore: Datastore,
+        legacyDatastore: LegacyDatastore
+    ): MigrationHelper {
         return MigrationHelper(datastore, legacyDatastore, appDatabase)
     }
 

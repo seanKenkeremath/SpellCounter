@@ -61,6 +61,7 @@ class GameViewModel @Inject constructor(
                 PlayerModel(
                     id = setupPlayers[i].id,
                     life = startingLife,
+                    lifeCounter = setupPlayers[i].profile?.lifeCounter,
                     colorResId = setupPlayers[i].color.resId ?: R.color.white,
                 ),
                 pullToReveal = tabletopType != TabletopType.LIST,

@@ -12,7 +12,9 @@ data class PlayerProfileEntity(
     val name: String = "",
     //Default profiles should not be removable
     @ColumnInfo(name = "deletable")
-    val deletable: Boolean = false
+    val deletable: Boolean = false,
+    @ColumnInfo(name = "life_counter_id")
+    val lifeCounterId: Int? = null
 ) {
 
     companion object {

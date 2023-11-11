@@ -183,7 +183,11 @@ class LifeViewHolder(
         this.playerId = playerModel.id
         lifeView.setAmount(playerModel.life)
         if (!ScThemeUtils.isLightTheme(itemView.context)) {
-            lifeView.setTextColor(ContextCompat.getColor(itemView.context, playerModel.colorResId))
+            val color = ContextCompat.getColor(itemView.context, playerModel.colorResId)
+            lifeView.setCustomCounter(playerModel.lifeCounter, color)
+            lifeView.setTextColor(color)
+        } else {
+            lifeView.setCustomCounter(playerModel.lifeCounter)
         }
     }
 }

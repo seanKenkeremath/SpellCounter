@@ -6,7 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import com.kenkeremath.mtgcounter.legacy.MigrationHelper
 import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject

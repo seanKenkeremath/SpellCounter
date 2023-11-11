@@ -43,6 +43,11 @@ class EditProfileViewModel @Inject constructor(
 
     private var allProfiles: Set<PlayerProfileModel>? = null
 
+    private val _lifeCounter: MutableLiveData<CounterTemplateModel?> =
+        MutableLiveData(editedProfile.lifeCounter)
+    val lifeCounter: LiveData<CounterTemplateModel?>
+        get() = _lifeCounter
+
     private val _counterSelections: MutableLiveData<List<CounterSelectionUiModel>> =
         MutableLiveData(emptyList())
     val counterSelections: LiveData<List<CounterSelectionUiModel>> = _counterSelections
@@ -92,6 +97,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     private fun updateUi() {
+        _lifeCounter.value = editedProfile.lifeCounter
         _counterSelections.value = allCounters?.sortedDescending()?.map { template ->
             CounterSelectionUiModel(
                 template,
@@ -137,6 +143,11 @@ class EditProfileViewModel @Inject constructor(
             }
             updateUi()
         }
+    }
+
+    fun selectLifeCounter(counterTemplateModel: CounterTemplateModel?) {
+        editedProfile = editedProfile.copy(lifeCounter = counterTemplateModel)
+        updateUi()
     }
 
     fun saveChanges(replaceExisting: Boolean = false) {

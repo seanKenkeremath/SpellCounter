@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class PlayerProfileModel(
     val name: String = "",
     val counters: List<CounterTemplateModel> = emptyList(),
+    val lifeCounter: CounterTemplateModel? = null,
     val deletable: Boolean = true,
 ) : Parcelable, Comparable<PlayerProfileModel> {
     companion object {
@@ -18,11 +19,12 @@ data class PlayerProfileModel(
     constructor(entity: PlayerProfileWithCountersEntity) : this(
         entity.profile.name,
         entity.counters.map { CounterTemplateModel(it) },
+        entity.lifeCounter?.let { CounterTemplateModel(it) },
         entity.profile.deletable,
     )
 
     override fun toString(): String {
-        return "PlayerTemplateModel(name='$name', counters=$counters)"
+        return "PlayerTemplateModel(name='$name', counters=$counters, lifeCounter: $lifeCounter)"
     }
 
     override fun compareTo(other: PlayerProfileModel): Int {

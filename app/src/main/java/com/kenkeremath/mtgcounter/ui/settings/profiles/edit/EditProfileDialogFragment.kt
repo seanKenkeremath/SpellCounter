@@ -23,7 +23,7 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
-import com.kenkeremath.mtgcounter.view.counter.SecondaryCounterView
+import com.kenkeremath.mtgcounter.view.counter.LifeCounterView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -99,7 +99,8 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         editLifeCounterButton.setOnClickListener {
             val f = SelectLifeCounterDialogFragment.newInstance(
                 getString(R.string.select_life_counter),
-                counterOptions = viewModel.availableCounters
+                counterOptions = viewModel.availableCounters,
+                selectedCounterId = viewModel.lifeCounter.value?.id,
             )
             f.show(childFragmentManager, SelectLifeCounterDialogFragment.TAG)
             f.setFragmentResultListener(
@@ -107,7 +108,7 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
             ) { _, bundle ->
                 val selectedCounter =
                     bundle.getParcelable<CounterTemplateModel>(SelectLifeCounterDialogFragment.RESULT_COUNTER)
-                // TODO: Use counter and save to profile
+                viewModel.selectLifeCounter(selectedCounter)
             }
         }
 
@@ -118,9 +119,8 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
             ), requireContext().resources.getInteger(R.integer.player_color_alpha)
         )
 
-        view.findViewById<SecondaryCounterView>(R.id.life_counter_preview_view).background =
-            ColorDrawable(previewBackgroundColor)
-
+        val lifeCounterView = view.findViewById<LifeCounterView>(R.id.life_counter_preview_view)
+        lifeCounterView.background = ColorDrawable(previewBackgroundColor)
 
         viewModel.profileName.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
@@ -130,6 +130,10 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
                 nameEditText.setText(it)
                 nameEditText.addTextChangedListener(textChangedListener)
             }
+        }
+
+        viewModel.lifeCounter.observe(viewLifecycleOwner) {
+            lifeCounterView.setCustomCounter(it)
         }
 
         viewModel.counterSelections.observe(viewLifecycleOwner) {

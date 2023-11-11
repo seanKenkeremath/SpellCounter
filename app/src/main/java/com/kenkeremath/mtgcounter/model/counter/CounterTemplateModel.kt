@@ -33,7 +33,7 @@ data class CounterTemplateModel(
         isFullArtImage= entity.isFullArtImage,
         startingValue = entity.startingValue,
         dateAdded = Date(entity.dateAdded),
-        deletable = entity.deletable
+        deletable = entity.deletable,
     )
 
     override fun toString(): String {

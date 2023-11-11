@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.OnCounterClickedListener
-import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
+import com.kenkeremath.mtgcounter.ui.settings.profiles.edit.SelectCounterRecyclerAdapter.Companion.ID_DEFAULT
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,10 +24,12 @@ internal class SelectLifeCounterDialogFragment : DialogFragment(),
     companion object {
         fun newInstance(
             title: String,
+            selectedCounterId: Int?,
             counterOptions: List<CounterTemplateModel>
         ): SelectLifeCounterDialogFragment {
             val args = Bundle()
             args.putParcelableArrayList(ARGS_COUNTERS, ArrayList(counterOptions))
+            args.putInt(ARGS_SELECTED_COUNTER_ID, selectedCounterId ?: ID_DEFAULT)
             args.putString(ARGS_TITLE, title)
             val fragment = SelectLifeCounterDialogFragment()
             fragment.arguments = args
@@ -36,13 +38,15 @@ internal class SelectLifeCounterDialogFragment : DialogFragment(),
 
         const val TAG = "fragment_select_counter"
         private const val ARGS_TITLE = "args_title"
+        private const val ARGS_SELECTED_COUNTER_ID = "args_selected_counter_id"
         private const val ARGS_COUNTERS = "args_counters"
         const val REQUEST_KEY_COUNTER = "request_key_select_counter"
         const val RESULT_COUNTER = "result_select_counter"
     }
 
     private lateinit var recyclerView: RecyclerView
-    private val recyclerAdapter = SelectCounterRecyclerAdapter(this)
+    private lateinit var recyclerAdapter: SelectCounterRecyclerAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +75,10 @@ internal class SelectLifeCounterDialogFragment : DialogFragment(),
             VERTICAL,
             false
         )
+        recyclerAdapter = SelectCounterRecyclerAdapter(
+            arguments?.getInt(ARGS_SELECTED_COUNTER_ID) ?: ID_DEFAULT,
+            this
+        )
         recyclerView.adapter = recyclerAdapter
         recyclerAdapter.setCounters(counters)
     }
@@ -89,15 +97,18 @@ internal class SelectLifeCounterDialogFragment : DialogFragment(),
             }
 
     override fun onCounterClicked(id: Int) {
-        counters.find { it.id == id }?.let {
-            selectCounter(it)
+        val counter = if (id == ID_DEFAULT) {
+            null
+        } else {
+            counters.find { it.id == id }
         }
+        selectCounter(counter)
     }
 
-    private fun selectCounter(counterTemplateModel: CounterTemplateModel) {
+    private fun selectCounter(counterTemplateModel: CounterTemplateModel?) {
         val b = Bundle()
         b.putParcelable(RESULT_COUNTER, counterTemplateModel)
-        setFragmentResult(EditCounterDialogFragment.REQUEST_KEY_COUNTER, b)
+        setFragmentResult(REQUEST_KEY_COUNTER, b)
         dismiss()
     }
 }

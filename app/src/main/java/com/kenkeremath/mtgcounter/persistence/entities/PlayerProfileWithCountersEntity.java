@@ -7,6 +7,8 @@ import androidx.room.Relation;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 @Entity
 public class PlayerProfileWithCountersEntity {
     @Embedded
@@ -22,10 +24,18 @@ public class PlayerProfileWithCountersEntity {
     )
     public List<CounterTemplateEntity> counters;
 
+    @Relation(
+            parentColumn = "life_counter_id",
+            entityColumn = "counter_template_id"
+    )
+    @Nullable
+    public CounterTemplateEntity lifeCounter;
+
     @Override
     public String toString() {
         return "PlayerProfileWithCountersEntity{" +
                 "profile=" + profile +
+                ", life counter" + lifeCounter +
                 ", counters=" + counters +
                 '}';
     }
