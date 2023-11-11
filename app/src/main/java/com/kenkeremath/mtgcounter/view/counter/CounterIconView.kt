@@ -81,6 +81,7 @@ class CounterIconView @JvmOverloads constructor(
                 //Image may be rendered outside of this view
             } else if (templateModel.uri != null) {
                 image.visibility = View.VISIBLE
+                image.imageTintList = null
                 Glide.with(context).load(templateModel.uri)
                     .error(R.drawable.image_error_placeholder)
                     .fitCenter()

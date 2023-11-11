@@ -2,7 +2,9 @@ package com.kenkeremath.mtgcounter.view.counter
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.ImageView
 import androidx.annotation.ColorInt
+import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 
@@ -13,6 +15,7 @@ class LifeCounterView @JvmOverloads constructor(
 ) : CounterView(R.layout.view_counter, context, attrs, defStyleAttr) {
 
     private val counterIconView: CounterIconView = findViewById(R.id.counter_icon_view)
+    private val backgroundImage = findViewById<ImageView>(R.id.background_image)
 
     init {
         counterIconView.setIconDrawable(R.drawable.ic_heart)
@@ -29,9 +32,16 @@ class LifeCounterView @JvmOverloads constructor(
         } else {
             counterIconView.setContent(
                 templateModel = counter,
-                renderFullArt = counter.isFullArtImage,
                 iconTint = iconTint
             )
+            counter.uri?.let {
+                if (counter.isFullArtImage) {
+                    Glide.with(context).load(it)
+                        .error(R.drawable.image_error_placeholder)
+                        .centerCrop()
+                        .into(backgroundImage)
+                }
+            }
         }
     }
 }
