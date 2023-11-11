@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -15,44 +14,86 @@
         app:title="@string/edit_profile_title" />
 
     <TextView
+        android:id="@+id/profile_name_label"
         style="@style/Header3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/default_padding"
         android:layout_marginTop="@dimen/default_padding"
         android:layout_marginBottom="@dimen/default_padding_half"
-        android:text="@string/profile_name_label" />
+        android:text="@string/profile_name_label"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/profile_name_edit_text"
         style="@style/NameEditText"
-        android:imeOptions="actionDone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/default_padding" />
+        android:layout_marginHorizontal="@dimen/default_padding"
+        android:imeOptions="actionDone"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name_label" />
 
     <TextView
+        android:id="@+id/life_counter_label"
+        style="@style/Header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+        android:layout_marginTop="@dimen/edit_counter_section_spacing"
+        android:gravity="center"
+        android:text="@string/edit_profile_life"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name_edit_text" />
+
+    <ImageView
+        android:id="@+id/edit_life_counter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/life_counter_label"
+        app:layout_constraintStart_toEndOf="@+id/life_counter_label"
+        app:layout_constraintTop_toTopOf="@+id/life_counter_label" />
+
+
+    <com.kenkeremath.mtgcounter.view.counter.SecondaryCounterView
+        android:id="@+id/life_counter_preview_view"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="@dimen/default_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/life_counter_label" />
+
+    <TextView
+        android:id="@+id/counters_label"
         style="@style/Header3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/default_padding"
         android:layout_marginTop="@dimen/default_padding"
-        android:layout_marginBottom="@dimen/default_padding_half"
-        android:text="@string/profile_edit_select_counters_header" />
+        android:text="@string/profile_edit_select_counters_header"
+        app:layout_constraintTop_toBottomOf="@+id/life_counter_preview_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_counters_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/default_padding_half"
         android:layout_weight="1"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@id/save"
+        app:layout_constraintTop_toBottomOf="@id/counters_label" />
 
     <Button
         android:id="@+id/save"
         style="@style/MenuButton.Round"
-        android:layout_margin="@dimen/menu_button_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save" />
+        android:layout_margin="@dimen/menu_button_margin"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

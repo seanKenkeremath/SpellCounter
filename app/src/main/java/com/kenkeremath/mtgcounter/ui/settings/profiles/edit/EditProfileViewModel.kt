@@ -8,7 +8,6 @@ import com.kenkeremath.mtgcounter.persistence.ProfileRepository
 import com.kenkeremath.mtgcounter.view.counter.edit.CounterSelectionUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -39,6 +38,9 @@ class EditProfileViewModel @Inject constructor(
     private var loading = false
 
     private var allCounters: MutableSet<CounterTemplateModel>? = null
+    val availableCounters: List<CounterTemplateModel>
+        get() = allCounters?.toList() ?: emptyList()
+
     private var allProfiles: Set<PlayerProfileModel>? = null
 
     private val _counterSelections: MutableLiveData<List<CounterSelectionUiModel>> =

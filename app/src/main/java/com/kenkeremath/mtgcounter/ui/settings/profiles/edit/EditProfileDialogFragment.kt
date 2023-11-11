@@ -1,5 +1,6 @@
 package com.kenkeremath.mtgcounter.ui.settings.profiles.edit
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -21,6 +23,7 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
+import com.kenkeremath.mtgcounter.view.counter.SecondaryCounterView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +45,7 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
 
     private val viewModel: EditProfileViewModel by viewModels()
 
+    private lateinit var editLifeCounterButton: View
     private lateinit var recyclerView: RecyclerView
     private val recyclerAdapter = EditProfileRecyclerAdapter(this, this)
 
@@ -90,6 +94,33 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         nameEditText.addTextChangedListener(textChangedListener)
         nameEditText.isEnabled = viewModel.isNameChangeEnabled
         nameEditText.isFocusable = viewModel.isNameChangeEnabled
+
+        editLifeCounterButton = view.findViewById(R.id.edit_life_counter_button)
+        editLifeCounterButton.setOnClickListener {
+            val f = SelectLifeCounterDialogFragment.newInstance(
+                getString(R.string.select_life_counter),
+                counterOptions = viewModel.availableCounters
+            )
+            f.show(childFragmentManager, SelectLifeCounterDialogFragment.TAG)
+            f.setFragmentResultListener(
+                SelectLifeCounterDialogFragment.REQUEST_KEY_COUNTER
+            ) { _, bundle ->
+                val selectedCounter =
+                    bundle.getParcelable<CounterTemplateModel>(SelectLifeCounterDialogFragment.RESULT_COUNTER)
+                // TODO: Use counter and save to profile
+            }
+        }
+
+        val previewBackgroundColor = ColorUtils.setAlphaComponent(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.accent_blue
+            ), requireContext().resources.getInteger(R.integer.player_color_alpha)
+        )
+
+        view.findViewById<SecondaryCounterView>(R.id.life_counter_preview_view).background =
+            ColorDrawable(previewBackgroundColor)
+
 
         viewModel.profileName.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing

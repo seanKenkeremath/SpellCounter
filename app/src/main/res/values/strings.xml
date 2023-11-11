@@ -53,6 +53,7 @@
 
     <!-- Edit Profile -->
     <string name="profile_name_label">Profile Name:</string>
+    <string name="edit_profile_life">Life Counter</string>
     <string name="profile_edit_select_counters_header">Counters:</string>
     <string name="edit_profile_title">Edit Profile</string>
     <string name="edit_profile_save_changes_title">Unsaved Changes</string>
@@ -79,6 +80,9 @@
     <string name="create_counter_full_art_label">Full Art:</string>
     <string name="create_counter_browse_button">Browse</string>
     <string name="counter_starting_value">Starting Value:</string>
+
+    <string name="select_counter">Select Counter</string>
+    <string name="select_life_counter">Select Life Counter</string>
 
     <!-- Player Menu -->
     <string name="add_counter_title">Counters</string>
