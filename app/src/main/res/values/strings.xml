@@ -54,7 +54,7 @@
     <!-- Edit Profile -->
     <string name="profile_name_label">Profile Name:</string>
     <string name="edit_profile_life">Life Counter</string>
-    <string name="profile_edit_select_counters_header">Counters:</string>
+    <string name="profile_edit_select_counters_header">Other Counters:</string>
     <string name="edit_profile_title">Edit Profile</string>
     <string name="edit_profile_save_changes_title">Unsaved Changes</string>
     <string name="edit_profile_save_changes_message">There are unsaved changes to this profile. Discard Changes?</string>
