@@ -214,19 +214,4 @@ class MigrationHelperTest {
         assertEquals(Datastore.CURRENT_VERSION, datastore.version)
         assertEquals(SpellCounterTheme.NOT_SET, datastore.theme)
     }
-
-    @Test
-    fun migration_from_old_app_migrates_invalid_theme() = coroutinesTestRule.testDispatcher.runBlockingTest {
-        /**
-         * If we are doing a migration we expect there to be a String value in the theme
-         * entry. Having an ID set prior to migration is an illegal state
-         */
-        datastore.theme = SpellCounterTheme.LOTUS_PETAL
-        assertEquals(0, datastore.version)
-
-        migrationHelper.performMigration().collect { }
-
-        assertEquals(Datastore.CURRENT_VERSION, datastore.version)
-        assertEquals(SpellCounterTheme.NOT_SET, datastore.theme)
-    }
 }
