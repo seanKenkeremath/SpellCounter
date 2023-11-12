@@ -9,7 +9,10 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.kenkeremath.mtgcounter.R
 
 object ScThemeUtils {
@@ -87,3 +90,12 @@ object ScThemeUtils {
         return tv.data != 0
     }
 }
+
+val Context.previewBackgroundColor: Int
+    @ColorInt
+    get() = ColorUtils.setAlphaComponent(
+        ContextCompat.getColor(
+            this,
+            R.color.accent_blue
+        ), this.resources.getInteger(R.integer.player_color_alpha)
+    )

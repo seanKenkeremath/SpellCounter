@@ -23,6 +23,8 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
+import com.kenkeremath.mtgcounter.ui.setup.theme.previewBackgroundColor
 import com.kenkeremath.mtgcounter.view.counter.LifeCounterView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -112,15 +114,14 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
             }
         }
 
-        val previewBackgroundColor = ColorUtils.setAlphaComponent(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.accent_blue
-            ), requireContext().resources.getInteger(R.integer.player_color_alpha)
-        )
+
 
         val lifeCounterView = view.findViewById<LifeCounterView>(R.id.life_counter_preview_view)
-        lifeCounterView.background = ColorDrawable(previewBackgroundColor)
+        if (ScThemeUtils.isLightTheme(requireContext())) {
+            lifeCounterView.background = ColorDrawable(requireContext().previewBackgroundColor)
+        } else {
+            lifeCounterView.setTextColor(requireContext().previewBackgroundColor)
+        }
 
         viewModel.profileName.observe(viewLifecycleOwner) {
             //Prevent updates while user is typing
@@ -133,7 +134,14 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         }
 
         viewModel.lifeCounter.observe(viewLifecycleOwner) {
-            lifeCounterView.setCustomCounter(it)
+            if (!ScThemeUtils.isLightTheme(requireContext())) {
+                lifeCounterView.setCustomCounter(
+                    counter = it,
+                    iconTint = requireContext().previewBackgroundColor
+                )
+            } else {
+                lifeCounterView.setCustomCounter(it)
+            }
         }
 
         viewModel.counterSelections.observe(viewLifecycleOwner) {

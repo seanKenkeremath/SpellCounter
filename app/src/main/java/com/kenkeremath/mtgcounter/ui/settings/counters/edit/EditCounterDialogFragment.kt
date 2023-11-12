@@ -24,14 +24,19 @@ import com.kenkeremath.mtgcounter.databinding.FragmentEditCounterBinding
 import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 import android.provider.MediaStore
+import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
 
 @AndroidEntryPoint
 class EditCounterDialogFragment : DialogFragment() {
 
     companion object {
-        fun newInstance(profileName: String? = null, template: CounterTemplateModel? = null): EditCounterDialogFragment {
+        fun newInstance(
+            profileName: String? = null,
+            template: CounterTemplateModel? = null
+        ): EditCounterDialogFragment {
             val args = Bundle()
             args.putString(ARGS_PROFILE_NAME, profileName)
             args.putParcelable(ARGS_COUNTER_TEMPLATE, template)
@@ -42,6 +47,7 @@ class EditCounterDialogFragment : DialogFragment() {
 
         //Which profile this counter should be added to. If null, no link is made
         const val ARGS_PROFILE_NAME = "args_profile_name"
+
         //Which existing counter is being edited. Null means new counter
         const val ARGS_COUNTER_TEMPLATE = "args_counter_template"
         const val TAG = "fragment_edit_counter"
@@ -113,7 +119,11 @@ class EditCounterDialogFragment : DialogFragment() {
                 R.color.accent_blue
             ), requireContext().resources.getInteger(R.integer.player_color_alpha)
         )
-        binding.counterPreviewView.background = ColorDrawable(previewBackgroundColor)
+        if (ScThemeUtils.isLightTheme(requireContext())) {
+            binding.counterPreviewView.background = ColorDrawable(previewBackgroundColor)
+        } else {
+            binding.counterPreviewView.setTextColor(previewBackgroundColor)
+        }
 
         val spinnerOptions = CreateCounterType.values().map {
             getString(it.labelResId)
@@ -269,11 +279,20 @@ class EditCounterDialogFragment : DialogFragment() {
         }
 
         viewModel.counterPreview.observe(viewLifecycleOwner) {
-            if (it == null) {
-                binding.counterPreviewView.visibility = View.INVISIBLE
-            } else {
-                binding.counterPreviewView.visibility = View.VISIBLE
-                binding.counterPreviewView.setContent(it)
+            binding.counterPreviewView.apply {
+                if (it == null) {
+                    visibility = View.INVISIBLE
+                } else {
+                    visibility = View.VISIBLE
+                    if (!ScThemeUtils.isLightTheme(context)) {
+                        setContent(
+                            counterModel = it,
+                            iconTint = previewBackgroundColor
+                        )
+                    } else {
+                        setContent(it)
+                    }
+                }
             }
         }
 

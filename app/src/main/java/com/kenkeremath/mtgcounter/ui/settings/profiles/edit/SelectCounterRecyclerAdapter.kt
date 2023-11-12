@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
@@ -17,6 +18,7 @@ import com.kenkeremath.mtgcounter.view.counter.CounterIconView
 
 class SelectCounterRecyclerAdapter(
     private val selectedId: Int,
+    @ColorInt private val iconTint: Int,
     private val onCounterClickedListener: OnCounterClickedListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -44,6 +46,7 @@ class SelectCounterRecyclerAdapter(
         return SelectCounterViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_counter_selection, parent, false),
+            iconTint,
             onCounterClickedListener,
         )
     }
@@ -81,6 +84,7 @@ class SelectCounterRecyclerAdapter(
 
 class SelectCounterViewHolder(
     itemView: View,
+    @ColorInt private val iconTint: Int,
     private val clickListener: OnCounterClickedListener,
 ) : RecyclerView.ViewHolder(itemView) {
 
@@ -100,9 +104,9 @@ class SelectCounterViewHolder(
     fun bind(model: CounterTemplateModel? = null, selected: Boolean) {
         counterId = model?.id ?: ID_DEFAULT
         if (model == null) {
-            counterIconView.setIconDrawable(R.drawable.ic_heart)
+            counterIconView.setIconDrawable(R.drawable.ic_heart, tint = iconTint)
         } else {
-            counterIconView.setContent(model, renderFullArt = true)
+            counterIconView.setContent(model, renderFullArt = true, iconTint = iconTint)
         }
 
         itemView.isSelected = selected

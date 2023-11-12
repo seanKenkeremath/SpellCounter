@@ -15,6 +15,7 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.OnCounterClickedListener
 import com.kenkeremath.mtgcounter.ui.settings.profiles.edit.SelectCounterRecyclerAdapter.Companion.ID_DEFAULT
+import com.kenkeremath.mtgcounter.ui.setup.theme.previewBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,8 +77,9 @@ internal class SelectLifeCounterDialogFragment : DialogFragment(),
             false
         )
         recyclerAdapter = SelectCounterRecyclerAdapter(
-            arguments?.getInt(ARGS_SELECTED_COUNTER_ID) ?: ID_DEFAULT,
-            this
+            selectedId = arguments?.getInt(ARGS_SELECTED_COUNTER_ID) ?: ID_DEFAULT,
+            iconTint = requireContext().previewBackgroundColor,
+            onCounterClickedListener = this
         )
         recyclerView.adapter = recyclerAdapter
         recyclerAdapter.setCounters(counters)
