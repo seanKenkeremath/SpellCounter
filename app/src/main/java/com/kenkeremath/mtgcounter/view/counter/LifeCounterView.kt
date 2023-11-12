@@ -27,6 +27,7 @@ class LifeCounterView @JvmOverloads constructor(
     }
 
     fun setCustomCounter(counter: CounterTemplateModel?, @ColorInt iconTint: Int? = null) {
+        clearBackground()
         if (counter == null) {
             counterIconView.setIconDrawable(R.drawable.ic_heart, iconTint)
         } else {
@@ -43,5 +44,9 @@ class LifeCounterView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    fun clearBackground() {
+        Glide.with(context).clear(backgroundImage)
     }
 }
