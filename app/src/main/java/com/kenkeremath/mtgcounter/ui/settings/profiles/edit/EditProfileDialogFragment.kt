@@ -11,7 +11,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -119,8 +118,6 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         val lifeCounterView = view.findViewById<LifeCounterView>(R.id.life_counter_preview_view)
         if (ScThemeUtils.isLightTheme(requireContext())) {
             lifeCounterView.background = ColorDrawable(requireContext().previewBackgroundColor)
-        } else {
-            lifeCounterView.setTextColor(requireContext().previewBackgroundColor)
         }
 
         viewModel.profileName.observe(viewLifecycleOwner) {
@@ -134,14 +131,10 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         }
 
         viewModel.lifeCounter.observe(viewLifecycleOwner) {
-            if (!ScThemeUtils.isLightTheme(requireContext())) {
-                lifeCounterView.setCustomCounter(
-                    counter = it,
-                    iconTint = requireContext().previewBackgroundColor
-                )
-            } else {
-                lifeCounterView.setCustomCounter(it)
-            }
+            lifeCounterView.setCustomCounter(
+                counter = it,
+                playerTint = requireContext().previewBackgroundColor
+            )
         }
 
         viewModel.counterSelections.observe(viewLifecycleOwner) {

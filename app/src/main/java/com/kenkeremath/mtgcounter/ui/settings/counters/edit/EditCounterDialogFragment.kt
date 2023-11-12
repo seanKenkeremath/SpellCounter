@@ -24,7 +24,6 @@ import com.kenkeremath.mtgcounter.databinding.FragmentEditCounterBinding
 import com.kenkeremath.mtgcounter.util.LogUtils
 import dagger.hilt.android.AndroidEntryPoint
 import android.provider.MediaStore
-import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
@@ -121,8 +120,6 @@ class EditCounterDialogFragment : DialogFragment() {
         )
         if (ScThemeUtils.isLightTheme(requireContext())) {
             binding.counterPreviewView.background = ColorDrawable(previewBackgroundColor)
-        } else {
-            binding.counterPreviewView.setTextColor(previewBackgroundColor)
         }
 
         val spinnerOptions = CreateCounterType.values().map {
@@ -284,14 +281,10 @@ class EditCounterDialogFragment : DialogFragment() {
                     visibility = View.INVISIBLE
                 } else {
                     visibility = View.VISIBLE
-                    if (!ScThemeUtils.isLightTheme(context)) {
-                        setContent(
-                            counterModel = it,
-                            iconTint = previewBackgroundColor
-                        )
-                    } else {
-                        setContent(it)
-                    }
+                    setContent(
+                        counterModel = it,
+                        playerTint = previewBackgroundColor
+                    )
                 }
             }
         }

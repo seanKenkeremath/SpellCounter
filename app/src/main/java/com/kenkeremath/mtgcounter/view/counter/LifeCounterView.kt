@@ -7,6 +7,7 @@ import androidx.annotation.ColorInt
 import com.bumptech.glide.Glide
 import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
+import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
 class LifeCounterView @JvmOverloads constructor(
     context: Context,
@@ -21,19 +22,27 @@ class LifeCounterView @JvmOverloads constructor(
         counterIconView.setIconDrawable(R.drawable.ic_heart)
     }
 
-    override fun setTextColor(color: Int) {
-        super.setTextColor(color)
-        counterIconView.setIconDrawable(R.drawable.ic_heart, color)
-    }
-
-    fun setCustomCounter(counter: CounterTemplateModel?, @ColorInt iconTint: Int? = null) {
+    /**
+     * Set data to this counter. This updates amount and icon. It also handles
+     * dark/light mode theming
+     */
+    fun setCustomCounter(counter: CounterTemplateModel?, @ColorInt playerTint: Int) {
         clearBackground()
+        val resolvedIconTint: Int? = if (ScThemeUtils.isLightTheme(context)) {
+            null
+        } else {
+            playerTint
+        }
+        // Only set this for dark mode
+        resolvedIconTint?.let {
+            setTextColor(it)
+        }
         if (counter == null) {
-            counterIconView.setIconDrawable(R.drawable.ic_heart, iconTint)
+            counterIconView.setIconDrawable(R.drawable.ic_heart, resolvedIconTint)
         } else {
             counterIconView.setContent(
                 templateModel = counter,
-                iconTint = iconTint
+                iconTint = resolvedIconTint
             )
             counter.uri?.let {
                 if (counter.isFullArtImage) {

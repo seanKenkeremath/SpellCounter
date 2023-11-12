@@ -55,6 +55,9 @@ class CounterIconView @JvmOverloads constructor(
      * In most situations, they will be roundered as the background outside of this view.
      *
      * iconTint is used in dark mode as a default tint color instead of the primary text color.
+     *
+     * NOTE: This view does not contain light or dark mode logic. this must be managed by
+     * the consuming class
      */
     fun setContent(
         templateModel: CounterTemplateModel,

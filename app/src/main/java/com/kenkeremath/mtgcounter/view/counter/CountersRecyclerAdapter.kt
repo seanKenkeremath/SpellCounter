@@ -11,7 +11,6 @@ import com.kenkeremath.mtgcounter.R
 import com.kenkeremath.mtgcounter.model.counter.CounterModel
 import com.kenkeremath.mtgcounter.model.player.PlayerModel
 import com.kenkeremath.mtgcounter.ui.game.OnPlayerUpdatedListener
-import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
 
 class CountersRecyclerAdapter(
     private val onPlayerUpdatedListener: OnPlayerUpdatedListener
@@ -66,7 +65,10 @@ class CountersRecyclerAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
         if (position == 0) {
             (holder as LifeViewHolder).bind(
                 player!!
@@ -83,7 +85,8 @@ class CountersRecyclerAdapter(
         if (recyclerView?.width ?: 0 > 0) {
             adjustCellWidth(isLifeCounter, holder)
         } else {
-            recyclerView?.viewTreeObserver?.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
+            recyclerView?.viewTreeObserver?.addOnPreDrawListener(object :
+                ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     recyclerView?.viewTreeObserver?.removeOnPreDrawListener(this)
                     adjustCellWidth(isLifeCounter, holder)
@@ -182,13 +185,8 @@ class LifeViewHolder(
     fun bind(playerModel: PlayerModel) {
         this.playerId = playerModel.id
         lifeView.setAmount(playerModel.life)
-        if (!ScThemeUtils.isLightTheme(itemView.context)) {
-            val color = ContextCompat.getColor(itemView.context, playerModel.colorResId)
-            lifeView.setCustomCounter(playerModel.lifeCounter, color)
-            lifeView.setTextColor(color)
-        } else {
-            lifeView.setCustomCounter(playerModel.lifeCounter)
-        }
+        val color = ContextCompat.getColor(itemView.context, playerModel.colorResId)
+        lifeView.setCustomCounter(playerModel.lifeCounter, color)
     }
 }
 
@@ -224,11 +222,9 @@ class CounterViewHolder(
     fun bind(playerId: Int, counterModel: CounterModel, playerModel: PlayerModel) {
         this.playerId = playerId
         this.counterId = counterModel.template.id
-        if (!ScThemeUtils.isLightTheme(itemView.context)) {
-            counterView.setTextColor(ContextCompat.getColor(itemView.context, playerModel.colorResId))
-            counterView.setContent(counterModel, iconTint = ContextCompat.getColor(itemView.context, playerModel.colorResId))
-        } else {
-            counterView.setContent(counterModel)
-        }
+        counterView.setContent(
+            counterModel,
+            playerTint = ContextCompat.getColor(itemView.context, playerModel.colorResId)
+        )
     }
 }
