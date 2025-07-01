@@ -3,11 +3,10 @@ buildscript {
     ext.hilt_version = '2.46.1'
     repositories {
         google()
-        jcenter()
-        
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.9.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
@@ -16,10 +15,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io"  }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -5,11 +7,11 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.kenkeremath.mtgcounter"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 26
         versionName "3.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -24,11 +26,11 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.7'
@@ -46,7 +48,7 @@ android {
     namespace 'com.kenkeremath.mtgcounter'
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+tasks.withType(AbstractKotlinCompile).configureEach {
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]
 }
 
@@ -101,7 +103,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
 
     //Misc
-    implementation 'rongi.rotate-layout:rotate-layout:3.0.0'
+    implementation 'com.github.rongi:rotate-layout:v3.0.0'
 
     //Compose
     implementation 'androidx.activity:activity-compose:1.8.0'
@@ -118,4 +120,10 @@ dependencies {
     testImplementation "androidx.test:core:1.5.0"
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
