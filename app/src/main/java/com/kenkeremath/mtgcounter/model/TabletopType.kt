@@ -4,8 +4,8 @@ import com.kenkeremath.mtgcounter.view.TableLayoutPosition
 
 enum class TabletopType(val numberOfPlayers: Int, val positions: List<TableLayoutPosition>) {
     //If layout applies to any number, -1 is returned for numberOfPlayers
-    NONE(-1, emptyList()),
-    LIST(-1, emptyList()),
+    NONE(-1, listOf()),
+    LIST(-1, listOf()),
     ONE_HORIZONTAL(1, listOf(TableLayoutPosition.SOLO_PANEL)),
     ONE_VERTICAL(1, listOf(TableLayoutPosition.BOTTOM_PANEL)),
     TWO_HORIZONTAL(2, listOf(TableLayoutPosition.LEFT_PANEL_1, TableLayoutPosition.RIGHT_PANEL_1)),

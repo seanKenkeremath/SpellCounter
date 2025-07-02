@@ -3,12 +3,17 @@ package com.kenkeremath.mtgcounter.model.counter
 import androidx.annotation.DrawableRes
 import com.kenkeremath.mtgcounter.R
 
+
+// Cannot Reference this from enum definition since companion object is not yet available
+// Companion object val is more discoverable to other classes, so we want both
+private const val DEFAULT_COUNTER_SYMBOL_ID = 0L
+
 /**
  * NOTE: We are using the ordinals of this enum for the default sort order.
  * All IDs should be unique. Comment out any deprecated/removed IDs to maintain proper order/IDs
  */
 enum class CounterSymbol(@DrawableRes val resId: Int? = null, val symbolId: Long) {
-    NONE(symbolId = CounterSymbol.DEFAULT_ID),
+    NONE(symbolId = DEFAULT_COUNTER_SYMBOL_ID),
     ISLAND(symbolId = 2L, resId = R.drawable.ic_water),
     SWAMP(symbolId = 3L, resId = R.drawable.ic_skull),
     MOUNTAIN(symbolId = 4L, resId = R.drawable.ic_fire),
@@ -24,6 +29,6 @@ enum class CounterSymbol(@DrawableRes val resId: Int? = null, val symbolId: Long
     CLOCK(symbolId = 12L, resId = R.drawable.ic_clock);
 
     companion object {
-        const val DEFAULT_ID = 0L
+        const val DEFAULT_ID = DEFAULT_COUNTER_SYMBOL_ID
     }
 }
