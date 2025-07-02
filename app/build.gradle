@@ -11,8 +11,8 @@ android {
         applicationId "com.kenkeremath.mtgcounter"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 26
-        versionName "3.4.0"
+        versionCode 27
+        versionName "3.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
