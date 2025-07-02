@@ -73,11 +73,6 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
         recyclerView = view.findViewById(R.id.profile_content_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = contentAdapter
-        val dividers = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-        ContextCompat.getDrawable(requireContext(), R.drawable.nav_menu_divider)?.let {
-            dividers.setDrawable(it)
-        }
-        recyclerView.addItemDecoration(dividers)
 
         viewModel.profileName.observe(viewLifecycleOwner) {
             updateContent()
