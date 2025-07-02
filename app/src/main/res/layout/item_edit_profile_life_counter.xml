@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="@dimen/default_padding">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/Header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
+            android:text="@string/edit_profile_life" />
+
+        <ImageView
+            android:id="@+id/edit_life_counter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:src="@drawable/ic_edit"
+            app:tint="?attr/scTextColorPrimary" />
+
+    </LinearLayout>
+
+    <com.kenkeremath.mtgcounter.view.counter.LifeCounterView
+        android:id="@+id/life_counter_preview_view"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_gravity="center"/>
+
+</LinearLayout> 

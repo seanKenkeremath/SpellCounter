@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
@@ -11,102 +10,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/edit_profile_title" />
 
-
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/profile_content_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
-
-        <!-- TODO: wrapping this in a scrollview makes the recyclerview not actually
-         recycler, which is generally ok for this screen but not optimal -->
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding">
-
-            <TextView
-                android:id="@+id/profile_name_label"
-                style="@style/Header3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/default_padding"
-                android:layout_marginBottom="@dimen/default_padding_half"
-                android:text="@string/profile_name_label"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/profile_name_edit_text"
-                style="@style/NameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/default_padding"
-                android:imeOptions="actionDone"
-                app:layout_constraintTop_toBottomOf="@+id/profile_name_label" />
-
-            <TextView
-                android:id="@+id/life_counter_label"
-                style="@style/Header2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/edit_counter_horizontal_margin"
-                android:layout_marginTop="@dimen/edit_counter_section_spacing"
-                android:gravity="center"
-                android:text="@string/edit_profile_life"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_name_edit_text" />
-
-            <ImageView
-                android:id="@+id/edit_life_counter_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/life_counter_label"
-                app:layout_constraintStart_toEndOf="@+id/life_counter_label"
-                app:layout_constraintTop_toTopOf="@+id/life_counter_label"
-                app:tint="?attr/scTextColorPrimary" />
-
-
-            <com.kenkeremath.mtgcounter.view.counter.LifeCounterView
-                android:id="@+id/life_counter_preview_view"
-                android:layout_width="100dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="@dimen/default_padding"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/life_counter_label" />
-
-            <TextView
-                android:id="@+id/counters_label"
-                style="@style/Header3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/default_padding"
-                android:layout_marginTop="@dimen/default_padding"
-                android:text="@string/profile_edit_select_counters_header"
-                app:layout_constraintTop_toBottomOf="@+id/life_counter_preview_view" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profile_counters_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_padding_half"
-                android:layout_weight="1"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/counters_label" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        android:overScrollMode="never" />
 
     <Button
         android:id="@+id/save"
@@ -114,6 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/menu_button_margin"
-        android:text="@string/save"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:text="@string/save" />
+
 </LinearLayout>

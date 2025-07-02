@@ -1,13 +1,9 @@
 package com.kenkeremath.mtgcounter.ui.settings.profiles.edit
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -22,9 +18,6 @@ import com.kenkeremath.mtgcounter.model.counter.CounterTemplateModel
 import com.kenkeremath.mtgcounter.model.player.PlayerProfileModel
 import com.kenkeremath.mtgcounter.ui.settings.counters.edit.EditCounterDialogFragment
 import com.kenkeremath.mtgcounter.ui.settings.counters.manage.OnManageCounterClickedListener
-import com.kenkeremath.mtgcounter.ui.setup.theme.ScThemeUtils
-import com.kenkeremath.mtgcounter.ui.setup.theme.previewBackgroundColor
-import com.kenkeremath.mtgcounter.view.counter.LifeCounterView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,19 +39,14 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
 
     private val viewModel: EditProfileViewModel by viewModels()
 
-    private lateinit var editLifeCounterButton: View
     private lateinit var recyclerView: RecyclerView
-    private val recyclerAdapter = EditProfileRecyclerAdapter(this, this)
+    private val contentAdapter = EditProfileContentAdapter(
+        editProfileCounterClickedListener = this,
+        onManageCounterClickedListener = this,
+        onNameChangedListener = { name -> viewModel.updateName(name) },
+        onEditLifeCounterClickListener = { showLifeCounterDialog() }
+    )
 
-    private lateinit var nameEditText: EditText
-    private val textChangedListener = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            viewModel.updateName(s.toString())
-        }
-
-        override fun afterTextChanged(s: Editable?) {}
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,63 +70,25 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
             viewModel.saveChanges()
         }
 
-        recyclerView = view.findViewById(R.id.profile_counters_recycler)
+        recyclerView = view.findViewById(R.id.profile_content_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = recyclerAdapter
+        recyclerView.adapter = contentAdapter
         val dividers = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         ContextCompat.getDrawable(requireContext(), R.drawable.nav_menu_divider)?.let {
             dividers.setDrawable(it)
         }
         recyclerView.addItemDecoration(dividers)
 
-        nameEditText = view.findViewById(R.id.profile_name_edit_text)
-        nameEditText.addTextChangedListener(textChangedListener)
-        nameEditText.isEnabled = viewModel.isNameChangeEnabled
-        nameEditText.isFocusable = viewModel.isNameChangeEnabled
-
-        editLifeCounterButton = view.findViewById(R.id.edit_life_counter_button)
-        editLifeCounterButton.setOnClickListener {
-            val f = SelectLifeCounterDialogFragment.newInstance(
-                getString(R.string.select_life_counter),
-                counterOptions = viewModel.availableCounters,
-                selectedCounterId = viewModel.lifeCounter.value?.id,
-            )
-            f.show(childFragmentManager, SelectLifeCounterDialogFragment.TAG)
-            f.setFragmentResultListener(
-                SelectLifeCounterDialogFragment.REQUEST_KEY_COUNTER
-            ) { _, bundle ->
-                val selectedCounter =
-                    bundle.getParcelable<CounterTemplateModel>(SelectLifeCounterDialogFragment.RESULT_COUNTER)
-                viewModel.selectLifeCounter(selectedCounter)
-            }
-        }
-
-
-
-        val lifeCounterView = view.findViewById<LifeCounterView>(R.id.life_counter_preview_view)
-        if (ScThemeUtils.isLightTheme(requireContext())) {
-            lifeCounterView.background = ColorDrawable(requireContext().previewBackgroundColor)
-        }
-
         viewModel.profileName.observe(viewLifecycleOwner) {
-            //Prevent updates while user is typing
-            if (!nameEditText.isFocused) {
-                //Remove listener while manually setting to avoid loop
-                nameEditText.removeTextChangedListener(textChangedListener)
-                nameEditText.setText(it)
-                nameEditText.addTextChangedListener(textChangedListener)
-            }
+            updateContent()
         }
 
         viewModel.lifeCounter.observe(viewLifecycleOwner) {
-            lifeCounterView.setCustomCounter(
-                counter = it,
-                playerTint = requireContext().previewBackgroundColor
-            )
+            updateContent()
         }
 
         viewModel.counterSelections.observe(viewLifecycleOwner) {
-            recyclerAdapter.setCounters(it)
+            updateContent()
         }
 
         viewModel.saveButtonEnabled.observe(viewLifecycleOwner) {
@@ -219,6 +169,31 @@ internal class EditProfileDialogFragment : DialogFragment(), OnEditProfileCounte
             newCounter?.let {
                 viewModel.addNewCounter(it)
             }
+        }
+    }
+
+    private fun updateContent() {
+        contentAdapter.setItems(
+            profileName = viewModel.profileName.value ?: "",
+            isNameChangeEnabled = viewModel.isNameChangeEnabled,
+            lifeCounter = viewModel.lifeCounter.value,
+            counterSelections = viewModel.counterSelections.value ?: emptyList()
+        )
+    }
+
+    private fun showLifeCounterDialog() {
+        val f = SelectLifeCounterDialogFragment.newInstance(
+            getString(R.string.select_life_counter),
+            counterOptions = viewModel.availableCounters,
+            selectedCounterId = viewModel.lifeCounter.value?.id,
+        )
+        f.show(childFragmentManager, SelectLifeCounterDialogFragment.TAG)
+        f.setFragmentResultListener(
+            SelectLifeCounterDialogFragment.REQUEST_KEY_COUNTER
+        ) { _, bundle ->
+            val selectedCounter =
+                bundle.getParcelable<CounterTemplateModel>(SelectLifeCounterDialogFragment.RESULT_COUNTER)
+            viewModel.selectLifeCounter(selectedCounter)
         }
     }
 }

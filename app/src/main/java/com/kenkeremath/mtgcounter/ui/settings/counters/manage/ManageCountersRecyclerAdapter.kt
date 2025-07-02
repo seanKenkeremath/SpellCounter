@@ -120,4 +120,8 @@ class CreateCounterViewHolder(
             onCounterClickedListener.onCounterCreateClicked()
         }
     }
+
+    fun bind() {
+        //no op
+    }
 }
